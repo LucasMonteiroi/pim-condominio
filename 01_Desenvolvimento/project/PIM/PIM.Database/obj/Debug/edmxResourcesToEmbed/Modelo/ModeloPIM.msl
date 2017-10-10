@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModeloDatabaseStoreContainer" CdmEntityContainer="EntidadePIM">
+    <EntitySetMapping Name="Aluguel">
+      <EntityTypeMapping TypeName="ModeloDatabase.Aluguel">
+        <MappingFragment StoreEntitySet="CG_ALUGUEL">
+          <ScalarProperty Name="Identificador" ColumnName="ALU_ID" />
+          <ScalarProperty Name="Valor" ColumnName="ALU_VALOR" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Apartamento">
+      <EntityTypeMapping TypeName="ModeloDatabase.Apartamento">
+        <MappingFragment StoreEntitySet="CG_APARTAMENTO">
+          <ScalarProperty Name="Identificador" ColumnName="APA_ID" />
+          <ScalarProperty Name="Bloco" ColumnName="APA_BLOCO" />
+          <ScalarProperty Name="Numero" ColumnName="APA_NUMERO" />
+          <ScalarProperty Name="IdContrato" ColumnName="APA_CONTRATO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Contrato">
+      <EntityTypeMapping TypeName="ModeloDatabase.Contrato">
+        <MappingFragment StoreEntitySet="CG_CONTRATO">
+          <ScalarProperty Name="Identificador" ColumnName="CON_ID" />
+          <ScalarProperty Name="DataContrato" ColumnName="CON_DATA" />
+          <ScalarProperty Name="Descricao" ColumnName="CON_DESCRICAO" />
+          <ScalarProperty Name="IdAluguel" ColumnName="CON_ALUGUEL" />
+          <ScalarProperty Name="IdMorador" ColumnName="CON_MORADOR" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Dependente">
+      <EntityTypeMapping TypeName="ModeloDatabase.Dependente">
+        <MappingFragment StoreEntitySet="CG_DEPENDENTE">
+          <ScalarProperty Name="Identificador" ColumnName="DEP_ID" />
+          <ScalarProperty Name="Nome" ColumnName="DEP_NOME" />
+          <ScalarProperty Name="RG" ColumnName="DEP_RG" />
+          <ScalarProperty Name="CPF" ColumnName="DEP_CPF" />
+          <ScalarProperty Name="Telefone" ColumnName="DEP_TELEFONE" />
+          <ScalarProperty Name="IdMorador" ColumnName="MOR_RESPONSAVEL" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Estacionamento">
+      <EntityTypeMapping TypeName="ModeloDatabase.Estacionamento">
+        <MappingFragment StoreEntitySet="CG_ESTACIONAMENTO">
+          <ScalarProperty Name="Identificador" ColumnName="EST_ID" />
+          <ScalarProperty Name="VagasDisponiveis" ColumnName="EST_VAGAS" />
+          <ScalarProperty Name="IdApartamento" ColumnName="EST_AP" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Morador">
+      <EntityTypeMapping TypeName="ModeloDatabase.Morador">
+        <MappingFragment StoreEntitySet="CG_MORADORES">
+          <ScalarProperty Name="Identificador" ColumnName="MOR_ID" />
+          <ScalarProperty Name="Nome" ColumnName="MOR_NOME" />
+          <ScalarProperty Name="RG" ColumnName="MOR_RG" />
+          <ScalarProperty Name="CPF" ColumnName="MOR_CPF" />
+          <ScalarProperty Name="Telefone" ColumnName="MOR_TELEFONE" />
+          <ScalarProperty Name="Celular" ColumnName="MOR_CELULAR" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ocorrencia">
+      <EntityTypeMapping TypeName="ModeloDatabase.Ocorrencia">
+        <MappingFragment StoreEntitySet="CG_OCORRENCIA">
+          <ScalarProperty Name="Identificador" ColumnName="OCO_ID" />
+          <ScalarProperty Name="Motivo" ColumnName="OCO_MOTIVO" />
+          <ScalarProperty Name="Descricao" ColumnName="OCO_DESCRICAO" />
+          <ScalarProperty Name="DataOcorrencia" ColumnName="OCO_DATA" />
+          <ScalarProperty Name="IdMorador" ColumnName="MOR_REC" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Reserva">
+      <EntityTypeMapping TypeName="ModeloDatabase.Reserva">
+        <MappingFragment StoreEntitySet="CG_RESERVAS">
+          <ScalarProperty Name="Identificador" ColumnName="RES_ID" />
+          <ScalarProperty Name="DataReserva" ColumnName="RES_DATA" />
+          <ScalarProperty Name="IdTipoReserva" ColumnName="RES_TIPO" />
+          <ScalarProperty Name="ConfirmacaoReserva" ColumnName="RES_CONFIR" />
+          <ScalarProperty Name="IdMorador" ColumnName="RES_MOD" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TipoReserva">
+      <EntityTypeMapping TypeName="ModeloDatabase.TipoReserva">
+        <MappingFragment StoreEntitySet="CG_TIPO_RESERVA">
+          <ScalarProperty Name="Identificador" ColumnName="TP_ID" />
+          <ScalarProperty Name="Tipo" ColumnName="TP_TIPO_RESERVA" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Colaborador">
+      <EntityTypeMapping TypeName="ModeloDatabase.Colaborador">
+        <MappingFragment StoreEntitySet="CORE_COLABORADOR">
+          <ScalarProperty Name="Identificador" ColumnName="COL_ID" />
+          <ScalarProperty Name="Nome" ColumnName="COL_NOME" />
+          <ScalarProperty Name="RG" ColumnName="COL_RG" />
+          <ScalarProperty Name="CPF" ColumnName="COL_CPF" />
+          <ScalarProperty Name="Funcao" ColumnName="COL_FUNCAO" />
+          <ScalarProperty Name="Salario" ColumnName="COL_SAL" />
+          <ScalarProperty Name="DataContrato" ColumnName="COL_CONTRATO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GrupoUsuario">
+      <EntityTypeMapping TypeName="ModeloDatabase.GrupoUsuario">
+        <MappingFragment StoreEntitySet="CORE_GRUPO_USUARIO">
+          <ScalarProperty Name="Identificador" ColumnName="GRP_ID" />
+          <ScalarProperty Name="Nome" ColumnName="GRP_NOME" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Usuario">
+      <EntityTypeMapping TypeName="ModeloDatabase.Usuario">
+        <MappingFragment StoreEntitySet="CORE_USUARIO">
+          <ScalarProperty Name="Identificador" ColumnName="USU_ID" />
+          <ScalarProperty Name="Login" ColumnName="USU_LOGIN" />
+          <ScalarProperty Name="Senha" ColumnName="USU_SENHA" />
+          <ScalarProperty Name="IdGrupo" ColumnName="USU_GRP" />
+          <ScalarProperty Name="IdColaborador" ColumnName="USU_COLAB" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

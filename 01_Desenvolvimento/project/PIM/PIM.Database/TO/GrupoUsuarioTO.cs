@@ -1,15 +1,24 @@
 ﻿namespace PIM.Database.TO
 {
-    using System;
+    using PIM.Database.Infra;
+    using PIM.Database.Modelo;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
-    public class GrupoUsuarioTO
+    public class GrupoUsuarioTO : RetornoTO
     {
         public int Identificador { get; set; }
         public string Nome { get; set; }
+
+        internal void PreencherTO(GrupoUsuario entidade)
+        {
+            Identificador = entidade.Identificador;
+            Nome = entidade.Nome;
+        }
+
+        internal void PreencherEntidade(GrupoUsuario entidade)
+        {
+            entidade.Nome = Nome;
+        }
     }
 
     public class ListaGrupoUsuarioTO

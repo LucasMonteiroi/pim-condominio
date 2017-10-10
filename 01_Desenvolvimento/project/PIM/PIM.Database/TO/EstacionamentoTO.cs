@@ -1,16 +1,27 @@
 ﻿namespace PIM.Database.TO
 {
-    using System;
+    using PIM.Database.Infra;
+    using PIM.Database.Modelo;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
-    public class EstacionamentoTO
+    public class EstacionamentoTO : RetornoTO
     {
         public int Identificador { get; set; }
         public int IdApartamento { get; set; }
         public int VagasDisponiveis { get; set; }
+
+        internal void PreencherTO(Estacionamento entidade)
+        {
+            Identificador = entidade.Identificador;
+            IdApartamento = entidade.IdApartamento;
+            VagasDisponiveis = entidade.VagasDisponiveis;
+        }
+
+        internal void PreencherEntidade(Estacionamento entidade)
+        {
+            entidade.IdApartamento = IdApartamento;
+            entidade.VagasDisponiveis = VagasDisponiveis;
+        }
     }
 
     public class ListaEstacionamentoTO

@@ -1,15 +1,24 @@
 ﻿namespace PIM.Database.TO
 {
-    using System;
+    using PIM.Database.Infra;
+    using PIM.Database.Modelo;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
-    public class TipoReservaTO
+    public class TipoReservaTO : RetornoTO
     {
         public int Identificador { get; set; }
-        public string TipoReserva { get; set; }
+        public string Tipo { get; set; }
+
+        internal void PreencherTO(TipoReserva entidade)
+        {
+            Identificador = entidade.Identificador;
+            Tipo = entidade.Tipo;
+        }
+
+        internal void PreencherEntidade(TipoReserva entidade)
+        {
+            entidade.Tipo = Tipo;
+        }
     }
 
     public class ListaTipoReservaTO

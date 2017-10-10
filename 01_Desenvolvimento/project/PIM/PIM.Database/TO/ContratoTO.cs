@@ -1,18 +1,34 @@
 ﻿namespace PIM.Database.TO
 {
+    using PIM.Database.Infra;
+    using PIM.Database.Modelo;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
-    public class ContratoTO
+    public class ContratoTO : RetornoTO
     {
         public int Identificador { get; set; }
-        public string Ativo { get; set; }
+        public string Descricao { get; set; }
         public DateTime DataContrato { get; set; }
         public int IdMorador { get; set; }
         public int IdAluguel { get; set; }
+
+        internal void PreencherTO(Contrato entidade)
+        {
+            Identificador = entidade.Identificador;
+            Descricao = entidade.Descricao;
+            DataContrato = entidade.DataContrato;
+            IdMorador = entidade.IdMorador;
+            IdAluguel = entidade.IdAluguel;
+        }
+
+        internal void PreencherEntidade(Contrato entidade)
+        {
+            entidade.Descricao = Descricao;
+            entidade.DataContrato = DataContrato;
+            entidade.IdMorador = IdMorador;
+            entidade.IdAluguel = IdAluguel;
+        }
     }
 
     public class ListaContratoTO

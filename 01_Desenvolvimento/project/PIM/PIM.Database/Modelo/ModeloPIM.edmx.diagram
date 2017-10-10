@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9167e8b2eeb847e88b1e5e6c791dbaf9" Name="Diagram1">
+        <EntityTypeShape EntityType="ModeloDatabase.Aluguel" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModeloDatabase.Apartamento" Width="1.5" PointX="5.25" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModeloDatabase.Contrato" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModeloDatabase.Dependente" Width="1.5" PointX="3" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModeloDatabase.Estacionamento" Width="1.5" PointX="7.5" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModeloDatabase.Morador" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModeloDatabase.Ocorrencia" Width="1.5" PointX="3" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModeloDatabase.Reserva" Width="1.5" PointX="6" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModeloDatabase.TipoReserva" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModeloDatabase.Colaborador" Width="1.5" PointX="8.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModeloDatabase.GrupoUsuario" Width="1.5" PointX="8.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModeloDatabase.Usuario" Width="1.5" PointX="11" PointY="7.375" IsExpanded="true" />
+        <AssociationConnector Association="ModeloDatabase.FK__CG_CONTRA__CON_A__5441852A" ManuallyRouted="false" />
+        <AssociationConnector Association="ModeloDatabase.FK__CG_APARTA__APA_C__5812160E" ManuallyRouted="false" />
+        <AssociationConnector Association="ModeloDatabase.FK__CG_ESTACI__EST_A__5AEE82B9" ManuallyRouted="false" />
+        <AssociationConnector Association="ModeloDatabase.FK__CG_CONTRA__CON_M__5535A963" ManuallyRouted="false" />
+        <AssociationConnector Association="ModeloDatabase.FK__CG_DEPEND__MOR_R__4F7CD00D" ManuallyRouted="false" />
+        <AssociationConnector Association="ModeloDatabase.FK__CG_OCORRE__MOR_R__4CA06362" ManuallyRouted="false" />
+        <AssociationConnector Association="ModeloDatabase.FK__CG_RESERV__RES_M__619B8048" ManuallyRouted="false" />
+        <AssociationConnector Association="ModeloDatabase.FK__CG_RESERV__RES_T__5FB337D6" ManuallyRouted="false" />
+        <AssociationConnector Association="ModeloDatabase.FK__CORE_USUA__USU_C__693CA210" ManuallyRouted="false" />
+        <AssociationConnector Association="ModeloDatabase.FK__CORE_USUA__USU_G__68487DD7" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

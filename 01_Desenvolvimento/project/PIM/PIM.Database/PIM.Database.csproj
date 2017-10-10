@@ -30,8 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,13 +49,66 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\SqlDataConn.cs" />
+    <Compile Include="Cruds\AluguelCrud.cs" />
+    <Compile Include="Infra\ControladorAcesso.cs" />
+    <Compile Include="Infra\RetornoTO.cs" />
+    <Compile Include="Interface\ICrud.cs" />
+    <Compile Include="Modelo\Aluguel.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\Apartamento.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\Colaborador.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\Contrato.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\Dependente.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\Estacionamento.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\GrupoUsuario.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\ModeloPIM.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModeloPIM.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\ModeloPIM.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\ModeloPIM.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModeloPIM.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\Morador.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\Ocorrencia.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\Reserva.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\TipoReserva.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\Usuario.cs">
+      <DependentUpon>ModeloPIM.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TO\AluguelTO.cs" />
     <Compile Include="TO\ApartamentoTO.cs" />
     <Compile Include="TO\ColaboradorTO.cs" />
     <Compile Include="TO\GrupoUsuarioTO.cs" />
-    <Compile Include="TO\PermissaoAcessoTO.cs" />
     <Compile Include="TO\ReservaTO.cs" />
     <Compile Include="TO\ContratoTO.cs" />
     <Compile Include="TO\DependenteTO.cs" />
@@ -56,8 +118,34 @@
     <Compile Include="TO\TipoReservaTO.cs" />
     <Compile Include="TO\UsuarioTO.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="DAO\" />
+    <EntityDeploy Include="Modelo\ModeloPIM.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ModeloPIM.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="Modelo\ModeloPIM.edmx.diagram">
+      <DependentUpon>ModeloPIM.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Modelo\ModeloPIM.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ModeloPIM.Context.cs</LastGenOutput>
+      <DependentUpon>ModeloPIM.edmx</DependentUpon>
+    </Content>
+    <Content Include="Modelo\ModeloPIM.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ModeloPIM.edmx</DependentUpon>
+      <LastGenOutput>ModeloPIM.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
