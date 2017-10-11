@@ -5,9 +5,9 @@
 
     public interface ICrud<T> where T : class
     {
-        T Cadastrar(EntidadePIM _Contexto, T _TO);
-        T Obter(EntidadePIM _Contexto, int _Identificador);
-        T Atualizar(EntidadePIM _Contexto, T _TO);
-        RetornoTO Remover(EntidadePIM _Contexto, int _Identificador);
+        void Cadastrar(EntidadePIM contexto, T to);
+        T Obter(EntidadePIM contexto, int identificador);
+        void Atualizar(EntidadePIM contexto, T to);
+        RetornoTO Remover(EntidadePIM contexto, int identificador);
     }
 }

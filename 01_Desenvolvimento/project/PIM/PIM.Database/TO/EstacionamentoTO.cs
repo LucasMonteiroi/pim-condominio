@@ -24,7 +24,7 @@
         }
     }
 
-    public class ListaEstacionamentoTO
+    public class ListaEstacionamentoTO : RetornoTO
     {
         public List<EstacionamentoTO> Lista { get; set; }
 

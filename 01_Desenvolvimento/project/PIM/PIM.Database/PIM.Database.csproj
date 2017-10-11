@@ -50,8 +50,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cruds\AluguelCrud.cs" />
+    <Compile Include="Cruds\ApartamentoCrud.cs" />
+    <Compile Include="Cruds\ColaboradorCrud.cs" />
+    <Compile Include="Cruds\ContratoCrud.cs" />
+    <Compile Include="Cruds\DependenteCrud.cs" />
+    <Compile Include="Cruds\EstacionamentoCrud.cs" />
+    <Compile Include="Cruds\GrupoUsuarioCrud.cs" />
+    <Compile Include="Cruds\MoradorCrud.cs" />
+    <Compile Include="Cruds\OcorrenciaCrud.cs" />
+    <Compile Include="Cruds\ReservaCrud.cs" />
+    <Compile Include="Cruds\TipoReservaCrud.cs" />
+    <Compile Include="Cruds\UsuarioCrud.cs" />
     <Compile Include="Infra\ControladorAcesso.cs" />
     <Compile Include="Infra\RetornoTO.cs" />
+    <Compile Include="Infra\Utilitario.cs" />
     <Compile Include="Interface\ICrud.cs" />
     <Compile Include="Modelo\Aluguel.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>

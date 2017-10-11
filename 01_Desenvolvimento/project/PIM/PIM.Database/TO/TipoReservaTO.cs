@@ -21,7 +21,7 @@
         }
     }
 
-    public class ListaTipoReservaTO
+    public class ListaTipoReservaTO : RetornoTO
     {
         public List<TipoReservaTO> Lista { get; set; }
 

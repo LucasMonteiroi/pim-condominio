@@ -33,7 +33,7 @@
         }
     }
 
-    public class ListaDependenteTO
+    public class ListaDependenteTO : RetornoTO
     {
         public List<DependenteTO> Lista { get; set; }
 

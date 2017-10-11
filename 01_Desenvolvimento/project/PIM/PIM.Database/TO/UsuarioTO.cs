@@ -30,7 +30,7 @@
         }
     }
 
-    public class ListaUsuarioTO
+    public class ListaUsuarioTO : RetornoTO
     {
         public List<UsuarioTO> Lista { get; set; }
 

@@ -27,7 +27,7 @@
         }
     }
 
-    public class ListaApartamentoTO
+    public class ListaApartamentoTO : RetornoTO
     {
         public List<ApartamentoTO> Lista { get; set; }
 

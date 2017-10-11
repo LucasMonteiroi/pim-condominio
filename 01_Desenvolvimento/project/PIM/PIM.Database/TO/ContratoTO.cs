@@ -31,7 +31,7 @@
         }
     }
 
-    public class ListaContratoTO
+    public class ListaContratoTO : RetornoTO
     {
         public List<ContratoTO> Lista { get; set; }
 

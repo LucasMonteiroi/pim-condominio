@@ -21,7 +21,7 @@
         }
     }
 
-    public class ListaGrupoUsuarioTO
+    public class ListaGrupoUsuarioTO : RetornoTO
     {
         public List<GrupoUsuarioTO> Lista { get; set; }
 

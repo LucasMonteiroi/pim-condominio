@@ -33,7 +33,7 @@
         }
     }
 
-    public class ListaMoradorTO
+    public class ListaMoradorTO : RetornoTO
     {
         public List<MoradorTO> Lista { get; set; }
 

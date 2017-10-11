@@ -31,7 +31,7 @@
         }
     }
 
-    public class ListaOcorrenciaTO
+    public class ListaOcorrenciaTO : RetornoTO
     {
         public List<OcorrenciaTO> Lista { get; set; }
 

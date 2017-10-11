@@ -37,7 +37,7 @@
         }
     }
 
-    public class ListaColaboradorTO
+    public class ListaColaboradorTO : RetornoTO
     {
         public List<ColaboradorTO> Lista { get; set; }
 
