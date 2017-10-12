@@ -1,7 +1,7 @@
 ﻿namespace PIM.Database.TO
 {
     using PIM.Database.Infra;
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
     using System;
     using System.Collections.Generic;
 

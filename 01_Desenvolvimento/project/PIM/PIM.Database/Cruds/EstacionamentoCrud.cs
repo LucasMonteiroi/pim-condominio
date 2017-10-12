@@ -2,7 +2,7 @@
 {
     using PIM.Database.Infra;
     using PIM.Database.Interface;
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
     using PIM.Database.TO;
     using System.Collections.Generic;
     using System.Linq;
@@ -10,14 +10,18 @@
 
     public class EstacionamentoCrud : ICrud<EstacionamentoTO>
     {
-        public void Cadastrar(EntidadePIM contexto, EstacionamentoTO to)
+        private EntidadePIM _Contexto;
+
+        public void Cadastrar(EstacionamentoTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             Estacionamento entidade = new Estacionamento();
 
             to.PreencherEntidade(entidade);
 
-            contexto.Estacionamento.Add(entidade);
-            contexto.SaveChanges();
+            _Contexto.Estacionamento.Add(entidade);
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
 
@@ -28,11 +32,13 @@
 
         }
 
-        public EstacionamentoTO Obter(EntidadePIM contexto, int identificador)
+        public EstacionamentoTO Obter(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             EstacionamentoTO retorno = new EstacionamentoTO();
 
-            Estacionamento entidade = contexto.Estacionamento.FirstOrDefault(x => x.Identificador == identificador);
+            Estacionamento entidade = _Contexto.Estacionamento.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -50,8 +56,10 @@
             return retorno;
         }
 
-        public void Atualizar(EntidadePIM contexto, EstacionamentoTO to)
+        public void Atualizar(EstacionamentoTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             if (to.Identificador == 0 || to == null)
             {
                 to.Valido = false;
@@ -60,7 +68,7 @@
                 return;
             }
 
-            Estacionamento entidade = contexto.Estacionamento.FirstOrDefault(x => x.Identificador == to.Identificador);
+            Estacionamento entidade = _Contexto.Estacionamento.FirstOrDefault(x => x.Identificador == to.Identificador);
 
             if (entidade == null)
             {
@@ -72,7 +80,7 @@
 
             to.PreencherEntidade(entidade);
 
-            contexto.SaveChanges();
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
             to.Valido = true;
@@ -81,11 +89,13 @@
             return;
         }
 
-        public RetornoTO Remover(EntidadePIM contexto, int identificador)
+        public RetornoTO Remover(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             RetornoTO retorno = new RetornoTO();
 
-            Estacionamento entidade = contexto.Estacionamento.FirstOrDefault(x => x.Identificador == identificador);
+            Estacionamento entidade = _Contexto.Estacionamento.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -95,8 +105,8 @@
                 return retorno;
             }
 
-            contexto.Estacionamento.Remove(entidade);
-            contexto.SaveChanges();
+            _Contexto.Estacionamento.Remove(entidade);
+            _Contexto.SaveChanges();
 
             retorno.Valido = true;
             retorno.Mensagem = Mensagem.Exclusao("Estacionamento");
@@ -104,11 +114,13 @@
             return retorno;
         }
 
-        public ListaEstacionamentoTO Listar(EntidadePIM contexto)
+        public ListaEstacionamentoTO Listar()
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ListaEstacionamentoTO retorno = new ListaEstacionamentoTO();
 
-            List<Estacionamento> listaEstacionamento = contexto.Estacionamento.ToList();
+            List<Estacionamento> listaEstacionamento = _Contexto.Estacionamento.ToList();
 
             if (listaEstacionamento == null || listaEstacionamento.Count == 0)
             {

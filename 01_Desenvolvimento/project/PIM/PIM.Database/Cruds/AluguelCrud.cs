@@ -2,23 +2,26 @@
 {
     using PIM.Database.Interface;
     using PIM.Database.TO;
-    using System;
     using PIM.Database.Infra;
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
     using System.Linq;
     using static PIM.Database.Infra.Utilitario;
     using System.Collections.Generic;
 
     public class AluguelCrud : ICrud<AluguelTO>
     {
-        public void Cadastrar(EntidadePIM contexto, AluguelTO to)
+        private EntidadePIM _Contexto;
+
+        public void Cadastrar(AluguelTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             Aluguel entidade = new Aluguel();
 
             to.PreencherEntidade(entidade);
 
-            contexto.Aluguel.Add(entidade);
-            contexto.SaveChanges();
+            _Contexto.Aluguel.Add(entidade);
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
 
@@ -29,11 +32,13 @@
 
         }
 
-        public AluguelTO Obter(EntidadePIM contexto, int identificador)
+        public AluguelTO Obter(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             AluguelTO retorno = new AluguelTO();
 
-            Aluguel entidade = contexto.Aluguel.FirstOrDefault(x => x.Identificador == identificador);
+            Aluguel entidade = _Contexto.Aluguel.FirstOrDefault(x => x.Identificador == identificador);
 
             if(entidade == null)
             {
@@ -51,9 +56,11 @@
             return retorno;
         }
 
-        public void Atualizar(EntidadePIM contexto, AluguelTO to)
+        public void Atualizar(AluguelTO to)
         {
-            if(to.Identificador == 0 || to == null)
+            _Contexto = ControladorAcesso.ObterContexto();
+
+            if (to.Identificador == 0 || to == null)
             {
                 to.Valido = false;
                 to.Mensagem = Mensagem.Atualizacao("Aluguel", false);
@@ -61,7 +68,7 @@
                 return;
             }
 
-            Aluguel entidade = contexto.Aluguel.FirstOrDefault(x => x.Identificador == to.Identificador);
+            Aluguel entidade = _Contexto.Aluguel.FirstOrDefault(x => x.Identificador == to.Identificador);
 
             if (entidade == null)
             {
@@ -73,7 +80,7 @@
 
             to.PreencherEntidade(entidade);
 
-            contexto.SaveChanges();
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
             to.Valido = true;
@@ -82,11 +89,13 @@
             return;
         }
 
-        public RetornoTO Remover(EntidadePIM contexto, int identificador)
+        public RetornoTO Remover(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             RetornoTO retorno = new RetornoTO();
 
-            Aluguel entidade = contexto.Aluguel.FirstOrDefault(x => x.Identificador == identificador);
+            Aluguel entidade = _Contexto.Aluguel.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -96,8 +105,8 @@
                 return retorno;
             }
 
-            contexto.Aluguel.Remove(entidade);
-            contexto.SaveChanges();
+            _Contexto.Aluguel.Remove(entidade);
+            _Contexto.SaveChanges();
 
             retorno.Valido = true;
             retorno.Mensagem = Mensagem.Exclusao("Aluguel");
@@ -105,11 +114,13 @@
             return retorno;
         }
 
-        public ListaAluguelTO Listar(EntidadePIM contexto)
+        public ListaAluguelTO Listar()
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ListaAluguelTO retorno = new ListaAluguelTO();
 
-            List<Aluguel> listaAluguel = contexto.Aluguel.ToList();
+            List<Aluguel> listaAluguel = _Contexto.Aluguel.ToList();
 
             if(listaAluguel == null || listaAluguel.Count == 0)
             {

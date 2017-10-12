@@ -53,6 +53,18 @@
                     return string.Format("Não existem {0} cadastradas na base de dados.", _Classe);
                 }
             }
+
+            internal static string Pesquisa(string _Classe, bool _Valido)
+            {
+                if (_Valido)
+                {
+                    return string.Format("Pesquisa de {0} realizada com sucesso.", _Classe);
+                }
+                else
+                {
+                    return string.Format("Não existem {0} de acordo com a informação inserida.", _Classe);
+                }
+            }
         }
 
         #endregion --- Mensagem ---

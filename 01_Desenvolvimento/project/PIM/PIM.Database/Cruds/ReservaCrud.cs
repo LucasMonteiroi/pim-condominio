@@ -4,21 +4,25 @@
     using PIM.Database.TO;
     using System;
     using PIM.Database.Infra;
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
     using System.Linq;
     using static PIM.Database.Infra.Utilitario;
     using System.Collections.Generic;
 
     public class ReservaCrud : ICrud<ReservaTO>
     {
-        public void Cadastrar(EntidadePIM contexto, ReservaTO to)
+        private EntidadePIM _Contexto;
+
+        public void Cadastrar(ReservaTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             Reserva entidade = new Reserva();
 
             to.PreencherEntidade(entidade);
 
-            contexto.Reserva.Add(entidade);
-            contexto.SaveChanges();
+            _Contexto.Reserva.Add(entidade);
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
 
@@ -29,11 +33,13 @@
 
         }
 
-        public ReservaTO Obter(EntidadePIM contexto, int identificador)
+        public ReservaTO Obter(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ReservaTO retorno = new ReservaTO();
 
-            Reserva entidade = contexto.Reserva.FirstOrDefault(x => x.Identificador == identificador);
+            Reserva entidade = _Contexto.Reserva.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -51,8 +57,10 @@
             return retorno;
         }
 
-        public void Atualizar(EntidadePIM contexto, ReservaTO to)
+        public void Atualizar(ReservaTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             if (to.Identificador == 0 || to == null)
             {
                 to.Valido = false;
@@ -61,7 +69,7 @@
                 return;
             }
 
-            Reserva entidade = contexto.Reserva.FirstOrDefault(x => x.Identificador == to.Identificador);
+            Reserva entidade = _Contexto.Reserva.FirstOrDefault(x => x.Identificador == to.Identificador);
 
             if (entidade == null)
             {
@@ -73,7 +81,7 @@
 
             to.PreencherEntidade(entidade);
 
-            contexto.SaveChanges();
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
             to.Valido = true;
@@ -82,11 +90,13 @@
             return;
         }
 
-        public RetornoTO Remover(EntidadePIM contexto, int identificador)
+        public RetornoTO Remover(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             RetornoTO retorno = new RetornoTO();
 
-            Reserva entidade = contexto.Reserva.FirstOrDefault(x => x.Identificador == identificador);
+            Reserva entidade = _Contexto.Reserva.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -96,8 +106,8 @@
                 return retorno;
             }
 
-            contexto.Reserva.Remove(entidade);
-            contexto.SaveChanges();
+            _Contexto.Reserva.Remove(entidade);
+            _Contexto.SaveChanges();
 
             retorno.Valido = true;
             retorno.Mensagem = Mensagem.Exclusao("Reserva");
@@ -105,11 +115,13 @@
             return retorno;
         }
 
-        public ListaReservaTO Listar(EntidadePIM contexto)
+        public ListaReservaTO Listar()
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ListaReservaTO retorno = new ListaReservaTO();
 
-            List<Reserva> listaReserva = contexto.Reserva.ToList();
+            List<Reserva> listaReserva = _Contexto.Reserva.ToList();
 
             if (listaReserva == null || listaReserva.Count == 0)
             {

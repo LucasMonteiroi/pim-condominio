@@ -2,7 +2,7 @@
 {
     using PIM.Database.Infra;
     using PIM.Database.Interface;
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
     using PIM.Database.TO;
     using System.Collections.Generic;
     using System.Linq;
@@ -10,14 +10,18 @@
 
     public class ApartamentoCrud : ICrud<ApartamentoTO>
     {
-        public void Cadastrar(EntidadePIM contexto, ApartamentoTO to)
+        private EntidadePIM _Contexto;
+        
+        public void Cadastrar(ApartamentoTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             Apartamento entidade = new Apartamento();
 
             to.PreencherEntidade(entidade);
 
-            contexto.Apartamento.Add(entidade);
-            contexto.SaveChanges();
+            _Contexto.Apartamento.Add(entidade);
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
 
@@ -28,11 +32,13 @@
 
         }
 
-        public ApartamentoTO Obter(EntidadePIM contexto, int identificador)
+        public ApartamentoTO Obter(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ApartamentoTO retorno = new ApartamentoTO();
 
-            Apartamento entidade = contexto.Apartamento.FirstOrDefault(x => x.Identificador == identificador);
+            Apartamento entidade = _Contexto.Apartamento.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -50,8 +56,10 @@
             return retorno;
         }
 
-        public void Atualizar(EntidadePIM contexto, ApartamentoTO to)
+        public void Atualizar(ApartamentoTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             if (to.Identificador == 0 || to == null)
             {
                 to.Valido = false;
@@ -60,7 +68,7 @@
                 return;
             }
 
-            Apartamento entidade = contexto.Apartamento.FirstOrDefault(x => x.Identificador == to.Identificador);
+            Apartamento entidade = _Contexto.Apartamento.FirstOrDefault(x => x.Identificador == to.Identificador);
 
             if (entidade == null)
             {
@@ -72,7 +80,7 @@
 
             to.PreencherEntidade(entidade);
 
-            contexto.SaveChanges();
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
             to.Valido = true;
@@ -81,11 +89,13 @@
             return;
         }
 
-        public RetornoTO Remover(EntidadePIM contexto, int identificador)
+        public RetornoTO Remover(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             RetornoTO retorno = new RetornoTO();
 
-            Apartamento entidade = contexto.Apartamento.FirstOrDefault(x => x.Identificador == identificador);
+            Apartamento entidade = _Contexto.Apartamento.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -95,8 +105,8 @@
                 return retorno;
             }
 
-            contexto.Apartamento.Remove(entidade);
-            contexto.SaveChanges();
+            _Contexto.Apartamento.Remove(entidade);
+            _Contexto.SaveChanges();
 
             retorno.Valido = true;
             retorno.Mensagem = Mensagem.Exclusao("Apartamento");
@@ -104,11 +114,13 @@
             return retorno;
         }
 
-        public ListaApartamentoTO Listar(EntidadePIM contexto)
+        public ListaApartamentoTO Listar()
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ListaApartamentoTO retorno = new ListaApartamentoTO();
 
-            List<Apartamento> listaApartamento = contexto.Apartamento.ToList();
+            List<Apartamento> listaApartamento = _Contexto.Apartamento.ToList();
 
             if (listaApartamento == null || listaApartamento.Count == 0)
             {

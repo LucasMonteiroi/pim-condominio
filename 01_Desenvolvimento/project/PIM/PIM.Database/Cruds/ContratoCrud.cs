@@ -2,7 +2,7 @@
 {
     using PIM.Database.Infra;
     using PIM.Database.Interface;
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
     using PIM.Database.TO;
     using System;
     using System.Collections.Generic;
@@ -13,14 +13,18 @@
 
     public class ContratoCrud : ICrud<ContratoTO>
     {
-        public void Cadastrar(EntidadePIM contexto, ContratoTO to)
+        private EntidadePIM _Contexto;
+
+        public void Cadastrar(ContratoTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             Contrato entidade = new Contrato();
 
             to.PreencherEntidade(entidade);
 
-            contexto.Contrato.Add(entidade);
-            contexto.SaveChanges();
+            _Contexto.Contrato.Add(entidade);
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
 
@@ -31,11 +35,13 @@
 
         }
 
-        public ContratoTO Obter(EntidadePIM contexto, int identificador)
+        public ContratoTO Obter(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ContratoTO retorno = new ContratoTO();
 
-            Contrato entidade = contexto.Contrato.FirstOrDefault(x => x.Identificador == identificador);
+            Contrato entidade = _Contexto.Contrato.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -53,8 +59,10 @@
             return retorno;
         }
 
-        public void Atualizar(EntidadePIM contexto, ContratoTO to)
+        public void Atualizar(ContratoTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             if (to.Identificador == 0 || to == null)
             {
                 to.Valido = false;
@@ -63,7 +71,7 @@
                 return;
             }
 
-            Contrato entidade = contexto.Contrato.FirstOrDefault(x => x.Identificador == to.Identificador);
+            Contrato entidade = _Contexto.Contrato.FirstOrDefault(x => x.Identificador == to.Identificador);
 
             if (entidade == null)
             {
@@ -75,7 +83,7 @@
 
             to.PreencherEntidade(entidade);
 
-            contexto.SaveChanges();
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
             to.Valido = true;
@@ -84,11 +92,13 @@
             return;
         }
 
-        public RetornoTO Remover(EntidadePIM contexto, int identificador)
+        public RetornoTO Remover(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             RetornoTO retorno = new RetornoTO();
 
-            Contrato entidade = contexto.Contrato.FirstOrDefault(x => x.Identificador == identificador);
+            Contrato entidade = _Contexto.Contrato.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -98,8 +108,8 @@
                 return retorno;
             }
 
-            contexto.Contrato.Remove(entidade);
-            contexto.SaveChanges();
+            _Contexto.Contrato.Remove(entidade);
+            _Contexto.SaveChanges();
 
             retorno.Valido = true;
             retorno.Mensagem = Mensagem.Exclusao("Contrato");
@@ -107,11 +117,13 @@
             return retorno;
         }
 
-        public ListaContratoTO Listar(EntidadePIM contexto)
+        public ListaContratoTO Listar()
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ListaContratoTO retorno = new ListaContratoTO();
 
-            List<Contrato> listaContrato = contexto.Contrato.ToList();
+            List<Contrato> listaContrato = _Contexto.Contrato.ToList();
 
             if (listaContrato == null || listaContrato.Count == 0)
             {

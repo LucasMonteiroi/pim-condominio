@@ -2,7 +2,7 @@
 {
     using PIM.Database.Infra;
     using PIM.Database.Interface;
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
     using PIM.Database.TO;
     using System.Collections.Generic;
     using System.Linq;
@@ -10,14 +10,18 @@
 
     public class DependenteCrud : ICrud<DependenteTO>
     {
-        public void Cadastrar(EntidadePIM contexto, DependenteTO to)
+        private EntidadePIM _Contexto;
+
+        public void Cadastrar(DependenteTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             Dependente entidade = new Dependente();
 
             to.PreencherEntidade(entidade);
 
-            contexto.Dependente.Add(entidade);
-            contexto.SaveChanges();
+            _Contexto.Dependente.Add(entidade);
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
 
@@ -28,11 +32,13 @@
 
         }
 
-        public DependenteTO Obter(EntidadePIM contexto, int identificador)
+        public DependenteTO Obter(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             DependenteTO retorno = new DependenteTO();
 
-            Dependente entidade = contexto.Dependente.FirstOrDefault(x => x.Identificador == identificador);
+            Dependente entidade = _Contexto.Dependente.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -50,8 +56,10 @@
             return retorno;
         }
 
-        public void Atualizar(EntidadePIM contexto, DependenteTO to)
+        public void Atualizar(DependenteTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             if (to.Identificador == 0 || to == null)
             {
                 to.Valido = false;
@@ -60,7 +68,7 @@
                 return;
             }
 
-            Dependente entidade = contexto.Dependente.FirstOrDefault(x => x.Identificador == to.Identificador);
+            Dependente entidade = _Contexto.Dependente.FirstOrDefault(x => x.Identificador == to.Identificador);
 
             if (entidade == null)
             {
@@ -72,7 +80,7 @@
 
             to.PreencherEntidade(entidade);
 
-            contexto.SaveChanges();
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
             to.Valido = true;
@@ -81,11 +89,13 @@
             return;
         }
 
-        public RetornoTO Remover(EntidadePIM contexto, int identificador)
+        public RetornoTO Remover(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             RetornoTO retorno = new RetornoTO();
 
-            Dependente entidade = contexto.Dependente.FirstOrDefault(x => x.Identificador == identificador);
+            Dependente entidade = _Contexto.Dependente.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -95,8 +105,8 @@
                 return retorno;
             }
 
-            contexto.Dependente.Remove(entidade);
-            contexto.SaveChanges();
+            _Contexto.Dependente.Remove(entidade);
+            _Contexto.SaveChanges();
 
             retorno.Valido = true;
             retorno.Mensagem = Mensagem.Exclusao("Dependente");
@@ -104,11 +114,13 @@
             return retorno;
         }
 
-        public ListaDependenteTO Listar(EntidadePIM contexto)
+        public ListaDependenteTO Listar()
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ListaDependenteTO retorno = new ListaDependenteTO();
 
-            List<Dependente> listaDependente = contexto.Dependente.ToList();
+            List<Dependente> listaDependente = _Contexto.Dependente.ToList();
 
             if (listaDependente == null || listaDependente.Count == 0)
             {

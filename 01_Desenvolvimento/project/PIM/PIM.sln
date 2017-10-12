@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Infra", "3 - Infra", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PIM.Database", "PIM.Database\PIM.Database.csproj", "{91F0B016-362B-4252-A7C8-A1220B66CC76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PIM.Service", "PIM.Service\PIM.Service.csproj", "{14F18A31-87C4-4668-9AC0-9D67992352BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,11 +23,16 @@ Global
 		{91F0B016-362B-4252-A7C8-A1220B66CC76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91F0B016-362B-4252-A7C8-A1220B66CC76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91F0B016-362B-4252-A7C8-A1220B66CC76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14F18A31-87C4-4668-9AC0-9D67992352BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14F18A31-87C4-4668-9AC0-9D67992352BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14F18A31-87C4-4668-9AC0-9D67992352BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14F18A31-87C4-4668-9AC0-9D67992352BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{91F0B016-362B-4252-A7C8-A1220B66CC76} = {6DA97927-4328-46C8-8F85-1B01BBDD4B1B}
+		{14F18A31-87C4-4668-9AC0-9D67992352BA} = {1C3A1F23-B9A8-4B03-B823-09695159D49F}
 	EndGlobalSection
 EndGlobal

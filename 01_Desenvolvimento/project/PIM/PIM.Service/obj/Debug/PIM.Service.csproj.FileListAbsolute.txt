@@ -1,0 +1,10 @@
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Service\bin\Debug\PIM.Service.dll
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Service\bin\Debug\PIM.Service.pdb
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Service\bin\Debug\PIM.Database.dll
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Service\bin\Debug\EntityFramework.dll
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Service\bin\Debug\PIM.Database.pdb
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Service\bin\Debug\PIM.Database.dll.config
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Service\bin\Debug\EntityFramework.xml
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Service\obj\Debug\PIM.Service.csprojResolveAssemblyReference.cache
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Service\obj\Debug\PIM.Service.dll
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Service\obj\Debug\PIM.Service.pdb

@@ -4,21 +4,25 @@
     using PIM.Database.TO;
     using System;
     using PIM.Database.Infra;
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
     using System.Linq;
     using static PIM.Database.Infra.Utilitario;
     using System.Collections.Generic;
 
     public class MoradorCrud : ICrud<MoradorTO>
     {
-        public void Cadastrar(EntidadePIM contexto, MoradorTO to)
+        private EntidadePIM _Contexto;
+
+        public void Cadastrar(MoradorTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             Morador entidade = new Morador();
 
             to.PreencherEntidade(entidade);
 
-            contexto.Morador.Add(entidade);
-            contexto.SaveChanges();
+            _Contexto.Morador.Add(entidade);
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
 
@@ -29,11 +33,13 @@
 
         }
 
-        public MoradorTO Obter(EntidadePIM contexto, int identificador)
+        public MoradorTO Obter(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             MoradorTO retorno = new MoradorTO();
 
-            Morador entidade = contexto.Morador.FirstOrDefault(x => x.Identificador == identificador);
+            Morador entidade = _Contexto.Morador.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -51,8 +57,10 @@
             return retorno;
         }
 
-        public void Atualizar(EntidadePIM contexto, MoradorTO to)
+        public void Atualizar(MoradorTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             if (to.Identificador == 0 || to == null)
             {
                 to.Valido = false;
@@ -61,7 +69,7 @@
                 return;
             }
 
-            Morador entidade = contexto.Morador.FirstOrDefault(x => x.Identificador == to.Identificador);
+            Morador entidade = _Contexto.Morador.FirstOrDefault(x => x.Identificador == to.Identificador);
 
             if (entidade == null)
             {
@@ -73,7 +81,7 @@
 
             to.PreencherEntidade(entidade);
 
-            contexto.SaveChanges();
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
             to.Valido = true;
@@ -82,11 +90,13 @@
             return;
         }
 
-        public RetornoTO Remover(EntidadePIM contexto, int identificador)
+        public RetornoTO Remover(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             RetornoTO retorno = new RetornoTO();
 
-            Morador entidade = contexto.Morador.FirstOrDefault(x => x.Identificador == identificador);
+            Morador entidade = _Contexto.Morador.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -96,8 +106,8 @@
                 return retorno;
             }
 
-            contexto.Morador.Remove(entidade);
-            contexto.SaveChanges();
+            _Contexto.Morador.Remove(entidade);
+            _Contexto.SaveChanges();
 
             retorno.Valido = true;
             retorno.Mensagem = Mensagem.Exclusao("Morador");
@@ -105,11 +115,13 @@
             return retorno;
         }
 
-        public ListaMoradorTO Listar(EntidadePIM contexto)
+        public ListaMoradorTO Listar()
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ListaMoradorTO retorno = new ListaMoradorTO();
 
-            List<Morador> listaMorador = contexto.Morador.ToList();
+            List<Morador> listaMorador = _Contexto.Morador.ToList();
 
             if (listaMorador == null || listaMorador.Count == 0)
             {

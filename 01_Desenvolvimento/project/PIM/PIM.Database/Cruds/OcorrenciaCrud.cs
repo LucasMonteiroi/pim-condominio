@@ -4,21 +4,25 @@
     using PIM.Database.TO;
     using System;
     using PIM.Database.Infra;
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
     using System.Linq;
     using static PIM.Database.Infra.Utilitario;
     using System.Collections.Generic;
 
     public class OcorrenciaCrud : ICrud<OcorrenciaTO>
     {
-        public void Cadastrar(EntidadePIM contexto, OcorrenciaTO to)
+        private EntidadePIM _Contexto;
+
+        public void Cadastrar(OcorrenciaTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             Ocorrencia entidade = new Ocorrencia();
 
             to.PreencherEntidade(entidade);
 
-            contexto.Ocorrencia.Add(entidade);
-            contexto.SaveChanges();
+            _Contexto.Ocorrencia.Add(entidade);
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
 
@@ -29,11 +33,13 @@
 
         }
 
-        public OcorrenciaTO Obter(EntidadePIM contexto, int identificador)
+        public OcorrenciaTO Obter(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             OcorrenciaTO retorno = new OcorrenciaTO();
 
-            Ocorrencia entidade = contexto.Ocorrencia.FirstOrDefault(x => x.Identificador == identificador);
+            Ocorrencia entidade = _Contexto.Ocorrencia.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -51,8 +57,10 @@
             return retorno;
         }
 
-        public void Atualizar(EntidadePIM contexto, OcorrenciaTO to)
+        public void Atualizar(OcorrenciaTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             if (to.Identificador == 0 || to == null)
             {
                 to.Valido = false;
@@ -61,7 +69,7 @@
                 return;
             }
 
-            Ocorrencia entidade = contexto.Ocorrencia.FirstOrDefault(x => x.Identificador == to.Identificador);
+            Ocorrencia entidade = _Contexto.Ocorrencia.FirstOrDefault(x => x.Identificador == to.Identificador);
 
             if (entidade == null)
             {
@@ -73,7 +81,7 @@
 
             to.PreencherEntidade(entidade);
 
-            contexto.SaveChanges();
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
             to.Valido = true;
@@ -82,11 +90,13 @@
             return;
         }
 
-        public RetornoTO Remover(EntidadePIM contexto, int identificador)
+        public RetornoTO Remover(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             RetornoTO retorno = new RetornoTO();
 
-            Ocorrencia entidade = contexto.Ocorrencia.FirstOrDefault(x => x.Identificador == identificador);
+            Ocorrencia entidade = _Contexto.Ocorrencia.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -96,8 +106,8 @@
                 return retorno;
             }
 
-            contexto.Ocorrencia.Remove(entidade);
-            contexto.SaveChanges();
+            _Contexto.Ocorrencia.Remove(entidade);
+            _Contexto.SaveChanges();
 
             retorno.Valido = true;
             retorno.Mensagem = Mensagem.Exclusao("Ocorrencia");
@@ -105,11 +115,13 @@
             return retorno;
         }
 
-        public ListaOcorrenciaTO Listar(EntidadePIM contexto)
+        public ListaOcorrenciaTO Listar()
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ListaOcorrenciaTO retorno = new ListaOcorrenciaTO();
 
-            List<Ocorrencia> listaOcorrencia = contexto.Ocorrencia.ToList();
+            List<Ocorrencia> listaOcorrencia = _Contexto.Ocorrencia.ToList();
 
             if (listaOcorrencia == null || listaOcorrencia.Count == 0)
             {

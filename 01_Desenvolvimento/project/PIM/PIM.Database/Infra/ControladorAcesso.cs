@@ -1,10 +1,10 @@
 ﻿namespace PIM.Database.Infra
 {
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
 
-    internal class ControladorAcesso
+    internal static class ControladorAcesso
     {
-        internal EntidadePIM ObterContexto()
+        internal static EntidadePIM ObterContexto()
         {
             return new EntidadePIM();
         }

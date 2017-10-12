@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ModeloDatabase.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CG_ALUGUEL">
+    <Key>
+      <PropertyRef Name="ALU_ID" />
+    </Key>
+    <Property Name="ALU_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ALU_VALOR" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CG_APARTAMENTO">
+    <Key>
+      <PropertyRef Name="APA_ID" />
+    </Key>
+    <Property Name="APA_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="APA_BLOCO" Type="int" Nullable="false" />
+    <Property Name="APA_NUMERO" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="APA_CONTRATO" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CG_CONTRATO">
+    <Key>
+      <PropertyRef Name="CON_ID" />
+    </Key>
+    <Property Name="CON_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CON_DATA" Type="datetime" Nullable="false" />
+    <Property Name="CON_DESCRICAO" Type="varchar" MaxLength="1000" Nullable="false" />
+    <Property Name="CON_ALUGUEL" Type="int" Nullable="false" />
+    <Property Name="CON_MORADOR" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CG_DEPENDENTE">
+    <Key>
+      <PropertyRef Name="DEP_ID" />
+    </Key>
+    <Property Name="DEP_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DEP_NOME" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="DEP_RG" Type="varchar" MaxLength="20" />
+    <Property Name="DEP_CPF" Type="varchar" MaxLength="20" />
+    <Property Name="DEP_TELEFONE" Type="varchar" MaxLength="20" />
+    <Property Name="MOR_RESPONSAVEL" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CG_ESTACIONAMENTO">
+    <Key>
+      <PropertyRef Name="EST_ID" />
+    </Key>
+    <Property Name="EST_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EST_VAGAS" Type="int" Nullable="false" />
+    <Property Name="EST_AP" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CG_MORADORES">
+    <Key>
+      <PropertyRef Name="MOR_ID" />
+    </Key>
+    <Property Name="MOR_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MOR_NOME" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="MOR_RG" Type="varchar" MaxLength="20" />
+    <Property Name="MOR_CPF" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="MOR_TELEFONE" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="MOR_CELULAR" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="CG_OCORRENCIA">
+    <Key>
+      <PropertyRef Name="OCO_ID" />
+    </Key>
+    <Property Name="OCO_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OCO_MOTIVO" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="OCO_DESCRICAO" Type="varchar" MaxLength="400" Nullable="false" />
+    <Property Name="OCO_DATA" Type="datetime" Nullable="false" />
+    <Property Name="MOR_REC" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CG_RESERVAS">
+    <Key>
+      <PropertyRef Name="RES_ID" />
+    </Key>
+    <Property Name="RES_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RES_DATA" Type="datetime" Nullable="false" />
+    <Property Name="RES_TIPO" Type="int" Nullable="false" />
+    <Property Name="RES_CONFIR" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="RES_MOD" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CG_TIPO_RESERVA">
+    <Key>
+      <PropertyRef Name="TP_ID" />
+    </Key>
+    <Property Name="TP_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TP_TIPO_RESERVA" Type="varchar" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CORE_COLABORADOR">
+    <Key>
+      <PropertyRef Name="COL_ID" />
+    </Key>
+    <Property Name="COL_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="COL_NOME" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="COL_RG" Type="varchar" MaxLength="20" />
+    <Property Name="COL_CPF" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="COL_FUNCAO" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="COL_SAL" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="COL_CONTRATO" Type="datetime" />
+  </EntityType>
+  <EntityType Name="CORE_GRUPO_USUARIO">
+    <Key>
+      <PropertyRef Name="GRP_ID" />
+    </Key>
+    <Property Name="GRP_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GRP_NOME" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CORE_USUARIO">
+    <Key>
+      <PropertyRef Name="USU_ID" />
+    </Key>
+    <Property Name="USU_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="USU_LOGIN" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="USU_SENHA" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="USU_GRP" Type="int" Nullable="false" />
+    <Property Name="USU_COLAB" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__CG_APARTA__APA_C__5812160E">
+    <End Role="CG_CONTRATO" Type="Self.CG_CONTRATO" Multiplicity="1" />
+    <End Role="CG_APARTAMENTO" Type="Self.CG_APARTAMENTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CG_CONTRATO">
+        <PropertyRef Name="CON_ID" />
+      </Principal>
+      <Dependent Role="CG_APARTAMENTO">
+        <PropertyRef Name="APA_CONTRATO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CG_CONTRA__CON_A__5441852A">
+    <End Role="CG_ALUGUEL" Type="Self.CG_ALUGUEL" Multiplicity="1" />
+    <End Role="CG_CONTRATO" Type="Self.CG_CONTRATO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CG_ALUGUEL">
+        <PropertyRef Name="ALU_ID" />
+      </Principal>
+      <Dependent Role="CG_CONTRATO">
+        <PropertyRef Name="CON_ALUGUEL" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CG_CONTRA__CON_M__5535A963">
+    <End Role="CG_MORADORES" Type="Self.CG_MORADORES" Multiplicity="1" />
+    <End Role="CG_CONTRATO" Type="Self.CG_CONTRATO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CG_MORADORES">
+        <PropertyRef Name="MOR_ID" />
+      </Principal>
+      <Dependent Role="CG_CONTRATO">
+        <PropertyRef Name="CON_MORADOR" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CG_DEPEND__MOR_R__4F7CD00D">
+    <End Role="CG_MORADORES" Type="Self.CG_MORADORES" Multiplicity="1" />
+    <End Role="CG_DEPENDENTE" Type="Self.CG_DEPENDENTE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CG_MORADORES">
+        <PropertyRef Name="MOR_ID" />
+      </Principal>
+      <Dependent Role="CG_DEPENDENTE">
+        <PropertyRef Name="MOR_RESPONSAVEL" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CG_ESTACI__EST_A__5AEE82B9">
+    <End Role="CG_APARTAMENTO" Type="Self.CG_APARTAMENTO" Multiplicity="1" />
+    <End Role="CG_ESTACIONAMENTO" Type="Self.CG_ESTACIONAMENTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CG_APARTAMENTO">
+        <PropertyRef Name="APA_ID" />
+      </Principal>
+      <Dependent Role="CG_ESTACIONAMENTO">
+        <PropertyRef Name="EST_AP" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CG_OCORRE__MOR_R__4CA06362">
+    <End Role="CG_MORADORES" Type="Self.CG_MORADORES" Multiplicity="1" />
+    <End Role="CG_OCORRENCIA" Type="Self.CG_OCORRENCIA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CG_MORADORES">
+        <PropertyRef Name="MOR_ID" />
+      </Principal>
+      <Dependent Role="CG_OCORRENCIA">
+        <PropertyRef Name="MOR_REC" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CG_RESERV__RES_M__619B8048">
+    <End Role="CG_MORADORES" Type="Self.CG_MORADORES" Multiplicity="1" />
+    <End Role="CG_RESERVAS" Type="Self.CG_RESERVAS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CG_MORADORES">
+        <PropertyRef Name="MOR_ID" />
+      </Principal>
+      <Dependent Role="CG_RESERVAS">
+        <PropertyRef Name="RES_MOD" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CG_RESERV__RES_T__5FB337D6">
+    <End Role="CG_TIPO_RESERVA" Type="Self.CG_TIPO_RESERVA" Multiplicity="1" />
+    <End Role="CG_RESERVAS" Type="Self.CG_RESERVAS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CG_TIPO_RESERVA">
+        <PropertyRef Name="TP_ID" />
+      </Principal>
+      <Dependent Role="CG_RESERVAS">
+        <PropertyRef Name="RES_TIPO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CORE_USUA__USU_C__693CA210">
+    <End Role="CORE_COLABORADOR" Type="Self.CORE_COLABORADOR" Multiplicity="1" />
+    <End Role="CORE_USUARIO" Type="Self.CORE_USUARIO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CORE_COLABORADOR">
+        <PropertyRef Name="COL_ID" />
+      </Principal>
+      <Dependent Role="CORE_USUARIO">
+        <PropertyRef Name="USU_COLAB" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CORE_USUA__USU_G__68487DD7">
+    <End Role="CORE_GRUPO_USUARIO" Type="Self.CORE_GRUPO_USUARIO" Multiplicity="1" />
+    <End Role="CORE_USUARIO" Type="Self.CORE_USUARIO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CORE_GRUPO_USUARIO">
+        <PropertyRef Name="GRP_ID" />
+      </Principal>
+      <Dependent Role="CORE_USUARIO">
+        <PropertyRef Name="USU_GRP" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ModeloDatabaseStoreContainer">
+    <EntitySet Name="CG_ALUGUEL" EntityType="Self.CG_ALUGUEL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CG_APARTAMENTO" EntityType="Self.CG_APARTAMENTO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CG_CONTRATO" EntityType="Self.CG_CONTRATO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CG_DEPENDENTE" EntityType="Self.CG_DEPENDENTE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CG_ESTACIONAMENTO" EntityType="Self.CG_ESTACIONAMENTO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CG_MORADORES" EntityType="Self.CG_MORADORES" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CG_OCORRENCIA" EntityType="Self.CG_OCORRENCIA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CG_RESERVAS" EntityType="Self.CG_RESERVAS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CG_TIPO_RESERVA" EntityType="Self.CG_TIPO_RESERVA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CORE_COLABORADOR" EntityType="Self.CORE_COLABORADOR" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CORE_GRUPO_USUARIO" EntityType="Self.CORE_GRUPO_USUARIO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CORE_USUARIO" EntityType="Self.CORE_USUARIO" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__CG_APARTA__APA_C__5812160E" Association="Self.FK__CG_APARTA__APA_C__5812160E">
+      <End Role="CG_CONTRATO" EntitySet="CG_CONTRATO" />
+      <End Role="CG_APARTAMENTO" EntitySet="CG_APARTAMENTO" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CG_CONTRA__CON_A__5441852A" Association="Self.FK__CG_CONTRA__CON_A__5441852A">
+      <End Role="CG_ALUGUEL" EntitySet="CG_ALUGUEL" />
+      <End Role="CG_CONTRATO" EntitySet="CG_CONTRATO" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CG_CONTRA__CON_M__5535A963" Association="Self.FK__CG_CONTRA__CON_M__5535A963">
+      <End Role="CG_MORADORES" EntitySet="CG_MORADORES" />
+      <End Role="CG_CONTRATO" EntitySet="CG_CONTRATO" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CG_DEPEND__MOR_R__4F7CD00D" Association="Self.FK__CG_DEPEND__MOR_R__4F7CD00D">
+      <End Role="CG_MORADORES" EntitySet="CG_MORADORES" />
+      <End Role="CG_DEPENDENTE" EntitySet="CG_DEPENDENTE" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CG_ESTACI__EST_A__5AEE82B9" Association="Self.FK__CG_ESTACI__EST_A__5AEE82B9">
+      <End Role="CG_APARTAMENTO" EntitySet="CG_APARTAMENTO" />
+      <End Role="CG_ESTACIONAMENTO" EntitySet="CG_ESTACIONAMENTO" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CG_OCORRE__MOR_R__4CA06362" Association="Self.FK__CG_OCORRE__MOR_R__4CA06362">
+      <End Role="CG_MORADORES" EntitySet="CG_MORADORES" />
+      <End Role="CG_OCORRENCIA" EntitySet="CG_OCORRENCIA" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CG_RESERV__RES_M__619B8048" Association="Self.FK__CG_RESERV__RES_M__619B8048">
+      <End Role="CG_MORADORES" EntitySet="CG_MORADORES" />
+      <End Role="CG_RESERVAS" EntitySet="CG_RESERVAS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CG_RESERV__RES_T__5FB337D6" Association="Self.FK__CG_RESERV__RES_T__5FB337D6">
+      <End Role="CG_TIPO_RESERVA" EntitySet="CG_TIPO_RESERVA" />
+      <End Role="CG_RESERVAS" EntitySet="CG_RESERVAS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CORE_USUA__USU_C__693CA210" Association="Self.FK__CORE_USUA__USU_C__693CA210">
+      <End Role="CORE_COLABORADOR" EntitySet="CORE_COLABORADOR" />
+      <End Role="CORE_USUARIO" EntitySet="CORE_USUARIO" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CORE_USUA__USU_G__68487DD7" Association="Self.FK__CORE_USUA__USU_G__68487DD7">
+      <End Role="CORE_GRUPO_USUARIO" EntitySet="CORE_GRUPO_USUARIO" />
+      <End Role="CORE_USUARIO" EntitySet="CORE_USUARIO" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

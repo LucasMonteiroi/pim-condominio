@@ -4,21 +4,25 @@
     using PIM.Database.TO;
     using System;
     using PIM.Database.Infra;
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
     using System.Linq;
     using static PIM.Database.Infra.Utilitario;
     using System.Collections.Generic;
 
     public class GrupoUsuarioCrud : ICrud<GrupoUsuarioTO>
     {
-        public void Cadastrar(EntidadePIM contexto, GrupoUsuarioTO to)
+        private EntidadePIM _Contexto;
+
+        public void Cadastrar(GrupoUsuarioTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             GrupoUsuario entidade = new GrupoUsuario();
 
             to.PreencherEntidade(entidade);
 
-            contexto.GrupoUsuario.Add(entidade);
-            contexto.SaveChanges();
+            _Contexto.GrupoUsuario.Add(entidade);
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
 
@@ -29,11 +33,13 @@
 
         }
 
-        public GrupoUsuarioTO Obter(EntidadePIM contexto, int identificador)
+        public GrupoUsuarioTO Obter(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             GrupoUsuarioTO retorno = new GrupoUsuarioTO();
 
-            GrupoUsuario entidade = contexto.GrupoUsuario.FirstOrDefault(x => x.Identificador == identificador);
+            GrupoUsuario entidade = _Contexto.GrupoUsuario.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -51,8 +57,10 @@
             return retorno;
         }
 
-        public void Atualizar(EntidadePIM contexto, GrupoUsuarioTO to)
+        public void Atualizar(GrupoUsuarioTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             if (to.Identificador == 0 || to == null)
             {
                 to.Valido = false;
@@ -61,7 +69,7 @@
                 return;
             }
 
-            GrupoUsuario entidade = contexto.GrupoUsuario.FirstOrDefault(x => x.Identificador == to.Identificador);
+            GrupoUsuario entidade = _Contexto.GrupoUsuario.FirstOrDefault(x => x.Identificador == to.Identificador);
 
             if (entidade == null)
             {
@@ -73,7 +81,7 @@
 
             to.PreencherEntidade(entidade);
 
-            contexto.SaveChanges();
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
             to.Valido = true;
@@ -82,11 +90,13 @@
             return;
         }
 
-        public RetornoTO Remover(EntidadePIM contexto, int identificador)
+        public RetornoTO Remover(int identificador)
         {
+                        _Contexto = ControladorAcesso.ObterContexto();
+
             RetornoTO retorno = new RetornoTO();
 
-            GrupoUsuario entidade = contexto.GrupoUsuario.FirstOrDefault(x => x.Identificador == identificador);
+            GrupoUsuario entidade = _Contexto.GrupoUsuario.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -96,8 +106,8 @@
                 return retorno;
             }
 
-            contexto.GrupoUsuario.Remove(entidade);
-            contexto.SaveChanges();
+            _Contexto.GrupoUsuario.Remove(entidade);
+            _Contexto.SaveChanges();
 
             retorno.Valido = true;
             retorno.Mensagem = Mensagem.Exclusao("GrupoUsuario");
@@ -105,11 +115,13 @@
             return retorno;
         }
 
-        public ListaGrupoUsuarioTO Listar(EntidadePIM contexto)
+        public ListaGrupoUsuarioTO Listar()
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ListaGrupoUsuarioTO retorno = new ListaGrupoUsuarioTO();
 
-            List<GrupoUsuario> listaGrupoUsuario = contexto.GrupoUsuario.ToList();
+            List<GrupoUsuario> listaGrupoUsuario = _Contexto.GrupoUsuario.ToList();
 
             if (listaGrupoUsuario == null || listaGrupoUsuario.Count == 0)
             {

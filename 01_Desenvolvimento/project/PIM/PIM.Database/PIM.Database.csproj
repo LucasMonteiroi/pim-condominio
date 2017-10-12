@@ -65,55 +65,55 @@
     <Compile Include="Infra\RetornoTO.cs" />
     <Compile Include="Infra\Utilitario.cs" />
     <Compile Include="Interface\ICrud.cs" />
-    <Compile Include="Modelo\Aluguel.cs">
+    <Compile Include="DatabaseModel\Aluguel.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\Apartamento.cs">
+    <Compile Include="DatabaseModel\Apartamento.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\Colaborador.cs">
+    <Compile Include="DatabaseModel\Colaborador.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\Contrato.cs">
+    <Compile Include="DatabaseModel\Contrato.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\Dependente.cs">
+    <Compile Include="DatabaseModel\Dependente.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\Estacionamento.cs">
+    <Compile Include="DatabaseModel\Estacionamento.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\GrupoUsuario.cs">
+    <Compile Include="DatabaseModel\GrupoUsuario.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\ModeloPIM.Context.cs">
+    <Compile Include="DatabaseModel\ModeloPIM.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ModeloPIM.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\ModeloPIM.cs">
+    <Compile Include="DatabaseModel\ModeloPIM.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\ModeloPIM.Designer.cs">
+    <Compile Include="DatabaseModel\ModeloPIM.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ModeloPIM.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\Morador.cs">
+    <Compile Include="DatabaseModel\Morador.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\Ocorrencia.cs">
+    <Compile Include="DatabaseModel\Ocorrencia.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\Reserva.cs">
+    <Compile Include="DatabaseModel\Reserva.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\TipoReserva.cs">
+    <Compile Include="DatabaseModel\TipoReserva.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modelo\Usuario.cs">
+    <Compile Include="DatabaseModel\Usuario.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -132,25 +132,25 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EntityDeploy Include="Modelo\ModeloPIM.edmx">
+    <EntityDeploy Include="DatabaseModel\ModeloPIM.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ModeloPIM.Designer.cs</LastGenOutput>
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <None Include="Modelo\ModeloPIM.edmx.diagram">
+    <None Include="DatabaseModel\ModeloPIM.edmx.diagram">
       <DependentUpon>ModeloPIM.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Modelo\ModeloPIM.Context.tt">
+    <Content Include="DatabaseModel\ModeloPIM.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ModeloPIM.Context.cs</LastGenOutput>
       <DependentUpon>ModeloPIM.edmx</DependentUpon>
     </Content>
-    <Content Include="Modelo\ModeloPIM.tt">
+    <Content Include="DatabaseModel\ModeloPIM.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ModeloPIM.edmx</DependentUpon>
       <LastGenOutput>ModeloPIM.cs</LastGenOutput>

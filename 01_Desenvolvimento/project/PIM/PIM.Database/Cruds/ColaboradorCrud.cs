@@ -2,7 +2,7 @@
 {
     using PIM.Database.Infra;
     using PIM.Database.Interface;
-    using PIM.Database.Modelo;
+    using PIM.Database.DatabaseModel;
     using PIM.Database.TO;
     using System.Collections.Generic;
     using System.Linq;
@@ -10,14 +10,18 @@
 
     public class ColaboradorCrud : ICrud<ColaboradorTO>
     {
-        public void Cadastrar(EntidadePIM contexto, ColaboradorTO to)
+        private EntidadePIM _Contexto;
+
+        public void Cadastrar(ColaboradorTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             Colaborador entidade = new Colaborador();
 
             to.PreencherEntidade(entidade);
 
-            contexto.Colaborador.Add(entidade);
-            contexto.SaveChanges();
+            _Contexto.Colaborador.Add(entidade);
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
 
@@ -28,11 +32,13 @@
 
         }
 
-        public ColaboradorTO Obter(EntidadePIM contexto, int identificador)
+        public ColaboradorTO Obter(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ColaboradorTO retorno = new ColaboradorTO();
 
-            Colaborador entidade = contexto.Colaborador.FirstOrDefault(x => x.Identificador == identificador);
+            Colaborador entidade = _Contexto.Colaborador.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -50,8 +56,10 @@
             return retorno;
         }
 
-        public void Atualizar(EntidadePIM contexto, ColaboradorTO to)
+        public void Atualizar(ColaboradorTO to)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             if (to.Identificador == 0 || to == null)
             {
                 to.Valido = false;
@@ -60,7 +68,7 @@
                 return;
             }
 
-            Colaborador entidade = contexto.Colaborador.FirstOrDefault(x => x.Identificador == to.Identificador);
+            Colaborador entidade = _Contexto.Colaborador.FirstOrDefault(x => x.Identificador == to.Identificador);
 
             if (entidade == null)
             {
@@ -72,7 +80,7 @@
 
             to.PreencherEntidade(entidade);
 
-            contexto.SaveChanges();
+            _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
             to.Valido = true;
@@ -81,11 +89,13 @@
             return;
         }
 
-        public RetornoTO Remover(EntidadePIM contexto, int identificador)
+        public RetornoTO Remover(int identificador)
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             RetornoTO retorno = new RetornoTO();
 
-            Colaborador entidade = contexto.Colaborador.FirstOrDefault(x => x.Identificador == identificador);
+            Colaborador entidade = _Contexto.Colaborador.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
@@ -95,8 +105,8 @@
                 return retorno;
             }
 
-            contexto.Colaborador.Remove(entidade);
-            contexto.SaveChanges();
+            _Contexto.Colaborador.Remove(entidade);
+            _Contexto.SaveChanges();
 
             retorno.Valido = true;
             retorno.Mensagem = Mensagem.Exclusao("Colaborador");
@@ -104,11 +114,13 @@
             return retorno;
         }
 
-        public ListaColaboradorTO Listar(EntidadePIM contexto)
+        public ListaColaboradorTO Listar()
         {
+            _Contexto = ControladorAcesso.ObterContexto();
+
             ListaColaboradorTO retorno = new ListaColaboradorTO();
 
-            List<Colaborador> listaColaborador = contexto.Colaborador.ToList();
+            List<Colaborador> listaColaborador = _Contexto.Colaborador.ToList();
 
             if (listaColaborador == null || listaColaborador.Count == 0)
             {
