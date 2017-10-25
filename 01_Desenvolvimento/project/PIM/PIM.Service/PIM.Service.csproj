@@ -43,7 +43,7 @@
     <Compile Include="Infra\CrudService.cs" />
     <Compile Include="Infra\UtilitarioService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AluguelService.cs" />
+    <Compile Include="Services\AdvertenciaService.cs" />
     <Compile Include="Services\ApartamentoService.cs" />
     <Compile Include="Services\ColaboradorService.cs" />
     <Compile Include="Services\ContratoService.cs" />

@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="ModeloDatabaseStoreContainer" CdmEntityContainer="EntidadePIM">
-    <EntitySetMapping Name="Aluguel">
-      <EntityTypeMapping TypeName="ModeloDatabase.Aluguel">
-        <MappingFragment StoreEntitySet="CG_ALUGUEL">
-          <ScalarProperty Name="Identificador" ColumnName="ALU_ID" />
-          <ScalarProperty Name="Valor" ColumnName="ALU_VALOR" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Apartamento">
       <EntityTypeMapping TypeName="ModeloDatabase.Apartamento">
         <MappingFragment StoreEntitySet="CG_APARTAMENTO">
@@ -22,10 +14,12 @@
     <EntitySetMapping Name="Contrato">
       <EntityTypeMapping TypeName="ModeloDatabase.Contrato">
         <MappingFragment StoreEntitySet="CG_CONTRATO">
+          <ScalarProperty Name="TipoContrato" ColumnName="CON_TIPO" />
+          <ScalarProperty Name="Parcelas" ColumnName="CON_PARCELAS" />
+          <ScalarProperty Name="Valor" ColumnName="CON_VALOR" />
           <ScalarProperty Name="Identificador" ColumnName="CON_ID" />
           <ScalarProperty Name="DataContrato" ColumnName="CON_DATA" />
           <ScalarProperty Name="Descricao" ColumnName="CON_DESCRICAO" />
-          <ScalarProperty Name="IdAluguel" ColumnName="CON_ALUGUEL" />
           <ScalarProperty Name="IdMorador" ColumnName="CON_MORADOR" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -33,6 +27,7 @@
     <EntitySetMapping Name="Dependente">
       <EntityTypeMapping TypeName="ModeloDatabase.Dependente">
         <MappingFragment StoreEntitySet="CG_DEPENDENTE">
+          <ScalarProperty Name="GrauParentesco" ColumnName="DEP_GRAU_PAR" />
           <ScalarProperty Name="Identificador" ColumnName="DEP_ID" />
           <ScalarProperty Name="Nome" ColumnName="DEP_NOME" />
           <ScalarProperty Name="RG" ColumnName="DEP_RG" />
@@ -54,6 +49,8 @@
     <EntitySetMapping Name="Morador">
       <EntityTypeMapping TypeName="ModeloDatabase.Morador">
         <MappingFragment StoreEntitySet="CG_MORADORES">
+          <ScalarProperty Name="Email" ColumnName="MOR_EMAIL" />
+          <ScalarProperty Name="DataNascimento" ColumnName="MOR_DATA_NASC" />
           <ScalarProperty Name="Identificador" ColumnName="MOR_ID" />
           <ScalarProperty Name="Nome" ColumnName="MOR_NOME" />
           <ScalarProperty Name="RG" ColumnName="MOR_RG" />
@@ -122,6 +119,25 @@
           <ScalarProperty Name="Senha" ColumnName="USU_SENHA" />
           <ScalarProperty Name="IdGrupo" ColumnName="USU_GRP" />
           <ScalarProperty Name="IdColaborador" ColumnName="USU_COLAB" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Advertencia">
+      <EntityTypeMapping TypeName="ModeloDatabase.Advertencia">
+        <MappingFragment StoreEntitySet="CG_ADVERTENCIA">
+          <ScalarProperty Name="IdOcorrencia" ColumnName="OCO_ID" />
+          <ScalarProperty Name="Pago" ColumnName="ADV_PAGO" />
+          <ScalarProperty Name="Valor" ColumnName="ADV_VALOR" />
+          <ScalarProperty Name="Identificador" ColumnName="ADV_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Visitante">
+      <EntityTypeMapping TypeName="ModeloDatabase.Visitante">
+        <MappingFragment StoreEntitySet="CG_VISITANTE">
+          <ScalarProperty Name="IdMorador" ColumnName="VIS_MOR" />
+          <ScalarProperty Name="Nome" ColumnName="VIS_NOME" />
+          <ScalarProperty Name="Identificador" ColumnName="VIS_ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

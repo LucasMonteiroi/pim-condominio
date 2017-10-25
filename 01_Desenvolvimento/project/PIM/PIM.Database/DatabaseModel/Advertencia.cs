@@ -12,16 +12,13 @@ namespace PIM.Database.DatabaseModel
     using System;
     using System.Collections.Generic;
     
-    public partial class Dependente
+    public partial class Advertencia
     {
         public int Identificador { get; set; }
-        public string Nome { get; set; }
-        public string RG { get; set; }
-        public string CPF { get; set; }
-        public string Telefone { get; set; }
-        public int IdMorador { get; set; }
-        public string GrauParentesco { get; set; }
+        public decimal Valor { get; set; }
+        public string Pago { get; set; }
+        public int IdOcorrencia { get; set; }
     
-        public virtual Morador Morador { get; set; }
+        public virtual Ocorrencia Ocorrencia { get; set; }
     }
 }

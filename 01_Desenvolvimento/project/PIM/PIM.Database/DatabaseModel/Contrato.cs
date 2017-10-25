@@ -23,10 +23,11 @@ namespace PIM.Database.DatabaseModel
         public int Identificador { get; set; }
         public System.DateTime DataContrato { get; set; }
         public string Descricao { get; set; }
-        public int IdAluguel { get; set; }
         public int IdMorador { get; set; }
+        public decimal Valor { get; set; }
+        public int Parcelas { get; set; }
+        public string TipoContrato { get; set; }
     
-        public virtual Aluguel Alugueis { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Apartamento> Apartamentos { get; set; }
         public virtual Morador Moradores { get; set; }

@@ -5,7 +5,6 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="9167e8b2eeb847e88b1e5e6c791dbaf9" Name="Diagram1">
-        <EntityTypeShape EntityType="ModeloDatabase.Aluguel" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ModeloDatabase.Apartamento" Width="1.5" PointX="5.25" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="ModeloDatabase.Contrato" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ModeloDatabase.Dependente" Width="1.5" PointX="3" PointY="9.25" IsExpanded="true" />
@@ -17,7 +16,6 @@
         <EntityTypeShape EntityType="ModeloDatabase.Colaborador" Width="1.5" PointX="8.75" PointY="7.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ModeloDatabase.GrupoUsuario" Width="1.5" PointX="8.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ModeloDatabase.Usuario" Width="1.5" PointX="11" PointY="7.375" IsExpanded="true" />
-        <AssociationConnector Association="ModeloDatabase.FK__CG_CONTRA__CON_A__5441852A" ManuallyRouted="false" />
         <AssociationConnector Association="ModeloDatabase.FK__CG_APARTA__APA_C__5812160E" ManuallyRouted="false" />
         <AssociationConnector Association="ModeloDatabase.FK__CG_ESTACI__EST_A__5AEE82B9" ManuallyRouted="false" />
         <AssociationConnector Association="ModeloDatabase.FK__CG_CONTRA__CON_M__5535A963" ManuallyRouted="false" />
@@ -27,6 +25,10 @@
         <AssociationConnector Association="ModeloDatabase.FK__CG_RESERV__RES_T__5FB337D6" ManuallyRouted="false" />
         <AssociationConnector Association="ModeloDatabase.FK__CORE_USUA__USU_C__693CA210" ManuallyRouted="false" />
         <AssociationConnector Association="ModeloDatabase.FK__CORE_USUA__USU_G__68487DD7" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ModeloDatabase.Advertencia" Width="1.5" PointX="5.25" PointY="12.625" />
+        <EntityTypeShape EntityType="ModeloDatabase.Visitante" Width="1.5" PointX="3" PointY="15.625" />
+        <AssociationConnector Association="ModeloDatabase.FK__CG_ADVERT__OCO_I__70DDC3D8" />
+        <AssociationConnector Association="ModeloDatabase.FK__CG_VISITA__VIS_M__02FC7413" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -4,13 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ModeloDatabase.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="CG_ALUGUEL">
+    <Schema Namespace="ModeloDatabase.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CG_ADVERTENCIA">
           <Key>
-            <PropertyRef Name="ALU_ID" />
+            <PropertyRef Name="ADV_ID" />
           </Key>
-          <Property Name="ALU_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ALU_VALOR" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ADV_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ADV_VALOR" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ADV_PAGO" Type="char" MaxLength="1" />
+          <Property Name="OCO_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="CG_APARTAMENTO">
           <Key>
@@ -28,8 +30,10 @@
           <Property Name="CON_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CON_DATA" Type="datetime" Nullable="false" />
           <Property Name="CON_DESCRICAO" Type="varchar" MaxLength="1000" Nullable="false" />
-          <Property Name="CON_ALUGUEL" Type="int" Nullable="false" />
           <Property Name="CON_MORADOR" Type="int" Nullable="false" />
+          <Property Name="CON_VALOR" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="CON_PARCELAS" Type="int" Nullable="false" />
+          <Property Name="CON_TIPO" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
         <EntityType Name="CG_DEPENDENTE">
           <Key>
@@ -41,6 +45,7 @@
           <Property Name="DEP_CPF" Type="varchar" MaxLength="20" />
           <Property Name="DEP_TELEFONE" Type="varchar" MaxLength="20" />
           <Property Name="MOR_RESPONSAVEL" Type="int" Nullable="false" />
+          <Property Name="DEP_GRAU_PAR" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
         <EntityType Name="CG_ESTACIONAMENTO">
           <Key>
@@ -60,6 +65,8 @@
           <Property Name="MOR_CPF" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="MOR_TELEFONE" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="MOR_CELULAR" Type="varchar" MaxLength="20" />
+          <Property Name="MOR_DATA_NASC" Type="datetime" />
+          <Property Name="MOR_EMAIL" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="CG_OCORRENCIA">
           <Key>
@@ -87,6 +94,14 @@
           </Key>
           <Property Name="TP_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TP_TIPO_RESERVA" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CG_VISITANTE">
+          <Key>
+            <PropertyRef Name="VIS_ID" />
+          </Key>
+          <Property Name="VIS_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VIS_NOME" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="VIS_MOR" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="CORE_COLABORADOR">
           <Key>
@@ -117,7 +132,19 @@
           <Property Name="USU_GRP" Type="int" Nullable="false" />
           <Property Name="USU_COLAB" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__CG_APARTA__APA_C__5812160E">
+        <Association Name="FK__CG_ADVERT__OCO_I__70DDC3D8">
+          <End Role="CG_OCORRENCIA" Type="Self.CG_OCORRENCIA" Multiplicity="1" />
+          <End Role="CG_ADVERTENCIA" Type="Self.CG_ADVERTENCIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CG_OCORRENCIA">
+              <PropertyRef Name="OCO_ID" />
+            </Principal>
+            <Dependent Role="CG_ADVERTENCIA">
+              <PropertyRef Name="OCO_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CG_APARTA__APA_C__4BAC3F29">
           <End Role="CG_CONTRATO" Type="Self.CG_CONTRATO" Multiplicity="1" />
           <End Role="CG_APARTAMENTO" Type="Self.CG_APARTAMENTO" Multiplicity="*" />
           <ReferentialConstraint>
@@ -129,19 +156,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CG_CONTRA__CON_A__5441852A">
-          <End Role="CG_ALUGUEL" Type="Self.CG_ALUGUEL" Multiplicity="1" />
-          <End Role="CG_CONTRATO" Type="Self.CG_CONTRATO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CG_ALUGUEL">
-              <PropertyRef Name="ALU_ID" />
-            </Principal>
-            <Dependent Role="CG_CONTRATO">
-              <PropertyRef Name="CON_ALUGUEL" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__CG_CONTRA__CON_M__5535A963">
+        <Association Name="FK__CG_CONTRA__CON_M__48CFD27E">
           <End Role="CG_MORADORES" Type="Self.CG_MORADORES" Multiplicity="1" />
           <End Role="CG_CONTRATO" Type="Self.CG_CONTRATO" Multiplicity="*" />
           <ReferentialConstraint>
@@ -153,7 +168,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CG_DEPEND__MOR_R__4F7CD00D">
+        <Association Name="FK__CG_DEPEND__MOR_R__4316F928">
           <End Role="CG_MORADORES" Type="Self.CG_MORADORES" Multiplicity="1" />
           <End Role="CG_DEPENDENTE" Type="Self.CG_DEPENDENTE" Multiplicity="*" />
           <ReferentialConstraint>
@@ -165,7 +180,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CG_ESTACI__EST_A__5AEE82B9">
+        <Association Name="FK__CG_ESTACI__EST_A__4E88ABD4">
           <End Role="CG_APARTAMENTO" Type="Self.CG_APARTAMENTO" Multiplicity="1" />
           <End Role="CG_ESTACIONAMENTO" Type="Self.CG_ESTACIONAMENTO" Multiplicity="*" />
           <ReferentialConstraint>
@@ -177,7 +192,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CG_OCORRE__MOR_R__4CA06362">
+        <Association Name="FK__CG_OCORRE__MOR_R__403A8C7D">
           <End Role="CG_MORADORES" Type="Self.CG_MORADORES" Multiplicity="1" />
           <End Role="CG_OCORRENCIA" Type="Self.CG_OCORRENCIA" Multiplicity="*" />
           <ReferentialConstraint>
@@ -189,7 +204,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CG_RESERV__RES_M__619B8048">
+        <Association Name="FK__CG_RESERV__RES_M__5535A963">
           <End Role="CG_MORADORES" Type="Self.CG_MORADORES" Multiplicity="1" />
           <End Role="CG_RESERVAS" Type="Self.CG_RESERVAS" Multiplicity="*" />
           <ReferentialConstraint>
@@ -201,7 +216,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CG_RESERV__RES_T__5FB337D6">
+        <Association Name="FK__CG_RESERV__RES_T__534D60F1">
           <End Role="CG_TIPO_RESERVA" Type="Self.CG_TIPO_RESERVA" Multiplicity="1" />
           <End Role="CG_RESERVAS" Type="Self.CG_RESERVAS" Multiplicity="*" />
           <ReferentialConstraint>
@@ -213,7 +228,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CORE_USUA__USU_C__693CA210">
+        <Association Name="FK__CG_VISITA__VIS_M__02FC7413">
+          <End Role="CG_MORADORES" Type="Self.CG_MORADORES" Multiplicity="1" />
+          <End Role="CG_VISITANTE" Type="Self.CG_VISITANTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CG_MORADORES">
+              <PropertyRef Name="MOR_ID" />
+            </Principal>
+            <Dependent Role="CG_VISITANTE">
+              <PropertyRef Name="VIS_MOR" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CORE_USUA__USU_C__5CD6CB2B">
           <End Role="CORE_COLABORADOR" Type="Self.CORE_COLABORADOR" Multiplicity="1" />
           <End Role="CORE_USUARIO" Type="Self.CORE_USUARIO" Multiplicity="*" />
           <ReferentialConstraint>
@@ -225,7 +252,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CORE_USUA__USU_G__68487DD7">
+        <Association Name="FK__CORE_USUA__USU_G__5BE2A6F2">
           <End Role="CORE_GRUPO_USUARIO" Type="Self.CORE_GRUPO_USUARIO" Multiplicity="1" />
           <End Role="CORE_USUARIO" Type="Self.CORE_USUARIO" Multiplicity="*" />
           <ReferentialConstraint>
@@ -238,7 +265,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="ModeloDatabaseStoreContainer">
-          <EntitySet Name="CG_ALUGUEL" EntityType="Self.CG_ALUGUEL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CG_ADVERTENCIA" EntityType="Self.CG_ADVERTENCIA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CG_APARTAMENTO" EntityType="Self.CG_APARTAMENTO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CG_CONTRATO" EntityType="Self.CG_CONTRATO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CG_DEPENDENTE" EntityType="Self.CG_DEPENDENTE" Schema="dbo" store:Type="Tables" />
@@ -247,63 +274,59 @@
           <EntitySet Name="CG_OCORRENCIA" EntityType="Self.CG_OCORRENCIA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CG_RESERVAS" EntityType="Self.CG_RESERVAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CG_TIPO_RESERVA" EntityType="Self.CG_TIPO_RESERVA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CG_VISITANTE" EntityType="Self.CG_VISITANTE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CORE_COLABORADOR" EntityType="Self.CORE_COLABORADOR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CORE_GRUPO_USUARIO" EntityType="Self.CORE_GRUPO_USUARIO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CORE_USUARIO" EntityType="Self.CORE_USUARIO" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__CG_APARTA__APA_C__5812160E" Association="Self.FK__CG_APARTA__APA_C__5812160E">
+          <AssociationSet Name="FK__CG_ADVERT__OCO_I__70DDC3D8" Association="Self.FK__CG_ADVERT__OCO_I__70DDC3D8">
+            <End Role="CG_OCORRENCIA" EntitySet="CG_OCORRENCIA" />
+            <End Role="CG_ADVERTENCIA" EntitySet="CG_ADVERTENCIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CG_APARTA__APA_C__4BAC3F29" Association="Self.FK__CG_APARTA__APA_C__4BAC3F29">
             <End Role="CG_CONTRATO" EntitySet="CG_CONTRATO" />
             <End Role="CG_APARTAMENTO" EntitySet="CG_APARTAMENTO" />
           </AssociationSet>
-          <AssociationSet Name="FK__CG_CONTRA__CON_A__5441852A" Association="Self.FK__CG_CONTRA__CON_A__5441852A">
-            <End Role="CG_ALUGUEL" EntitySet="CG_ALUGUEL" />
-            <End Role="CG_CONTRATO" EntitySet="CG_CONTRATO" />
-          </AssociationSet>
-          <AssociationSet Name="FK__CG_CONTRA__CON_M__5535A963" Association="Self.FK__CG_CONTRA__CON_M__5535A963">
+          <AssociationSet Name="FK__CG_CONTRA__CON_M__48CFD27E" Association="Self.FK__CG_CONTRA__CON_M__48CFD27E">
             <End Role="CG_MORADORES" EntitySet="CG_MORADORES" />
             <End Role="CG_CONTRATO" EntitySet="CG_CONTRATO" />
           </AssociationSet>
-          <AssociationSet Name="FK__CG_DEPEND__MOR_R__4F7CD00D" Association="Self.FK__CG_DEPEND__MOR_R__4F7CD00D">
+          <AssociationSet Name="FK__CG_DEPEND__MOR_R__4316F928" Association="Self.FK__CG_DEPEND__MOR_R__4316F928">
             <End Role="CG_MORADORES" EntitySet="CG_MORADORES" />
             <End Role="CG_DEPENDENTE" EntitySet="CG_DEPENDENTE" />
           </AssociationSet>
-          <AssociationSet Name="FK__CG_ESTACI__EST_A__5AEE82B9" Association="Self.FK__CG_ESTACI__EST_A__5AEE82B9">
+          <AssociationSet Name="FK__CG_ESTACI__EST_A__4E88ABD4" Association="Self.FK__CG_ESTACI__EST_A__4E88ABD4">
             <End Role="CG_APARTAMENTO" EntitySet="CG_APARTAMENTO" />
             <End Role="CG_ESTACIONAMENTO" EntitySet="CG_ESTACIONAMENTO" />
           </AssociationSet>
-          <AssociationSet Name="FK__CG_OCORRE__MOR_R__4CA06362" Association="Self.FK__CG_OCORRE__MOR_R__4CA06362">
+          <AssociationSet Name="FK__CG_OCORRE__MOR_R__403A8C7D" Association="Self.FK__CG_OCORRE__MOR_R__403A8C7D">
             <End Role="CG_MORADORES" EntitySet="CG_MORADORES" />
             <End Role="CG_OCORRENCIA" EntitySet="CG_OCORRENCIA" />
           </AssociationSet>
-          <AssociationSet Name="FK__CG_RESERV__RES_M__619B8048" Association="Self.FK__CG_RESERV__RES_M__619B8048">
+          <AssociationSet Name="FK__CG_RESERV__RES_M__5535A963" Association="Self.FK__CG_RESERV__RES_M__5535A963">
             <End Role="CG_MORADORES" EntitySet="CG_MORADORES" />
             <End Role="CG_RESERVAS" EntitySet="CG_RESERVAS" />
           </AssociationSet>
-          <AssociationSet Name="FK__CG_RESERV__RES_T__5FB337D6" Association="Self.FK__CG_RESERV__RES_T__5FB337D6">
+          <AssociationSet Name="FK__CG_RESERV__RES_T__534D60F1" Association="Self.FK__CG_RESERV__RES_T__534D60F1">
             <End Role="CG_TIPO_RESERVA" EntitySet="CG_TIPO_RESERVA" />
             <End Role="CG_RESERVAS" EntitySet="CG_RESERVAS" />
           </AssociationSet>
-          <AssociationSet Name="FK__CORE_USUA__USU_C__693CA210" Association="Self.FK__CORE_USUA__USU_C__693CA210">
+          <AssociationSet Name="FK__CG_VISITA__VIS_M__02FC7413" Association="Self.FK__CG_VISITA__VIS_M__02FC7413">
+            <End Role="CG_MORADORES" EntitySet="CG_MORADORES" />
+            <End Role="CG_VISITANTE" EntitySet="CG_VISITANTE" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CORE_USUA__USU_C__5CD6CB2B" Association="Self.FK__CORE_USUA__USU_C__5CD6CB2B">
             <End Role="CORE_COLABORADOR" EntitySet="CORE_COLABORADOR" />
             <End Role="CORE_USUARIO" EntitySet="CORE_USUARIO" />
           </AssociationSet>
-          <AssociationSet Name="FK__CORE_USUA__USU_G__68487DD7" Association="Self.FK__CORE_USUA__USU_G__68487DD7">
+          <AssociationSet Name="FK__CORE_USUA__USU_G__5BE2A6F2" Association="Self.FK__CORE_USUA__USU_G__5BE2A6F2">
             <End Role="CORE_GRUPO_USUARIO" EntitySet="CORE_GRUPO_USUARIO" />
             <End Role="CORE_USUARIO" EntitySet="CORE_USUARIO" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ModeloDatabase" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Aluguel">
-          <Key>
-            <PropertyRef Name="Identificador" />
-          </Key>
-          <Property Name="Identificador" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Valor" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <NavigationProperty Name="Contrato" Relationship="Self.FK__CG_CONTRA__CON_A__5441852A" FromRole="CG_ALUGUEL" ToRole="CG_CONTRATO" />
-        </EntityType>
         <EntityType Name="Apartamento">
           <Key>
             <PropertyRef Name="Identificador" />
@@ -322,11 +345,12 @@
           <Property Name="Identificador" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DataContrato" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Descricao" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IdAluguel" Type="Int32" Nullable="false" />
           <Property Name="IdMorador" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Alugueis" Relationship="Self.FK__CG_CONTRA__CON_A__5441852A" FromRole="CG_CONTRATO" ToRole="CG_ALUGUEL" />
           <NavigationProperty Name="Apartamentos" Relationship="Self.FK__CG_APARTA__APA_C__5812160E" FromRole="CG_CONTRATO" ToRole="CG_APARTAMENTO" />
           <NavigationProperty Name="Moradores" Relationship="Self.FK__CG_CONTRA__CON_M__5535A963" FromRole="CG_CONTRATO" ToRole="CG_MORADORES" />
+          <Property Name="Valor" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Parcelas" Type="Int32" Nullable="false" />
+          <Property Name="TipoContrato" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="Dependente">
           <Key>
@@ -339,6 +363,7 @@
           <Property Name="Telefone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="IdMorador" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Morador" Relationship="Self.FK__CG_DEPEND__MOR_R__4F7CD00D" FromRole="CG_DEPENDENTE" ToRole="CG_MORADORES" />
+          <Property Name="GrauParentesco" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="Estacionamento">
           <Key>
@@ -363,6 +388,9 @@
           <NavigationProperty Name="Dependentes" Relationship="Self.FK__CG_DEPEND__MOR_R__4F7CD00D" FromRole="CG_MORADORES" ToRole="CG_DEPENDENTE" />
           <NavigationProperty Name="Ocorrencias" Relationship="Self.FK__CG_OCORRE__MOR_R__4CA06362" FromRole="CG_MORADORES" ToRole="CG_OCORRENCIA" />
           <NavigationProperty Name="Reservas" Relationship="Self.FK__CG_RESERV__RES_M__619B8048" FromRole="CG_MORADORES" ToRole="CG_RESERVAS" />
+          <Property Name="DataNascimento" Type="DateTime" Precision="3" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Visitantes" Relationship="ModeloDatabase.FK__CG_VISITA__VIS_M__02FC7413" FromRole="Morador" ToRole="CG_VISITANTE" />
         </EntityType>
         <EntityType Name="Ocorrencia">
           <Key>
@@ -374,6 +402,7 @@
           <Property Name="DataOcorrencia" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IdMorador" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Morador" Relationship="Self.FK__CG_OCORRE__MOR_R__4CA06362" FromRole="CG_OCORRENCIA" ToRole="CG_MORADORES" />
+          <NavigationProperty Name="Advertencias" Relationship="ModeloDatabase.FK__CG_ADVERT__OCO_I__70DDC3D8" FromRole="Ocorrencia" ToRole="CG_ADVERTENCIA" />
         </EntityType>
         <EntityType Name="Reserva">
           <Key>
@@ -428,18 +457,6 @@
           <NavigationProperty Name="Colaborador" Relationship="Self.FK__CORE_USUA__USU_C__693CA210" FromRole="CORE_USUARIO" ToRole="CORE_COLABORADOR" />
           <NavigationProperty Name="GrupoUsuario" Relationship="Self.FK__CORE_USUA__USU_G__68487DD7" FromRole="CORE_USUARIO" ToRole="CORE_GRUPO_USUARIO" />
         </EntityType>
-        <Association Name="FK__CG_CONTRA__CON_A__5441852A">
-          <End Role="CG_ALUGUEL" Type="ModeloDatabase.Aluguel" Multiplicity="1" />
-          <End Role="CG_CONTRATO" Type="ModeloDatabase.Contrato" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CG_ALUGUEL">
-              <PropertyRef Name="Identificador" />
-            </Principal>
-            <Dependent Role="CG_CONTRATO">
-              <PropertyRef Name="IdAluguel" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__CG_APARTA__APA_C__5812160E">
           <End Role="CG_CONTRATO" Type="ModeloDatabase.Contrato" Multiplicity="1" />
           <End Role="CG_APARTAMENTO" Type="ModeloDatabase.Apartamento" Multiplicity="*" />
@@ -549,7 +566,6 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="EntidadePIM" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Aluguel" EntityType="ModeloDatabase.Aluguel" />
           <EntitySet Name="Apartamento" EntityType="ModeloDatabase.Apartamento" />
           <EntitySet Name="Contrato" EntityType="ModeloDatabase.Contrato" />
           <EntitySet Name="Dependente" EntityType="ModeloDatabase.Dependente" />
@@ -561,10 +577,6 @@
           <EntitySet Name="Colaborador" EntityType="ModeloDatabase.Colaborador" />
           <EntitySet Name="GrupoUsuario" EntityType="ModeloDatabase.GrupoUsuario" />
           <EntitySet Name="Usuario" EntityType="ModeloDatabase.Usuario" />
-          <AssociationSet Name="FK__CG_CONTRA__CON_A__5441852A" Association="Self.FK__CG_CONTRA__CON_A__5441852A">
-            <End Role="CG_ALUGUEL" EntitySet="Aluguel" />
-            <End Role="CG_CONTRATO" EntitySet="Contrato" />
-          </AssociationSet>
           <AssociationSet Name="FK__CG_APARTA__APA_C__5812160E" Association="Self.FK__CG_APARTA__APA_C__5812160E">
             <End Role="CG_CONTRATO" EntitySet="Contrato" />
             <End Role="CG_APARTAMENTO" EntitySet="Apartamento" />
@@ -601,21 +613,66 @@
             <End Role="CORE_GRUPO_USUARIO" EntitySet="GrupoUsuario" />
             <End Role="CORE_USUARIO" EntitySet="Usuario" />
           </AssociationSet>
+          <EntitySet Name="Advertencia" EntityType="ModeloDatabase.Advertencia" />
+          <EntitySet Name="Visitante" EntityType="ModeloDatabase.Visitante" />
+          <AssociationSet Name="FK__CG_ADVERT__OCO_I__70DDC3D8" Association="ModeloDatabase.FK__CG_ADVERT__OCO_I__70DDC3D8">
+            <End Role="Ocorrencia" EntitySet="Ocorrencia" />
+            <End Role="CG_ADVERTENCIA" EntitySet="Advertencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CG_VISITA__VIS_M__02FC7413" Association="ModeloDatabase.FK__CG_VISITA__VIS_M__02FC7413">
+            <End Role="Morador" EntitySet="Morador" />
+            <End Role="CG_VISITANTE" EntitySet="Visitante" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Advertencia">
+          <Key>
+            <PropertyRef Name="Identificador" />
+          </Key>
+          <Property Name="Identificador" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Valor" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Pago" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="IdOcorrencia" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Ocorrencia" Relationship="ModeloDatabase.FK__CG_ADVERT__OCO_I__70DDC3D8" FromRole="CG_ADVERTENCIA" ToRole="Ocorrencia" />
+        </EntityType>
+        <EntityType Name="Visitante">
+          <Key>
+            <PropertyRef Name="Identificador" />
+          </Key>
+          <Property Name="Identificador" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IdMorador" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Morador" Relationship="ModeloDatabase.FK__CG_VISITA__VIS_M__02FC7413" FromRole="CG_VISITANTE" ToRole="Morador" />
+        </EntityType>
+        <Association Name="FK__CG_ADVERT__OCO_I__70DDC3D8">
+          <End Type="ModeloDatabase.Ocorrencia" Role="Ocorrencia" Multiplicity="1" />
+          <End Type="ModeloDatabase.Advertencia" Role="CG_ADVERTENCIA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ocorrencia">
+              <PropertyRef Name="Identificador" />
+            </Principal>
+            <Dependent Role="CG_ADVERTENCIA">
+              <PropertyRef Name="IdOcorrencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CG_VISITA__VIS_M__02FC7413">
+          <End Type="ModeloDatabase.Morador" Role="Morador" Multiplicity="1" />
+          <End Type="ModeloDatabase.Visitante" Role="CG_VISITANTE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Morador">
+              <PropertyRef Name="Identificador" />
+            </Principal>
+            <Dependent Role="CG_VISITANTE">
+              <PropertyRef Name="IdMorador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModeloDatabaseStoreContainer" CdmEntityContainer="EntidadePIM">
-          <EntitySetMapping Name="Aluguel">
-            <EntityTypeMapping TypeName="ModeloDatabase.Aluguel">
-              <MappingFragment StoreEntitySet="CG_ALUGUEL">
-                <ScalarProperty Name="Identificador" ColumnName="ALU_ID" />
-                <ScalarProperty Name="Valor" ColumnName="ALU_VALOR" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Apartamento">
             <EntityTypeMapping TypeName="ModeloDatabase.Apartamento">
               <MappingFragment StoreEntitySet="CG_APARTAMENTO">
@@ -629,10 +686,12 @@
           <EntitySetMapping Name="Contrato">
             <EntityTypeMapping TypeName="ModeloDatabase.Contrato">
               <MappingFragment StoreEntitySet="CG_CONTRATO">
+                <ScalarProperty Name="TipoContrato" ColumnName="CON_TIPO" />
+                <ScalarProperty Name="Parcelas" ColumnName="CON_PARCELAS" />
+                <ScalarProperty Name="Valor" ColumnName="CON_VALOR" />
                 <ScalarProperty Name="Identificador" ColumnName="CON_ID" />
                 <ScalarProperty Name="DataContrato" ColumnName="CON_DATA" />
                 <ScalarProperty Name="Descricao" ColumnName="CON_DESCRICAO" />
-                <ScalarProperty Name="IdAluguel" ColumnName="CON_ALUGUEL" />
                 <ScalarProperty Name="IdMorador" ColumnName="CON_MORADOR" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -640,6 +699,7 @@
           <EntitySetMapping Name="Dependente">
             <EntityTypeMapping TypeName="ModeloDatabase.Dependente">
               <MappingFragment StoreEntitySet="CG_DEPENDENTE">
+                <ScalarProperty Name="GrauParentesco" ColumnName="DEP_GRAU_PAR" />
                 <ScalarProperty Name="Identificador" ColumnName="DEP_ID" />
                 <ScalarProperty Name="Nome" ColumnName="DEP_NOME" />
                 <ScalarProperty Name="RG" ColumnName="DEP_RG" />
@@ -661,6 +721,8 @@
           <EntitySetMapping Name="Morador">
             <EntityTypeMapping TypeName="ModeloDatabase.Morador">
               <MappingFragment StoreEntitySet="CG_MORADORES">
+                <ScalarProperty Name="Email" ColumnName="MOR_EMAIL" />
+                <ScalarProperty Name="DataNascimento" ColumnName="MOR_DATA_NASC" />
                 <ScalarProperty Name="Identificador" ColumnName="MOR_ID" />
                 <ScalarProperty Name="Nome" ColumnName="MOR_NOME" />
                 <ScalarProperty Name="RG" ColumnName="MOR_RG" />
@@ -729,6 +791,25 @@
                 <ScalarProperty Name="Senha" ColumnName="USU_SENHA" />
                 <ScalarProperty Name="IdGrupo" ColumnName="USU_GRP" />
                 <ScalarProperty Name="IdColaborador" ColumnName="USU_COLAB" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Advertencia">
+            <EntityTypeMapping TypeName="ModeloDatabase.Advertencia">
+              <MappingFragment StoreEntitySet="CG_ADVERTENCIA">
+                <ScalarProperty Name="IdOcorrencia" ColumnName="OCO_ID" />
+                <ScalarProperty Name="Pago" ColumnName="ADV_PAGO" />
+                <ScalarProperty Name="Valor" ColumnName="ADV_VALOR" />
+                <ScalarProperty Name="Identificador" ColumnName="ADV_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Visitante">
+            <EntityTypeMapping TypeName="ModeloDatabase.Visitante">
+              <MappingFragment StoreEntitySet="CG_VISITANTE">
+                <ScalarProperty Name="IdMorador" ColumnName="VIS_MOR" />
+                <ScalarProperty Name="Nome" ColumnName="VIS_NOME" />
+                <ScalarProperty Name="Identificador" ColumnName="VIS_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

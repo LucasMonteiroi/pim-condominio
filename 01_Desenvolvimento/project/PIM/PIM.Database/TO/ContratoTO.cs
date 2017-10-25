@@ -11,7 +11,9 @@
         public string Descricao { get; set; }
         public DateTime DataContrato { get; set; }
         public int IdMorador { get; set; }
-        public int IdAluguel { get; set; }
+        public decimal Valor { get; set; }
+        public int Parcelas { get; set; }
+        public string TipoContrato { get; set; }
 
         internal void PreencherTO(Contrato entidade)
         {
@@ -19,7 +21,9 @@
             Descricao = entidade.Descricao;
             DataContrato = entidade.DataContrato;
             IdMorador = entidade.IdMorador;
-            IdAluguel = entidade.IdAluguel;
+            Valor = entidade.Valor;
+            Parcelas = entidade.Parcelas;
+            TipoContrato = entidade.TipoContrato;
         }
 
         internal void PreencherEntidade(Contrato entidade)
@@ -27,7 +31,9 @@
             entidade.Descricao = Descricao;
             entidade.DataContrato = DataContrato;
             entidade.IdMorador = IdMorador;
-            entidade.IdAluguel = IdAluguel;
+            entidade.Valor = Valor;
+            entidade.Parcelas = Parcelas;
+            entidade.TipoContrato = TipoContrato;
         }
     }
 

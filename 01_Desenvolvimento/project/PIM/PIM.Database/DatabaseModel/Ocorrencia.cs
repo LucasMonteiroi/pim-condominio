@@ -14,6 +14,12 @@ namespace PIM.Database.DatabaseModel
     
     public partial class Ocorrencia
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Ocorrencia()
+        {
+            this.Advertencias = new HashSet<Advertencia>();
+        }
+    
         public int Identificador { get; set; }
         public string Motivo { get; set; }
         public string Descricao { get; set; }
@@ -21,5 +27,7 @@ namespace PIM.Database.DatabaseModel
         public int IdMorador { get; set; }
     
         public virtual Morador Morador { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Advertencia> Advertencias { get; set; }
     }
 }

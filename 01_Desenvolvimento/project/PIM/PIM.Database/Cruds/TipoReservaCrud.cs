@@ -1,15 +1,13 @@
 ﻿namespace PIM.Database.Cruds
 {
-    using PIM.Database.Interface;
     using PIM.Database.TO;
-    using System;
     using PIM.Database.Infra;
     using PIM.Database.DatabaseModel;
     using System.Linq;
     using static PIM.Database.Infra.Utilitario;
     using System.Collections.Generic;
 
-    public class TipoReservaCrud : ICrud<TipoReservaTO>
+    public class TipoReservaCrud
     {
         private EntidadePIM _Contexto;
 

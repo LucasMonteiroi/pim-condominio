@@ -3,6 +3,7 @@
     using PIM.Database.Infra;
     using PIM.Database.DatabaseModel;
     using System.Collections.Generic;
+    using System;
 
     public class MoradorTO : RetornoTO
     {
@@ -12,6 +13,8 @@
         public string CPF { get; set; }
         public string Telefone { get; set; }
         public string Celular { get; set; }
+        public DateTime? DataNascimento { get; set; }
+        public string Email { get; set; }
 
         internal void PreencherTO(Morador entidade)
         {
@@ -21,6 +24,8 @@
             CPF = entidade.CPF;
             Telefone = entidade.Telefone;
             Celular = entidade.Celular;
+            DataNascimento = entidade.DataNascimento;
+            Email = entidade.Email;
         }
 
         internal void PreencherEntidade(Morador entidade)
@@ -30,6 +35,8 @@
             entidade.CPF = CPF;
             entidade.Telefone = Telefone;
             entidade.Celular = Celular;
+            entidade.Email = Email;
+            entidade.DataNascimento = DataNascimento;
         }
     }
 

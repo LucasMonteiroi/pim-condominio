@@ -1,17 +1,13 @@
 ﻿namespace PIM.Database.Cruds
 {
     using PIM.Database.Infra;
-    using PIM.Database.Interface;
     using PIM.Database.DatabaseModel;
     using PIM.Database.TO;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using static PIM.Database.Infra.Utilitario;
 
-    public class ContratoCrud : ICrud<ContratoTO>
+    public class ContratoCrud
     {
         private EntidadePIM _Contexto;
 

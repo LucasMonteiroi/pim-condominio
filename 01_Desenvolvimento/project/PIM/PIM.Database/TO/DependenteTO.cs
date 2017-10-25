@@ -12,6 +12,7 @@
         public string CPF { get; set; }
         public string Telefone { get; set; }
         public int IdMorador { get; set; }
+        public string GrauParentesco { get; set; }
 
         internal void PreencherTO(Dependente entidade)
         {
@@ -21,6 +22,7 @@
             CPF = entidade.CPF;
             Telefone = entidade.Telefone;
             IdMorador = entidade.IdMorador;
+            GrauParentesco = entidade.GrauParentesco;
         }
 
         internal void PreencherEntidade(Dependente entidade)
@@ -30,6 +32,7 @@
             entidade.CPF = CPF;
             entidade.Telefone = Telefone;
             entidade.IdMorador = IdMorador;
+            entidade.GrauParentesco = GrauParentesco;
         }
     }
 

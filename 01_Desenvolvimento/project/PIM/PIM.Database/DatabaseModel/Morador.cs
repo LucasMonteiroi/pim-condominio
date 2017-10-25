@@ -21,6 +21,7 @@ namespace PIM.Database.DatabaseModel
             this.Dependentes = new HashSet<Dependente>();
             this.Ocorrencias = new HashSet<Ocorrencia>();
             this.Reservas = new HashSet<Reserva>();
+            this.Visitantes = new HashSet<Visitante>();
         }
     
         public int Identificador { get; set; }
@@ -29,6 +30,8 @@ namespace PIM.Database.DatabaseModel
         public string CPF { get; set; }
         public string Telefone { get; set; }
         public string Celular { get; set; }
+        public Nullable<System.DateTime> DataNascimento { get; set; }
+        public string Email { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Contrato> Contratos { get; set; }
@@ -38,5 +41,7 @@ namespace PIM.Database.DatabaseModel
         public virtual ICollection<Ocorrencia> Ocorrencias { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Reserva> Reservas { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Visitante> Visitantes { get; set; }
     }
 }

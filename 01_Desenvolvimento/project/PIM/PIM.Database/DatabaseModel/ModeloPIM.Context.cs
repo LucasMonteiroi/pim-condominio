@@ -25,7 +25,6 @@ namespace PIM.Database.DatabaseModel
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Aluguel> Aluguel { get; set; }
         public virtual DbSet<Apartamento> Apartamento { get; set; }
         public virtual DbSet<Contrato> Contrato { get; set; }
         public virtual DbSet<Dependente> Dependente { get; set; }
@@ -37,5 +36,7 @@ namespace PIM.Database.DatabaseModel
         public virtual DbSet<Colaborador> Colaborador { get; set; }
         public virtual DbSet<GrupoUsuario> GrupoUsuario { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<Advertencia> Advertencia { get; set; }
+        public virtual DbSet<Visitante> Visitante { get; set; }
     }
 }

@@ -1,49 +1,48 @@
 ﻿namespace PIM.Database.Cruds
 {
-    using PIM.Database.Interface;
-    using PIM.Database.TO;
-    using PIM.Database.Infra;
     using PIM.Database.DatabaseModel;
+    using PIM.Database.Infra;
+    using PIM.Database.TO;
+    using System.Collections.Generic;
     using System.Linq;
     using static PIM.Database.Infra.Utilitario;
-    using System.Collections.Generic;
 
-    public class AluguelCrud : ICrud<AluguelTO>
+    public class AdvertenciaCrud
     {
         private EntidadePIM _Contexto;
 
-        public void Cadastrar(AluguelTO to)
+        public void Cadastrar(AdvertenciaTO to)
         {
             _Contexto = ControladorAcesso.ObterContexto();
 
-            Aluguel entidade = new Aluguel();
+            Advertencia entidade = new Advertencia();
 
             to.PreencherEntidade(entidade);
 
-            _Contexto.Aluguel.Add(entidade);
+            _Contexto.Advertencia.Add(entidade);
             _Contexto.SaveChanges();
 
             to.PreencherTO(entidade);
 
             to.Valido = true;
-            to.Mensagem = Mensagem.Cadastro("Aluguel");
+            to.Mensagem = Utilitario.Mensagem.Cadastro("Advertencia");
 
             return;
 
         }
 
-        public AluguelTO Obter(int identificador)
+        public AdvertenciaTO Obter(int identificador)
         {
             _Contexto = ControladorAcesso.ObterContexto();
 
-            AluguelTO retorno = new AluguelTO();
+            AdvertenciaTO retorno = new AdvertenciaTO();
 
-            Aluguel entidade = _Contexto.Aluguel.FirstOrDefault(x => x.Identificador == identificador);
+            Advertencia entidade = _Contexto.Advertencia.FirstOrDefault(x => x.Identificador == identificador);
 
-            if(entidade == null)
+            if (entidade == null)
             {
                 retorno.Valido = false;
-                retorno.Mensagem = Mensagem.Obter("Aluguel", false);
+                retorno.Mensagem = Mensagem.Obter("Advertencia", false);
 
                 return retorno;
             }
@@ -51,29 +50,29 @@
             retorno.PreencherTO(entidade);
 
             retorno.Valido = true;
-            retorno.Mensagem = Mensagem.Obter("Aluguel", true);
+            retorno.Mensagem = Mensagem.Obter("Advertencia", true);
 
             return retorno;
         }
 
-        public void Atualizar(AluguelTO to)
+        public void Atualizar(AdvertenciaTO to)
         {
             _Contexto = ControladorAcesso.ObterContexto();
 
             if (to.Identificador == 0 || to == null)
             {
                 to.Valido = false;
-                to.Mensagem = Mensagem.Atualizacao("Aluguel", false);
+                to.Mensagem = Mensagem.Atualizacao("Advertencia", false);
 
                 return;
             }
 
-            Aluguel entidade = _Contexto.Aluguel.FirstOrDefault(x => x.Identificador == to.Identificador);
+            Advertencia entidade = _Contexto.Advertencia.FirstOrDefault(x => x.Identificador == to.Identificador);
 
             if (entidade == null)
             {
                 to.Valido = false;
-                to.Mensagem = Mensagem.Obter("Aluguel", false);
+                to.Mensagem = Mensagem.Obter("Advertencia", false);
 
                 return;
             }
@@ -84,7 +83,7 @@
 
             to.PreencherTO(entidade);
             to.Valido = true;
-            to.Mensagem = Mensagem.Atualizacao("Aluguel", true);
+            to.Mensagem = Mensagem.Atualizacao("Advertencia", true);
 
             return;
         }
@@ -95,53 +94,53 @@
 
             RetornoTO retorno = new RetornoTO();
 
-            Aluguel entidade = _Contexto.Aluguel.FirstOrDefault(x => x.Identificador == identificador);
+            Advertencia entidade = _Contexto.Advertencia.FirstOrDefault(x => x.Identificador == identificador);
 
             if (entidade == null)
             {
                 retorno.Valido = false;
-                retorno.Mensagem = Mensagem.Obter("Aluguel", false);
+                retorno.Mensagem = Mensagem.Obter("Advertencia", false);
 
                 return retorno;
             }
 
-            _Contexto.Aluguel.Remove(entidade);
+            _Contexto.Advertencia.Remove(entidade);
             _Contexto.SaveChanges();
 
             retorno.Valido = true;
-            retorno.Mensagem = Mensagem.Exclusao("Aluguel");
+            retorno.Mensagem = Mensagem.Exclusao("Advertencia");
 
             return retorno;
         }
 
-        public ListaAluguelTO Listar()
+        public ListaAdvertenciaTO Listar()
         {
             _Contexto = ControladorAcesso.ObterContexto();
 
-            ListaAluguelTO retorno = new ListaAluguelTO();
+            ListaAdvertenciaTO retorno = new ListaAdvertenciaTO();
 
-            List<Aluguel> listaAluguel = _Contexto.Aluguel.ToList();
+            List<Advertencia> listaAdvertencia = _Contexto.Advertencia.ToList();
 
-            if(listaAluguel == null || listaAluguel.Count == 0)
+            if (listaAdvertencia == null || listaAdvertencia.Count == 0)
             {
                 retorno.Valido = false;
-                retorno.Mensagem = Mensagem.Lista("Aluguel", false);
+                retorno.Mensagem = Mensagem.Lista("Advertencia", false);
 
                 return retorno;
             }
 
-            AluguelTO to;
+            AdvertenciaTO to;
 
-            foreach(Aluguel entidade in listaAluguel)
+            foreach (Advertencia entidade in listaAdvertencia)
             {
-                to = new AluguelTO();
+                to = new AdvertenciaTO();
                 to.PreencherTO(entidade);
 
                 retorno.Lista.Add(to);
             }
 
             retorno.Valido = true;
-            retorno.Mensagem = Mensagem.Lista("Aluguel", true);
+            retorno.Mensagem = Mensagem.Lista("Advertencia", true);
 
             return retorno;
         }

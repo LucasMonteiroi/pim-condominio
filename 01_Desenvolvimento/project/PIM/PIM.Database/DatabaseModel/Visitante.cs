@@ -12,18 +12,12 @@ namespace PIM.Database.DatabaseModel
     using System;
     using System.Collections.Generic;
     
-    public partial class Aluguel
+    public partial class Visitante
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Aluguel()
-        {
-            this.Contrato = new HashSet<Contrato>();
-        }
-    
         public int Identificador { get; set; }
-        public decimal Valor { get; set; }
+        public string Nome { get; set; }
+        public int IdMorador { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contrato> Contrato { get; set; }
+        public virtual Morador Morador { get; set; }
     }
 }
