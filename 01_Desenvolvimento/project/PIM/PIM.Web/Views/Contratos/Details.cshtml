@@ -1,0 +1,66 @@
+﻿@model PIM.Database.DatabaseModel.Contrato
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Contrato</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DataContrato)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataContrato)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descricao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Valor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Valor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Parcelas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Parcelas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoContrato)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoContrato)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Moradores.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Moradores.Nome)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Identificador }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

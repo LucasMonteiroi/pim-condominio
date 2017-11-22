@@ -1,0 +1,50 @@
+﻿@model PIM.Database.DatabaseModel.Reserva
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Reserva</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DataReserva)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataReserva)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ConfirmacaoReserva)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ConfirmacaoReserva)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Moradores.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Moradores.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoReserva.Tipo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoReserva.Tipo)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Identificador }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

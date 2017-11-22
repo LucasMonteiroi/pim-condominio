@@ -2,7 +2,6 @@
 {
     using PIM.Database.Cruds;
     using PIM.Database.Infra;
-    using PIM.Database.Interface;
     using PIM.Database.TO;
     using PIM.Service.Infra;
     using System;

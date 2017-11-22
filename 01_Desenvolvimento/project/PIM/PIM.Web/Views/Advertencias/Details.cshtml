@@ -1,0 +1,42 @@
+﻿@model PIM.Database.DatabaseModel.Advertencia
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Advertencia</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Valor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Valor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pago)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pago)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ocorrencia.Motivo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ocorrencia.Motivo)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Identificador }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

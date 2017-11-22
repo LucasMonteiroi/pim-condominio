@@ -1,0 +1,50 @@
+﻿@model PIM.Database.DatabaseModel.Usuario
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Usuario</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Login)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Senha)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Senha)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Colaborador.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Colaborador.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GrupoUsuario.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GrupoUsuario.Nome)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Identificador }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

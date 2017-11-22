@@ -1,0 +1,51 @@
+﻿@model IEnumerable<PIM.Database.DatabaseModel.Reserva>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DataReserva)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ConfirmacaoReserva)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Moradores.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TipoReserva.Tipo)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DataReserva)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ConfirmacaoReserva)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Moradores.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TipoReserva.Tipo)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Identificador }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Identificador }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Identificador })
+        </td>
+    </tr>
+}
+
+</table>

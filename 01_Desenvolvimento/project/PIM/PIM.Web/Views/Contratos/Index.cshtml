@@ -1,0 +1,63 @@
+﻿@model IEnumerable<PIM.Database.DatabaseModel.Contrato>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DataContrato)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descricao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Valor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Parcelas)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TipoContrato)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Moradores.Nome)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DataContrato)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descricao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Parcelas)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TipoContrato)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Moradores.Nome)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Identificador }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Identificador }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Identificador })
+        </td>
+    </tr>
+}
+
+</table>
