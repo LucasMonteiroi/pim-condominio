@@ -1,127 +1,158 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using PIM.Database.DatabaseModel;
-
-namespace PIM.Web.Controllers
+﻿namespace PIM.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using PIM.Database.TO;
+    using PIM.Service.Services;
+    using AutoMapper;
+    using PIM.Web.ViewModels;
+
     public class MoradoresController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: Moradores
         public ActionResult Index()
         {
-            return View(db.Morador.ToList());
+            ListaMoradorTO listaMorador = new ListaMoradorTO();
+
+            try
+            {
+                listaMorador = MoradorService.Listar();
+                var listaMoradoresVM = Mapper.Map<List<MoradorTO>, List<MoradorVM>>(listaMorador.Lista);
+
+                return View(listaMoradoresVM);
+            }
+            catch (Exception ex)
+            {
+                listaMorador.Mensagem = $"Erro ao obter moradores. Erro: {ex.Message} ";
+            }
+
+            return View();
         }
 
-        // GET: Moradores/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
+            MoradorTO moradorTO = new MoradorTO();
+
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                moradorTO = MoradorService.Obter(id);
+
+                if (!moradorTO.Valido)
+                {
+                    Session["Mensagem"] = moradorTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var moradorVM = Mapper.Map<MoradorTO, MoradorVM>(moradorTO);
+
+                return View(moradorVM);
             }
-            Morador morador = db.Morador.Find(id);
-            if (morador == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                moradorTO.Mensagem = $"Erro ao obter morador. Erro: {ex.Message}";
+
             }
-            return View(morador);
+
+            return View();
         }
 
-        // GET: Moradores/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Moradores/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,Nome,RG,CPF,Telefone,Celular,DataNascimento,Email")] Morador morador)
+        public ActionResult Create(MoradorVM morador)
         {
             if (ModelState.IsValid)
             {
-                db.Morador.Add(morador);
-                db.SaveChanges();
+                var moradorTO = Mapper.Map<MoradorVM, MoradorTO>(morador);
+
+                MoradorService.Criar(moradorTO);
+
+                Session["Mensagem"] = moradorTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            return View(morador);
+            else
+            {
+                return View(morador);
+            }
         }
 
-        // GET: Moradores/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Morador morador = db.Morador.Find(id);
-            if (morador == null)
-            {
-                return HttpNotFound();
-            }
-            return View(morador);
-        }
-
-        // POST: Moradores/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,Nome,RG,CPF,Telefone,Celular,DataNascimento,Email")] Morador morador)
+        public ActionResult Edit(int id)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(morador).State = EntityState.Modified;
-                db.SaveChanges();
+                var moradorTO = MoradorService.Obter(id);
+
+                if (!moradorTO.Valido)
+                {
+                    Session["Mensagem"] = moradorTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var moradorVM = Mapper.Map<MoradorTO, MoradorVM>(moradorTO);
+
+                return View(moradorVM);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(MoradorVM moradorVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var moradorTO = Mapper.Map<MoradorVM, MoradorTO>(moradorVM);
+
+                MoradorService.Atualizar(moradorTO);
+
+                if (!moradorTO.Valido)
+                {
+                    Session["Mensagem"] = moradorTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                moradorVM = Mapper.Map<MoradorTO, MoradorVM>(moradorTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (id > 0)
+            {
+                var moradorTO = MoradorService.Obter(id);
+                var moradorVM = Mapper.Map<MoradorTO, MoradorVM>(moradorTO);
+
+                return View(moradorVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            return View(morador);
         }
 
-        // GET: Moradores/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Morador morador = db.Morador.Find(id);
-            if (morador == null)
-            {
-                return HttpNotFound();
-            }
-            return View(morador);
-        }
-
-        // POST: Moradores/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Morador morador = db.Morador.Find(id);
-            db.Morador.Remove(morador);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            if (ModelState.IsValid)
             {
-                db.Dispose();
+                if (id > 0)
+                {
+                    var retorno = MoradorService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
             }
-            base.Dispose(disposing);
+
+            return RedirectToAction("Index");
         }
     }
 }

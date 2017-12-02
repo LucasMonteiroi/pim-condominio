@@ -1,4 +1,4 @@
-﻿@model PIM.Database.DatabaseModel.Estacionamento
+﻿@model PIM.Web.ViewModels.EstacionamentoVM
 
 @{
     ViewBag.Title = "Details";
@@ -19,11 +19,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Apartamento.Numero)
+            @Html.DisplayNameFor(model => model.IdApartamento)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Apartamento.Numero)
+            @Html.DisplayFor(model => model.Apartamento)
         </dd>
 
     </dl>

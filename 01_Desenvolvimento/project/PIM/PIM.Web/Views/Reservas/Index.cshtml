@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PIM.Database.DatabaseModel.Reserva>
+﻿@model IEnumerable<PIM.Web.ViewModels.ReservaVM>
 
 @{
     ViewBag.Title = "Index";
@@ -18,10 +18,10 @@
             @Html.DisplayNameFor(model => model.ConfirmacaoReserva)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Moradores.Nome)
+            @Html.DisplayNameFor(model => model.NomeMorador)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TipoReserva.Tipo)
+            @Html.DisplayNameFor(model => model.IdTipoReserva)
         </th>
         <th></th>
     </tr>
@@ -35,10 +35,10 @@
             @Html.DisplayFor(modelItem => item.ConfirmacaoReserva)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Moradores.Nome)
+            @Html.DisplayFor(modelItem => item.NomeMorador)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TipoReserva.Tipo)
+            @Html.DisplayFor(modelItem => item.TipoReserva)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Identificador }) |

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PIM.Database.DatabaseModel.Usuario>
+﻿@model IEnumerable<PIM.Web.ViewModels.UsuarioVM>
 
 @{
     ViewBag.Title = "Index";
@@ -15,13 +15,10 @@
             @Html.DisplayNameFor(model => model.Login)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Senha)
+            @Html.DisplayNameFor(model => model.IdColaborador)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Colaborador.Nome)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.GrupoUsuario.Nome)
+            @Html.DisplayNameFor(model => model.IdGrupo)
         </th>
         <th></th>
     </tr>
@@ -32,13 +29,10 @@
             @Html.DisplayFor(modelItem => item.Login)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Senha)
+            @Html.DisplayFor(modelItem => item.NomeColaborador)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Colaborador.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.GrupoUsuario.Nome)
+            @Html.DisplayFor(modelItem => item.NomeGrupoUsuario)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Identificador }) |

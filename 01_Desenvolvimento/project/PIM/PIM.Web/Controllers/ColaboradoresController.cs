@@ -7,121 +7,158 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using PIM.Database.DatabaseModel;
+using PIM.Web.ViewModels;
+using PIM.Database.TO;
+using PIM.Service.Services;
+using AutoMapper;
 
 namespace PIM.Web.Controllers
 {
     public class ColaboradoresController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: Colaboradores
         public ActionResult Index()
         {
-            return View(db.Colaborador.ToList());
+            ListaColaboradorTO listaColaborador = new ListaColaboradorTO();
+
+            try
+            {
+                listaColaborador = ColaboradorService.Listar();
+                var listaColaboradoresVM = Mapper.Map<List<ColaboradorTO>, List<ColaboradorVM>>(listaColaborador.Lista);
+
+                return View(listaColaboradoresVM);
+            }
+            catch (Exception ex)
+            {
+                listaColaborador.Mensagem = $"Erro ao obter Colaboradores. Erro: {ex.Message} ";
+            }
+
+            return View();
         }
 
-        // GET: Colaboradores/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
+            ColaboradorTO ColaboradorTO = new ColaboradorTO();
+
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ColaboradorTO = ColaboradorService.Obter(id);
+
+                if (!ColaboradorTO.Valido)
+                {
+                    Session["Mensagem"] = ColaboradorTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var ColaboradorVM = Mapper.Map<ColaboradorTO, ColaboradorVM>(ColaboradorTO);
+
+                return View(ColaboradorVM);
             }
-            Colaborador colaborador = db.Colaborador.Find(id);
-            if (colaborador == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                ColaboradorTO.Mensagem = $"Erro ao obter Colaborador. Erro: {ex.Message}";
+
             }
-            return View(colaborador);
+
+            return View();
         }
 
-        // GET: Colaboradores/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Colaboradores/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,Nome,RG,CPF,Funcao,Salario,DataContrato")] Colaborador colaborador)
+        public ActionResult Create(ColaboradorVM Colaborador)
         {
             if (ModelState.IsValid)
             {
-                db.Colaborador.Add(colaborador);
-                db.SaveChanges();
+                var ColaboradorTO = Mapper.Map<ColaboradorVM, ColaboradorTO>(Colaborador);
+
+                ColaboradorService.Criar(ColaboradorTO);
+
+                Session["Mensagem"] = ColaboradorTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            return View(colaborador);
+            else
+            {
+                return View(Colaborador);
+            }
         }
 
-        // GET: Colaboradores/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Colaborador colaborador = db.Colaborador.Find(id);
-            if (colaborador == null)
-            {
-                return HttpNotFound();
-            }
-            return View(colaborador);
-        }
-
-        // POST: Colaboradores/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,Nome,RG,CPF,Funcao,Salario,DataContrato")] Colaborador colaborador)
+        public ActionResult Edit(int id)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(colaborador).State = EntityState.Modified;
-                db.SaveChanges();
+                var ColaboradorTO = ColaboradorService.Obter(id);
+
+                if (!ColaboradorTO.Valido)
+                {
+                    Session["Mensagem"] = ColaboradorTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var ColaboradorVM = Mapper.Map<ColaboradorTO, ColaboradorVM>(ColaboradorTO);
+
+                return View(ColaboradorVM);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ColaboradorVM ColaboradorVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var ColaboradorTO = Mapper.Map<ColaboradorVM, ColaboradorTO>(ColaboradorVM);
+
+                ColaboradorService.Atualizar(ColaboradorTO);
+
+                if (!ColaboradorTO.Valido)
+                {
+                    Session["Mensagem"] = ColaboradorTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                ColaboradorVM = Mapper.Map<ColaboradorTO, ColaboradorVM>(ColaboradorTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (id > 0)
+            {
+                var ColaboradorTO = ColaboradorService.Obter(id);
+                var ColaboradorVM = Mapper.Map<ColaboradorTO, ColaboradorVM>(ColaboradorTO);
+
+                return View(ColaboradorVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            return View(colaborador);
         }
 
-        // GET: Colaboradores/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Colaborador colaborador = db.Colaborador.Find(id);
-            if (colaborador == null)
-            {
-                return HttpNotFound();
-            }
-            return View(colaborador);
-        }
-
-        // POST: Colaboradores/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Colaborador colaborador = db.Colaborador.Find(id);
-            db.Colaborador.Remove(colaborador);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            if (ModelState.IsValid)
             {
-                db.Dispose();
+                if (id > 0)
+                {
+                    var retorno = ColaboradorService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
             }
-            base.Dispose(disposing);
+
+            return RedirectToAction("Index");
         }
     }
 }

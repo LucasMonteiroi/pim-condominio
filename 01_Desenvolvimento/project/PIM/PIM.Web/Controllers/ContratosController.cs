@@ -1,132 +1,189 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using PIM.Database.DatabaseModel;
-
-namespace PIM.Web.Controllers
+﻿namespace PIM.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using PIM.Service.Services;
+    using AutoMapper;
+    using PIM.Web.ViewModels;
+    using PIM.Database.TO;
+    using System.Linq;
+
     public class ContratosController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: Contratos
         public ActionResult Index()
         {
-            var contrato = db.Contrato.Include(c => c.Moradores);
-            return View(contrato.ToList());
-        }
+            ListaContratoTO listaContrato = new ListaContratoTO();
 
-        // GET: Contratos/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Contrato contrato = db.Contrato.Find(id);
-            if (contrato == null)
-            {
-                return HttpNotFound();
-            }
-            return View(contrato);
-        }
+                listaContrato = ContratoService.Listar();
+                var listaContratosVM = Mapper.Map<List<ContratoTO>, List<ContratoVM>>(listaContrato.Lista);
 
-        // GET: Contratos/Create
-        public ActionResult Create()
-        {
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome");
+                NomearVariaveis(null, listaContratosVM);
+
+                return View(listaContratosVM);
+            }
+            catch (Exception ex)
+            {
+                listaContrato.Mensagem = $"Erro ao obter Contratoes. Erro: {ex.Message} ";
+            }
+
             return View();
         }
 
-        // POST: Contratos/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
+        public ActionResult Details(int id)
+        {
+            ContratoTO ContratoTO = new ContratoTO();
+
+            try
+            {
+                ContratoTO = ContratoService.Obter(id);
+
+                if (!ContratoTO.Valido)
+                {
+                    Session["Mensagem"] = ContratoTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var ContratoVM = Mapper.Map<ContratoTO, ContratoVM>(ContratoTO);
+
+                return View(ContratoVM);
+            }
+            catch (Exception ex)
+            {
+                ContratoTO.Mensagem = $"Erro ao obter Contrato. Erro: {ex.Message}";
+
+            }
+
+            return View();
+        }
+
+        public ActionResult Create()
+        {
+            ViewBag.Morador = ListarMoradores();
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,DataContrato,Descricao,IdMorador,Valor,Parcelas,TipoContrato")] Contrato contrato)
+        public ActionResult Create(ContratoVM Contrato)
         {
             if (ModelState.IsValid)
             {
-                db.Contrato.Add(contrato);
-                db.SaveChanges();
+                var ContratoTO = Mapper.Map<ContratoVM, ContratoTO>(Contrato);
+
+                ContratoService.Criar(ContratoTO);
+
+                Session["Mensagem"] = ContratoTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", contrato.IdMorador);
-            return View(contrato);
+            else
+            {
+                return View(Contrato);
+            }
         }
 
-        // GET: Contratos/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            ViewBag.Morador = ListarMoradores();
+
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var ContratoTO = ContratoService.Obter(id);
+
+                if (!ContratoTO.Valido)
+                {
+                    Session["Mensagem"] = ContratoTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var ContratoVM = Mapper.Map<ContratoTO, ContratoVM>(ContratoTO);
+
+                return View(ContratoVM);
             }
-            Contrato contrato = db.Contrato.Find(id);
-            if (contrato == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", contrato.IdMorador);
-            return View(contrato);
+
+            return RedirectToAction("Index");
         }
 
-        // POST: Contratos/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,DataContrato,Descricao,IdMorador,Valor,Parcelas,TipoContrato")] Contrato contrato)
+        public ActionResult Edit(ContratoVM ContratoVM)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(contrato).State = EntityState.Modified;
-                db.SaveChanges();
+                var ContratoTO = Mapper.Map<ContratoVM, ContratoTO>(ContratoVM);
+
+                ContratoService.Atualizar(ContratoTO);
+
+                if (!ContratoTO.Valido)
+                {
+                    Session["Mensagem"] = ContratoTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                ContratoVM = Mapper.Map<ContratoTO, ContratoVM>(ContratoTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (id > 0)
+            {
+                var ContratoTO = ContratoService.Obter(id);
+                var ContratoVM = Mapper.Map<ContratoTO, ContratoVM>(ContratoTO);
+
+                return View(ContratoVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", contrato.IdMorador);
-            return View(contrato);
         }
 
-        // GET: Contratos/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Contrato contrato = db.Contrato.Find(id);
-            if (contrato == null)
-            {
-                return HttpNotFound();
-            }
-            return View(contrato);
-        }
-
-        // POST: Contratos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Contrato contrato = db.Contrato.Find(id);
-            db.Contrato.Remove(contrato);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                if (id > 0)
+                {
+                    var retorno = ContratoService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
+            }
+
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        private SelectList ListarMoradores()
         {
-            if (disposing)
+            var listaMoradorTO = MoradorService.Listar();
+            var listaMoradorVM = Mapper.Map<List<MoradorTO>, List<MoradorVM>>(listaMoradorTO.Lista);
+            return new SelectList(listaMoradorVM, "Identificador", "Nome");
+        }
+
+        private void NomearVariaveis(ContratoVM contratoVM = null, List<ContratoVM> listaContratoVM = null)
+        {
+            var listaMoradorTO = MoradorService.Listar().Lista;
+
+            if (listaContratoVM != null && listaContratoVM.Count > 0)
             {
-                db.Dispose();
+                foreach (var con in listaContratoVM)
+                {
+                    con.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == con.IdMorador).Nome;
+                }
             }
-            base.Dispose(disposing);
+
+            if (contratoVM != null)
+            {
+                contratoVM.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == contratoVM.IdMorador).Nome;
+            }
         }
     }
 }

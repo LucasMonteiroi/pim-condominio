@@ -1,4 +1,4 @@
-﻿@model PIM.Database.DatabaseModel.Dependente
+﻿@model PIM.Web.ViewModels.DependenteVM
 
 @{
     ViewBag.Title = "Edit";
@@ -52,7 +52,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.IdMorador, "IdMorador", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("IdMorador", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.IdMorador, ViewBag.Morador as SelectList, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.IdMorador, "", new { @class = "text-danger" })
             </div>
         </div>

@@ -61,6 +61,7 @@
     <Compile Include="Cruds\ReservaCrud.cs" />
     <Compile Include="Cruds\TipoReservaCrud.cs" />
     <Compile Include="Cruds\UsuarioCrud.cs" />
+    <Compile Include="Cruds\VisitanteCrud.cs" />
     <Compile Include="DatabaseModel\Advertencia.cs">
       <DependentUpon>ModeloPIM.tt</DependentUpon>
     </Compile>
@@ -131,6 +132,7 @@
     <Compile Include="TO\OcorrenciaTO.cs" />
     <Compile Include="TO\TipoReservaTO.cs" />
     <Compile Include="TO\UsuarioTO.cs" />
+    <Compile Include="TO\VisitanteTO.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -145,6 +147,7 @@
       <DependentUpon>ModeloPIM.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
+    <None Include="PIM.Database.Diagram.dgml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DatabaseModel\ModeloPIM.Context.tt">

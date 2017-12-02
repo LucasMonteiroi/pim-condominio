@@ -1,127 +1,158 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using PIM.Database.DatabaseModel;
-
-namespace PIM.Web.Controllers
+﻿namespace PIM.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using AutoMapper;
+    using PIM.Database.TO;
+    using PIM.Web.ViewModels;
+    using PIM.Service.Services;
+
     public class GruposUsuariosController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: GruposUsuarios
         public ActionResult Index()
         {
-            return View(db.GrupoUsuario.ToList());
+            ListaGrupoUsuarioTO listaGrupoUsuario = new ListaGrupoUsuarioTO();
+
+            try
+            {
+                listaGrupoUsuario = GrupoUsuarioService.Listar();
+                var listaGrupoUsuarioesVM = Mapper.Map<List<GrupoUsuarioTO>, List<GrupoUsuarioVM>>(listaGrupoUsuario.Lista);
+
+                return View(listaGrupoUsuarioesVM);
+            }
+            catch (Exception ex)
+            {
+                listaGrupoUsuario.Mensagem = $"Erro ao obter GrupoUsuarioes. Erro: {ex.Message} ";
+            }
+
+            return View();
         }
 
-        // GET: GruposUsuarios/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
+            GrupoUsuarioTO GrupoUsuarioTO = new GrupoUsuarioTO();
+
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                GrupoUsuarioTO = GrupoUsuarioService.Obter(id);
+
+                if (!GrupoUsuarioTO.Valido)
+                {
+                    Session["Mensagem"] = GrupoUsuarioTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var GrupoUsuarioVM = Mapper.Map<GrupoUsuarioTO, GrupoUsuarioVM>(GrupoUsuarioTO);
+
+                return View(GrupoUsuarioVM);
             }
-            GrupoUsuario grupoUsuario = db.GrupoUsuario.Find(id);
-            if (grupoUsuario == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                GrupoUsuarioTO.Mensagem = $"Erro ao obter GrupoUsuario. Erro: {ex.Message}";
+
             }
-            return View(grupoUsuario);
+
+            return View();
         }
 
-        // GET: GruposUsuarios/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: GruposUsuarios/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,Nome")] GrupoUsuario grupoUsuario)
+        public ActionResult Create(GrupoUsuarioVM GrupoUsuario)
         {
             if (ModelState.IsValid)
             {
-                db.GrupoUsuario.Add(grupoUsuario);
-                db.SaveChanges();
+                var GrupoUsuarioTO = Mapper.Map<GrupoUsuarioVM, GrupoUsuarioTO>(GrupoUsuario);
+
+                GrupoUsuarioService.Criar(GrupoUsuarioTO);
+
+                Session["Mensagem"] = GrupoUsuarioTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            return View(grupoUsuario);
+            else
+            {
+                return View(GrupoUsuario);
+            }
         }
 
-        // GET: GruposUsuarios/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            GrupoUsuario grupoUsuario = db.GrupoUsuario.Find(id);
-            if (grupoUsuario == null)
-            {
-                return HttpNotFound();
-            }
-            return View(grupoUsuario);
-        }
-
-        // POST: GruposUsuarios/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,Nome")] GrupoUsuario grupoUsuario)
+        public ActionResult Edit(int id)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(grupoUsuario).State = EntityState.Modified;
-                db.SaveChanges();
+                var GrupoUsuarioTO = GrupoUsuarioService.Obter(id);
+
+                if (!GrupoUsuarioTO.Valido)
+                {
+                    Session["Mensagem"] = GrupoUsuarioTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var GrupoUsuarioVM = Mapper.Map<GrupoUsuarioTO, GrupoUsuarioVM>(GrupoUsuarioTO);
+
+                return View(GrupoUsuarioVM);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(GrupoUsuarioVM GrupoUsuarioVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var GrupoUsuarioTO = Mapper.Map<GrupoUsuarioVM, GrupoUsuarioTO>(GrupoUsuarioVM);
+
+                GrupoUsuarioService.Atualizar(GrupoUsuarioTO);
+
+                if (!GrupoUsuarioTO.Valido)
+                {
+                    Session["Mensagem"] = GrupoUsuarioTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                GrupoUsuarioVM = Mapper.Map<GrupoUsuarioTO, GrupoUsuarioVM>(GrupoUsuarioTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (id > 0)
+            {
+                var GrupoUsuarioTO = GrupoUsuarioService.Obter(id);
+                var GrupoUsuarioVM = Mapper.Map<GrupoUsuarioTO, GrupoUsuarioVM>(GrupoUsuarioTO);
+
+                return View(GrupoUsuarioVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            return View(grupoUsuario);
         }
 
-        // GET: GruposUsuarios/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            GrupoUsuario grupoUsuario = db.GrupoUsuario.Find(id);
-            if (grupoUsuario == null)
-            {
-                return HttpNotFound();
-            }
-            return View(grupoUsuario);
-        }
-
-        // POST: GruposUsuarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            GrupoUsuario grupoUsuario = db.GrupoUsuario.Find(id);
-            db.GrupoUsuario.Remove(grupoUsuario);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            if (ModelState.IsValid)
             {
-                db.Dispose();
+                if (id > 0)
+                {
+                    var retorno = GrupoUsuarioService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
             }
-            base.Dispose(disposing);
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -39,7 +39,7 @@
 
             internal static string Exclusao(string _Classe)
             {
-                return string.Format("{0} removido(a) com sucesso!");
+                return string.Format("{0} removido(a) com sucesso!", _Classe);
             }
 
             internal static string Lista(string _Classe, bool _Valido)

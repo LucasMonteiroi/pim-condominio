@@ -38,7 +38,7 @@
             return _Crud.Remover(identificador);
         }
 
-        public static ListaApartamentoTO Lista()
+        public static ListaApartamentoTO Listar()
         {
             _Crud = CrudService<ApartamentoCrud>.ObterInstancia();
             return _Crud.Listar();

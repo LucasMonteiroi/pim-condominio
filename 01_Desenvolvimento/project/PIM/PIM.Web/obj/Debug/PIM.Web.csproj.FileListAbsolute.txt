@@ -1,4 +1,3 @@
-C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\obj\Debug\PIM.Web.csprojResolveAssemblyReference.cache
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\roslyn\csc.exe
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\roslyn\csc.exe.config
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\roslyn\csc.rsp
@@ -29,6 +28,8 @@ C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\PIM.
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\PIM.Web.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\PIM.Web.pdb
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\AutoMapper.dll
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\EntityFramework.dll
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\EntityFramework.SqlServer.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\Microsoft.Web.Infrastructure.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\PIM.Database.dll
@@ -39,11 +40,12 @@ C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\Syst
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\System.Web.Webpages.Deployment.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\System.Web.Webpages.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\System.Web.Webpages.Razor.dll
-C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\EntityFramework.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\PIM.Database.pdb
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\PIM.Database.dll.config
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\PIM.Service.pdb
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\AutoMapper.xml
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\EntityFramework.xml
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\EntityFramework.SqlServer.xml
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\System.Web.Razor.xml
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\System.Web.Webpages.xml
@@ -51,14 +53,12 @@ C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\Syst
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\System.Web.Webpages.Razor.xml
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\System.Web.Helpers.xml
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\System.Web.Mvc.xml
-C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\EntityFramework.xml
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\pt-br\System.Web.Razor.resources.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\pt-br\System.Web.Webpages.resources.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\pt-br\System.Web.Webpages.Deployment.resources.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\pt-br\System.Web.Webpages.Razor.resources.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\pt-br\System.Web.Helpers.resources.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\pt-br\System.Web.Mvc.resources.dll
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\obj\Debug\PIM.Web.csprojResolveAssemblyReference.cache
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\obj\Debug\PIM.Web.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\obj\Debug\PIM.Web.pdb
-C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\EntityFramework.SqlServer.dll
-C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Web\bin\EntityFramework.SqlServer.xml

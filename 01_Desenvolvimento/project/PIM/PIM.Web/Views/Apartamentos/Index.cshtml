@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PIM.Database.DatabaseModel.Apartamento>
+﻿@model IEnumerable<PIM.Web.ViewModels.ApartamentoVM>
 
 @{
     ViewBag.Title = "Index";
@@ -18,7 +18,7 @@
             @Html.DisplayNameFor(model => model.Numero)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Contrato.Descricao)
+            @Html.DisplayNameFor(model => model.IdContrato)
         </th>
         <th></th>
     </tr>
@@ -32,7 +32,7 @@
             @Html.DisplayFor(modelItem => item.Numero)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Contrato.Descricao)
+            @Html.DisplayFor(modelItem => item.DescricaoContrato)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Identificador }) |

@@ -1,136 +1,199 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using PIM.Database.DatabaseModel;
-
-namespace PIM.Web.Controllers
+﻿namespace PIM.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using PIM.Web.ViewModels;
+    using PIM.Database.TO;
+    using AutoMapper;
+    using PIM.Service.Services;
+    using System.Linq;
+
     public class ReservasController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: Reservas
         public ActionResult Index()
         {
-            var reserva = db.Reserva.Include(r => r.Moradores).Include(r => r.TipoReserva);
-            return View(reserva.ToList());
-        }
+            ListaReservaTO listaReserva = new ListaReservaTO();
 
-        // GET: Reservas/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                listaReserva = ReservaService.Listar();
+                var listaReservasVM = Mapper.Map<List<ReservaTO>, List<ReservaVM>>(listaReserva.Lista);
+                NomearVariaveis(null, listaReservasVM);
+                return View(listaReservasVM);
             }
-            Reserva reserva = db.Reserva.Find(id);
-            if (reserva == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                listaReserva.Mensagem = $"Erro ao obter Reservaes. Erro: {ex.Message} ";
             }
-            return View(reserva);
-        }
 
-        // GET: Reservas/Create
-        public ActionResult Create()
-        {
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome");
-            ViewBag.IdTipoReserva = new SelectList(db.TipoReserva, "Identificador", "Tipo");
             return View();
         }
 
-        // POST: Reservas/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
+        public ActionResult Details(int id)
+        {
+            ReservaTO ReservaTO = new ReservaTO();
+
+            try
+            {
+                ReservaTO = ReservaService.Obter(id);
+
+                if (!ReservaTO.Valido)
+                {
+                    Session["Mensagem"] = ReservaTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var ReservaVM = Mapper.Map<ReservaTO, ReservaVM>(ReservaTO);
+                NomearVariaveis(ReservaVM, null);
+                return View(ReservaVM);
+            }
+            catch (Exception ex)
+            {
+                ReservaTO.Mensagem = $"Erro ao obter Reserva. Erro: {ex.Message}";
+
+            }
+
+            return View();
+        }
+
+        public ActionResult Create()
+        {
+            ViewBag.Morador = ListarMoradores();
+            ViewBag.TipoReserva = ListarTipoReservas();
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,DataReserva,IdTipoReserva,ConfirmacaoReserva,IdMorador")] Reserva reserva)
+        public ActionResult Create(ReservaVM Reserva)
         {
             if (ModelState.IsValid)
             {
-                db.Reserva.Add(reserva);
-                db.SaveChanges();
+                var ReservaTO = Mapper.Map<ReservaVM, ReservaTO>(Reserva);
+
+                ReservaService.Criar(ReservaTO);
+
+                Session["Mensagem"] = ReservaTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", reserva.IdMorador);
-            ViewBag.IdTipoReserva = new SelectList(db.TipoReserva, "Identificador", "Tipo", reserva.IdTipoReserva);
-            return View(reserva);
+            else
+            {
+                return View(Reserva);
+            }
         }
 
-        // GET: Reservas/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            ViewBag.Morador = ListarMoradores();
+            ViewBag.TipoReserva = ListarTipoReservas();
+
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var ReservaTO = ReservaService.Obter(id);
+
+                if (!ReservaTO.Valido)
+                {
+                    Session["Mensagem"] = ReservaTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var ReservaVM = Mapper.Map<ReservaTO, ReservaVM>(ReservaTO);
+                NomearVariaveis(ReservaVM, null);
+                return View(ReservaVM);
             }
-            Reserva reserva = db.Reserva.Find(id);
-            if (reserva == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", reserva.IdMorador);
-            ViewBag.IdTipoReserva = new SelectList(db.TipoReserva, "Identificador", "Tipo", reserva.IdTipoReserva);
-            return View(reserva);
+
+            return RedirectToAction("Index");
         }
 
-        // POST: Reservas/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,DataReserva,IdTipoReserva,ConfirmacaoReserva,IdMorador")] Reserva reserva)
+        public ActionResult Edit(ReservaVM ReservaVM)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(reserva).State = EntityState.Modified;
-                db.SaveChanges();
+                var ReservaTO = Mapper.Map<ReservaVM, ReservaTO>(ReservaVM);
+
+                ReservaService.Atualizar(ReservaTO);
+
+                if (!ReservaTO.Valido)
+                {
+                    Session["Mensagem"] = ReservaTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                ReservaVM = Mapper.Map<ReservaTO, ReservaVM>(ReservaTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (id > 0)
+            {
+                var ReservaTO = ReservaService.Obter(id);
+                var ReservaVM = Mapper.Map<ReservaTO, ReservaVM>(ReservaTO);
+                NomearVariaveis(ReservaVM, null);
+                return View(ReservaVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", reserva.IdMorador);
-            ViewBag.IdTipoReserva = new SelectList(db.TipoReserva, "Identificador", "Tipo", reserva.IdTipoReserva);
-            return View(reserva);
         }
 
-        // GET: Reservas/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Reserva reserva = db.Reserva.Find(id);
-            if (reserva == null)
-            {
-                return HttpNotFound();
-            }
-            return View(reserva);
-        }
-
-        // POST: Reservas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Reserva reserva = db.Reserva.Find(id);
-            db.Reserva.Remove(reserva);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                if (id > 0)
+                {
+                    var retorno = ReservaService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
+            }
+
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        private SelectList ListarMoradores()
         {
-            if (disposing)
+            var listaMoradorTO = MoradorService.Listar();
+            var listaMoradorVM = Mapper.Map<List<MoradorTO>, List<MoradorVM>>(listaMoradorTO.Lista);
+            return new SelectList(listaMoradorVM, "Identificador", "Nome");
+        }
+
+        private SelectList ListarTipoReservas()
+        {
+            var listaTipoReservaTO = TipoReservaService.Listar();
+            var listaTipoReservaVM = Mapper.Map<List<TipoReservaTO>, List<TipoReservaVM>>(listaTipoReservaTO.Lista);
+            return new SelectList(listaTipoReservaVM, "Identificador", "Tipo");
+        }
+
+        private void NomearVariaveis(ReservaVM ReservaVM = null, List<ReservaVM> listaReservaVM = null)
+        {
+            var listaMoradorTO = MoradorService.Listar().Lista;
+            var listaTipoReservaTO = TipoReservaService.Listar().Lista;
+
+            if (listaReservaVM != null && listaReservaVM.Count > 0)
             {
-                db.Dispose();
+                foreach (var con in listaReservaVM)
+                {
+                    con.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == con.IdMorador).Nome;
+                    con.TipoReserva = listaTipoReservaTO.FirstOrDefault(x => x.Identificador == con.IdTipoReserva).Tipo;
+                }
             }
-            base.Dispose(disposing);
+
+            if (ReservaVM != null)
+            {
+                ReservaVM.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == ReservaVM.IdMorador).Nome;
+                ReservaVM.TipoReserva = listaTipoReservaTO.FirstOrDefault(x => x.Identificador == ReservaVM.IdTipoReserva).Tipo;
+            }
         }
     }
 }

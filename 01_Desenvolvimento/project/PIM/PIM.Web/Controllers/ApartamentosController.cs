@@ -1,132 +1,200 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using PIM.Database.DatabaseModel;
-
-namespace PIM.Web.Controllers
+﻿namespace PIM.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web;
+    using System.Web.Mvc;
+    using PIM.Database.DatabaseModel;
+    using PIM.Service.Services;
+    using PIM.Web.ViewModels;
+    using PIM.Database.TO;
+    using AutoMapper;
+
     public class ApartamentosController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: Apartamentos
         public ActionResult Index()
         {
-            var apartamento = db.Apartamento.Include(a => a.Contrato);
-            return View(apartamento.ToList());
-        }
+            ListaApartamentoTO listaApartamento = new ListaApartamentoTO();
 
-        // GET: Apartamentos/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Apartamento apartamento = db.Apartamento.Find(id);
-            if (apartamento == null)
-            {
-                return HttpNotFound();
-            }
-            return View(apartamento);
-        }
+                listaApartamento = ApartamentoService.Listar();
+                var listaApartamentosVM = Mapper.Map<List<ApartamentoTO>, List<ApartamentoVM>>(listaApartamento.Lista);
 
-        // GET: Apartamentos/Create
-        public ActionResult Create()
-        {
-            ViewBag.IdContrato = new SelectList(db.Contrato, "Identificador", "Descricao");
+                NomearVariaveis(null, listaApartamentosVM);
+
+                return View(listaApartamentosVM);
+            }
+            catch (Exception ex)
+            {
+                listaApartamento.Mensagem = $"Erro ao obter Apartamentoes. Erro: {ex.Message} ";
+            }
+
             return View();
         }
 
-        // POST: Apartamentos/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
+        public ActionResult Details(int id)
+        {
+            ViewBag.Contratos = ListarContratos();
+
+            ApartamentoTO ApartamentoTO = new ApartamentoTO();
+
+            try
+            {
+                ApartamentoTO = ApartamentoService.Obter(id);
+
+                if (!ApartamentoTO.Valido)
+                {
+                    Session["Mensagem"] = ApartamentoTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var apartamentoVM = Mapper.Map<ApartamentoTO, ApartamentoVM>(ApartamentoTO);
+                NomearVariaveis(apartamentoVM);
+                return View(apartamentoVM);
+            }
+            catch (Exception ex)
+            {
+                ApartamentoTO.Mensagem = $"Erro ao obter Apartamento. Erro: {ex.Message}";
+
+            }
+
+            return View();
+        }
+
+        public ActionResult Create()
+        {
+            ViewBag.Contratos = ListarContratos();
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,Bloco,Numero,IdContrato")] Apartamento apartamento)
+        public ActionResult Create(ApartamentoVM Apartamento)
         {
             if (ModelState.IsValid)
             {
-                db.Apartamento.Add(apartamento);
-                db.SaveChanges();
+                var ApartamentoTO = Mapper.Map<ApartamentoVM, ApartamentoTO>(Apartamento);
+
+                ApartamentoService.Criar(ApartamentoTO);
+
+                Session["Mensagem"] = ApartamentoTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            ViewBag.IdContrato = new SelectList(db.Contrato, "Identificador", "Descricao", apartamento.IdContrato);
-            return View(apartamento);
+            else
+            {
+                return View(Apartamento);
+            }
         }
 
-        // GET: Apartamentos/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            ViewBag.Contratos = ListarContratos();
+
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var ApartamentoTO = ApartamentoService.Obter(id);
+
+                if (!ApartamentoTO.Valido)
+                {
+                    Session["Mensagem"] = ApartamentoTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var apartamentoVM = Mapper.Map<ApartamentoTO, ApartamentoVM>(ApartamentoTO);
+                NomearVariaveis(apartamentoVM);
+                return View(apartamentoVM);
             }
-            Apartamento apartamento = db.Apartamento.Find(id);
-            if (apartamento == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdContrato = new SelectList(db.Contrato, "Identificador", "Descricao", apartamento.IdContrato);
-            return View(apartamento);
+
+            return RedirectToAction("Index");
         }
 
-        // POST: Apartamentos/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,Bloco,Numero,IdContrato")] Apartamento apartamento)
+        public ActionResult Edit(ApartamentoVM ApartamentoVM)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(apartamento).State = EntityState.Modified;
-                db.SaveChanges();
+                var ApartamentoTO = Mapper.Map<ApartamentoVM, ApartamentoTO>(ApartamentoVM);
+
+                ApartamentoService.Atualizar(ApartamentoTO);
+
+                if (!ApartamentoTO.Valido)
+                {
+                    Session["Mensagem"] = ApartamentoTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                ApartamentoVM = Mapper.Map<ApartamentoTO, ApartamentoVM>(ApartamentoTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            ViewBag.Contratos = ListarContratos();
+
+            if (id > 0)
+            {
+                var ApartamentoTO = ApartamentoService.Obter(id);
+                var apartamentoVM = Mapper.Map<ApartamentoTO, ApartamentoVM>(ApartamentoTO);
+
+                NomearVariaveis(apartamentoVM);
+
+                return View(apartamentoVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            ViewBag.IdContrato = new SelectList(db.Contrato, "Identificador", "Descricao", apartamento.IdContrato);
-            return View(apartamento);
         }
 
-        // GET: Apartamentos/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Apartamento apartamento = db.Apartamento.Find(id);
-            if (apartamento == null)
-            {
-                return HttpNotFound();
-            }
-            return View(apartamento);
-        }
-
-        // POST: Apartamentos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Apartamento apartamento = db.Apartamento.Find(id);
-            db.Apartamento.Remove(apartamento);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                if (id > 0)
+                {
+                    var retorno = ApartamentoService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
+            }
+
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        private SelectList ListarContratos()
         {
-            if (disposing)
+            var listaContratoTO = ContratoService.Listar();
+            var listaContratoVM = Mapper.Map<List<ContratoTO>, List<ContratoVM>>(listaContratoTO.Lista);
+            return new SelectList(listaContratoVM, "Identificador", "Descricao");
+        }
+
+        private void NomearVariaveis(ApartamentoVM ApartamentoVM = null, List<ApartamentoVM> listaApartamentosVM = null)
+        {
+            var listaContratoTO = ContratoService.Listar().Lista;
+
+            if (listaApartamentosVM != null && listaApartamentosVM.Count > 0)
             {
-                db.Dispose();
+                foreach (var apa in listaApartamentosVM)
+                {
+                    apa.DescricaoContrato = listaContratoTO.FirstOrDefault(x => x.Identificador == apa.IdContrato).Descricao;
+                }
             }
-            base.Dispose(disposing);
+
+            if (ApartamentoVM != null)
+            {
+                ApartamentoVM.DescricaoContrato = listaContratoTO.FirstOrDefault(x => x.Identificador == ApartamentoVM.IdContrato).Descricao;
+            }
         }
     }
 }

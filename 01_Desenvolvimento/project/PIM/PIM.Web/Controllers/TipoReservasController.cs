@@ -1,127 +1,158 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using PIM.Database.DatabaseModel;
-
-namespace PIM.Web.Controllers
+﻿namespace PIM.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using AutoMapper;
+    using PIM.Database.TO;
+    using PIM.Web.ViewModels;
+    using PIM.Service.Services;
+
     public class TipoReservasController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: TipoReservas
         public ActionResult Index()
         {
-            return View(db.TipoReserva.ToList());
+            ListaTipoReservaTO listaTipoReserva = new ListaTipoReservaTO();
+
+            try
+            {
+                listaTipoReserva = TipoReservaService.Listar();
+                var listaTipoReservaesVM = Mapper.Map<List<TipoReservaTO>, List<TipoReservaVM>>(listaTipoReserva.Lista);
+
+                return View(listaTipoReservaesVM);
+            }
+            catch (Exception ex)
+            {
+                listaTipoReserva.Mensagem = $"Erro ao obter TipoReservaes. Erro: {ex.Message} ";
+            }
+
+            return View();
         }
 
-        // GET: TipoReservas/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
+            TipoReservaTO TipoReservaTO = new TipoReservaTO();
+
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TipoReservaTO = TipoReservaService.Obter(id);
+
+                if (!TipoReservaTO.Valido)
+                {
+                    Session["Mensagem"] = TipoReservaTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var TipoReservaVM = Mapper.Map<TipoReservaTO, TipoReservaVM>(TipoReservaTO);
+
+                return View(TipoReservaVM);
             }
-            TipoReserva tipoReserva = db.TipoReserva.Find(id);
-            if (tipoReserva == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                TipoReservaTO.Mensagem = $"Erro ao obter TipoReserva. Erro: {ex.Message}";
+
             }
-            return View(tipoReserva);
+
+            return View();
         }
 
-        // GET: TipoReservas/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: TipoReservas/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,Tipo")] TipoReserva tipoReserva)
+        public ActionResult Create(TipoReservaVM TipoReserva)
         {
             if (ModelState.IsValid)
             {
-                db.TipoReserva.Add(tipoReserva);
-                db.SaveChanges();
+                var TipoReservaTO = Mapper.Map<TipoReservaVM, TipoReservaTO>(TipoReserva);
+
+                TipoReservaService.Criar(TipoReservaTO);
+
+                Session["Mensagem"] = TipoReservaTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            return View(tipoReserva);
+            else
+            {
+                return View(TipoReserva);
+            }
         }
 
-        // GET: TipoReservas/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            TipoReserva tipoReserva = db.TipoReserva.Find(id);
-            if (tipoReserva == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tipoReserva);
-        }
-
-        // POST: TipoReservas/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,Tipo")] TipoReserva tipoReserva)
+        public ActionResult Edit(int id)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(tipoReserva).State = EntityState.Modified;
-                db.SaveChanges();
+                var TipoReservaTO = TipoReservaService.Obter(id);
+
+                if (!TipoReservaTO.Valido)
+                {
+                    Session["Mensagem"] = TipoReservaTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var TipoReservaVM = Mapper.Map<TipoReservaTO, TipoReservaVM>(TipoReservaTO);
+
+                return View(TipoReservaVM);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(TipoReservaVM TipoReservaVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var TipoReservaTO = Mapper.Map<TipoReservaVM, TipoReservaTO>(TipoReservaVM);
+
+                TipoReservaService.Atualizar(TipoReservaTO);
+
+                if (!TipoReservaTO.Valido)
+                {
+                    Session["Mensagem"] = TipoReservaTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                TipoReservaVM = Mapper.Map<TipoReservaTO, TipoReservaVM>(TipoReservaTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (id > 0)
+            {
+                var TipoReservaTO = TipoReservaService.Obter(id);
+                var TipoReservaVM = Mapper.Map<TipoReservaTO, TipoReservaVM>(TipoReservaTO);
+
+                return View(TipoReservaVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            return View(tipoReserva);
         }
 
-        // GET: TipoReservas/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            TipoReserva tipoReserva = db.TipoReserva.Find(id);
-            if (tipoReserva == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tipoReserva);
-        }
-
-        // POST: TipoReservas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            TipoReserva tipoReserva = db.TipoReserva.Find(id);
-            db.TipoReserva.Remove(tipoReserva);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            if (ModelState.IsValid)
             {
-                db.Dispose();
+                if (id > 0)
+                {
+                    var retorno = TipoReservaService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
             }
-            base.Dispose(disposing);
+
+            return RedirectToAction("Index");
         }
     }
 }

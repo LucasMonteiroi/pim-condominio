@@ -1,4 +1,4 @@
-﻿@model PIM.Database.DatabaseModel.Usuario
+﻿@model PIM.Web.ViewModels.UsuarioVM
 
 @{
     ViewBag.Title = "Delete";
@@ -20,32 +20,26 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Senha)
+            @Html.DisplayNameFor(model => model.IdColaborador)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Senha)
+            @Html.DisplayFor(model => model.NomeColaborador)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Colaborador.Nome)
+            @Html.DisplayNameFor(model => model.IdGrupo)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Colaborador.Nome)
+            @Html.DisplayFor(model => model.NomeGrupoUsuario)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.GrupoUsuario.Nome)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.GrupoUsuario.Nome)
-        </dd>
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

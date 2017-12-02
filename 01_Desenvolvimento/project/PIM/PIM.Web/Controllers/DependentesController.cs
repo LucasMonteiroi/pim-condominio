@@ -1,132 +1,186 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using PIM.Database.DatabaseModel;
-
-namespace PIM.Web.Controllers
+﻿namespace PIM.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using PIM.Database.TO;
+    using PIM.Service.Services;
+    using AutoMapper;
+    using PIM.Web.ViewModels;
+    using System.Linq;
+
     public class DependentesController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: Dependentes
         public ActionResult Index()
         {
-            var dependente = db.Dependente.Include(d => d.Morador);
-            return View(dependente.ToList());
-        }
+            ListaDependenteTO listaDependente = new ListaDependenteTO();
 
-        // GET: Dependentes/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                listaDependente = DependenteService.Listar();
+                var listaDependenteesVM = Mapper.Map<List<DependenteTO>, List<DependenteVM>>(listaDependente.Lista);
+                NomearVariaveis(null, listaDependenteesVM);
+                return View(listaDependenteesVM);
             }
-            Dependente dependente = db.Dependente.Find(id);
-            if (dependente == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                listaDependente.Mensagem = $"Erro ao obter Dependentees. Erro: {ex.Message} ";
             }
-            return View(dependente);
-        }
 
-        // GET: Dependentes/Create
-        public ActionResult Create()
-        {
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome");
             return View();
         }
 
-        // POST: Dependentes/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
+        public ActionResult Details(int id)
+        {
+            DependenteTO DependenteTO = new DependenteTO();
+
+            try
+            {
+                DependenteTO = DependenteService.Obter(id);
+
+                if (!DependenteTO.Valido)
+                {
+                    Session["Mensagem"] = DependenteTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var DependenteVM = Mapper.Map<DependenteTO, DependenteVM>(DependenteTO);
+                NomearVariaveis(DependenteVM, null);
+                return View(DependenteVM);
+            }
+            catch (Exception ex)
+            {
+                DependenteTO.Mensagem = $"Erro ao obter Dependente. Erro: {ex.Message}";
+
+            }
+
+            return View();
+        }
+
+        public ActionResult Create()
+        {
+            ViewBag.Morador = ListarMoradores();
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,Nome,RG,CPF,Telefone,IdMorador,GrauParentesco")] Dependente dependente)
+        public ActionResult Create(DependenteVM Dependente)
         {
             if (ModelState.IsValid)
             {
-                db.Dependente.Add(dependente);
-                db.SaveChanges();
+                var DependenteTO = Mapper.Map<DependenteVM, DependenteTO>(Dependente);
+
+                DependenteService.Criar(DependenteTO);
+
+                Session["Mensagem"] = DependenteTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", dependente.IdMorador);
-            return View(dependente);
+            else
+            {
+                return View(Dependente);
+            }
         }
 
-        // GET: Dependentes/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            ViewBag.Morador = ListarMoradores();
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var DependenteTO = DependenteService.Obter(id);
+
+                if (!DependenteTO.Valido)
+                {
+                    Session["Mensagem"] = DependenteTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var DependenteVM = Mapper.Map<DependenteTO, DependenteVM>(DependenteTO);
+                NomearVariaveis(DependenteVM, null);
+                return View(DependenteVM);
             }
-            Dependente dependente = db.Dependente.Find(id);
-            if (dependente == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", dependente.IdMorador);
-            return View(dependente);
+
+            return RedirectToAction("Index");
         }
 
-        // POST: Dependentes/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,Nome,RG,CPF,Telefone,IdMorador,GrauParentesco")] Dependente dependente)
+        public ActionResult Edit(DependenteVM DependenteVM)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(dependente).State = EntityState.Modified;
-                db.SaveChanges();
+                var DependenteTO = Mapper.Map<DependenteVM, DependenteTO>(DependenteVM);
+
+                DependenteService.Atualizar(DependenteTO);
+
+                if (!DependenteTO.Valido)
+                {
+                    Session["Mensagem"] = DependenteTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                DependenteVM = Mapper.Map<DependenteTO, DependenteVM>(DependenteTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (id > 0)
+            {
+                var DependenteTO = DependenteService.Obter(id);
+                var DependenteVM = Mapper.Map<DependenteTO, DependenteVM>(DependenteTO);
+                NomearVariaveis(DependenteVM, null);
+                return View(DependenteVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", dependente.IdMorador);
-            return View(dependente);
         }
 
-        // GET: Dependentes/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Dependente dependente = db.Dependente.Find(id);
-            if (dependente == null)
-            {
-                return HttpNotFound();
-            }
-            return View(dependente);
-        }
-
-        // POST: Dependentes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Dependente dependente = db.Dependente.Find(id);
-            db.Dependente.Remove(dependente);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                if (id > 0)
+                {
+                    var retorno = DependenteService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
+            }
+
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        private SelectList ListarMoradores()
         {
-            if (disposing)
+            var listaMoradorTO = MoradorService.Listar();
+            var listaMoradorVM = Mapper.Map<List<MoradorTO>, List<MoradorVM>>(listaMoradorTO.Lista);
+            return new SelectList(listaMoradorVM, "Identificador", "Nome");
+        }
+
+        private void NomearVariaveis(DependenteVM DependenteVM = null, List<DependenteVM> listaDependenteVM = null)
+        {
+            var listaMoradorTO = MoradorService.Listar().Lista;
+
+            if (listaDependenteVM != null && listaDependenteVM.Count > 0)
             {
-                db.Dispose();
+                foreach (var con in listaDependenteVM)
+                {
+                    con.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == con.IdMorador).Nome;
+                }
             }
-            base.Dispose(disposing);
+
+            if (DependenteVM != null)
+            {
+                DependenteVM.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == DependenteVM.IdMorador).Nome;
+            }
         }
     }
 }

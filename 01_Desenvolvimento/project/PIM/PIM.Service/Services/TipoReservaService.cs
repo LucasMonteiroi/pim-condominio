@@ -5,7 +5,7 @@
     using PIM.Database.TO;
     using PIM.Service.Infra;
 
-    public static class TipoTipoReserva
+    public static class TipoReservaService
     {
         private static TipoReservaCrud _Crud;
 

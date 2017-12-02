@@ -1,4 +1,4 @@
-﻿@model PIM.Database.DatabaseModel.Dependente
+﻿@model PIM.Web.ViewModels.DependenteVM
 
 @{
     ViewBag.Title = "Delete";
@@ -52,11 +52,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Morador.Nome)
+            @Html.DisplayNameFor(model => model.IdMorador)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Morador.Nome)
+            @Html.DisplayFor(model => model.NomeMorador)
         </dd>
 
     </dl>

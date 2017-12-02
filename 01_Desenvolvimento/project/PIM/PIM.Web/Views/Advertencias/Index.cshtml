@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PIM.Database.DatabaseModel.Advertencia>
+﻿@model IEnumerable<PIM.Web.ViewModels.AdvertenciaVM>
 
 @{
     ViewBag.Title = "Index";
@@ -18,7 +18,7 @@
             @Html.DisplayNameFor(model => model.Pago)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Ocorrencia.Motivo)
+            @Html.DisplayNameFor(model => model.IdOcorrencia)
         </th>
         <th></th>
     </tr>
@@ -32,7 +32,7 @@
             @Html.DisplayFor(modelItem => item.Pago)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Ocorrencia.Motivo)
+            @Html.DisplayFor(modelItem => item.MotivoOcorrencia)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Identificador }) |

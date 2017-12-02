@@ -35,7 +35,7 @@
             return _Crud.Remover(identificador);
         }
 
-        public static ListaColaboradorTO Lista()
+        public static ListaColaboradorTO Listar()
         {
             _Crud = CrudService<ColaboradorCrud>.ObterInstancia();
             return _Crud.Listar();

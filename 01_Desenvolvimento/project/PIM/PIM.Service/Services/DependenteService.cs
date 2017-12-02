@@ -35,7 +35,7 @@
             return _Crud.Remover(identificador);
         }
 
-        public static ListaDependenteTO Lista()
+        public static ListaDependenteTO Listar()
         {
             _Crud = CrudService<DependenteCrud>.ObterInstancia();
             return _Crud.Listar();

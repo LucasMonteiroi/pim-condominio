@@ -1,132 +1,186 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using PIM.Database.DatabaseModel;
-
-namespace PIM.Web.Controllers
+﻿namespace PIM.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using PIM.Web.ViewModels;
+    using PIM.Database.TO;
+    using AutoMapper;
+    using PIM.Service.Services;
+    using System.Linq;
+
     public class OcorrenciasController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: Ocorrencias
         public ActionResult Index()
         {
-            var ocorrencia = db.Ocorrencia.Include(o => o.Morador);
-            return View(ocorrencia.ToList());
-        }
+            ListaOcorrenciaTO listaOcorrencia = new ListaOcorrenciaTO();
 
-        // GET: Ocorrencias/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                listaOcorrencia = OcorrenciaService.Listar();
+                var listaOcorrenciaesVM = Mapper.Map<List<OcorrenciaTO>, List<OcorrenciaVM>>(listaOcorrencia.Lista);
+                NomearVariaveis(null, listaOcorrenciaesVM);
+                return View(listaOcorrenciaesVM);
             }
-            Ocorrencia ocorrencia = db.Ocorrencia.Find(id);
-            if (ocorrencia == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                listaOcorrencia.Mensagem = $"Erro ao obter Ocorrenciaes. Erro: {ex.Message} ";
             }
-            return View(ocorrencia);
-        }
 
-        // GET: Ocorrencias/Create
-        public ActionResult Create()
-        {
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome");
             return View();
         }
 
-        // POST: Ocorrencias/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
+        public ActionResult Details(int id)
+        {
+            OcorrenciaTO OcorrenciaTO = new OcorrenciaTO();
+
+            try
+            {
+                OcorrenciaTO = OcorrenciaService.Obter(id);
+
+                if (!OcorrenciaTO.Valido)
+                {
+                    Session["Mensagem"] = OcorrenciaTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var OcorrenciaVM = Mapper.Map<OcorrenciaTO, OcorrenciaVM>(OcorrenciaTO);
+                NomearVariaveis(OcorrenciaVM, null);
+                return View(OcorrenciaVM);
+            }
+            catch (Exception ex)
+            {
+                OcorrenciaTO.Mensagem = $"Erro ao obter Ocorrencia. Erro: {ex.Message}";
+
+            }
+
+            return View();
+        }
+
+        public ActionResult Create()
+        {
+            ViewBag.Morador = ListarMoradores();
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,Motivo,Descricao,DataOcorrencia,IdMorador")] Ocorrencia ocorrencia)
+        public ActionResult Create(OcorrenciaVM Ocorrencia)
         {
             if (ModelState.IsValid)
             {
-                db.Ocorrencia.Add(ocorrencia);
-                db.SaveChanges();
+                var OcorrenciaTO = Mapper.Map<OcorrenciaVM, OcorrenciaTO>(Ocorrencia);
+
+                OcorrenciaService.Criar(OcorrenciaTO);
+
+                Session["Mensagem"] = OcorrenciaTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", ocorrencia.IdMorador);
-            return View(ocorrencia);
+            else
+            {
+                return View(Ocorrencia);
+            }
         }
 
-        // GET: Ocorrencias/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            ViewBag.Morador = ListarMoradores();
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var OcorrenciaTO = OcorrenciaService.Obter(id);
+
+                if (!OcorrenciaTO.Valido)
+                {
+                    Session["Mensagem"] = OcorrenciaTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var OcorrenciaVM = Mapper.Map<OcorrenciaTO, OcorrenciaVM>(OcorrenciaTO);
+                NomearVariaveis(OcorrenciaVM, null);
+                return View(OcorrenciaVM);
             }
-            Ocorrencia ocorrencia = db.Ocorrencia.Find(id);
-            if (ocorrencia == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", ocorrencia.IdMorador);
-            return View(ocorrencia);
+
+            return RedirectToAction("Index");
         }
 
-        // POST: Ocorrencias/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,Motivo,Descricao,DataOcorrencia,IdMorador")] Ocorrencia ocorrencia)
+        public ActionResult Edit(OcorrenciaVM OcorrenciaVM)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(ocorrencia).State = EntityState.Modified;
-                db.SaveChanges();
+                var OcorrenciaTO = Mapper.Map<OcorrenciaVM, OcorrenciaTO>(OcorrenciaVM);
+
+                OcorrenciaService.Atualizar(OcorrenciaTO);
+
+                if (!OcorrenciaTO.Valido)
+                {
+                    Session["Mensagem"] = OcorrenciaTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                OcorrenciaVM = Mapper.Map<OcorrenciaTO, OcorrenciaVM>(OcorrenciaTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (id > 0)
+            {
+                var OcorrenciaTO = OcorrenciaService.Obter(id);
+                var OcorrenciaVM = Mapper.Map<OcorrenciaTO, OcorrenciaVM>(OcorrenciaTO);
+                NomearVariaveis(OcorrenciaVM, null);
+                return View(OcorrenciaVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", ocorrencia.IdMorador);
-            return View(ocorrencia);
         }
 
-        // GET: Ocorrencias/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Ocorrencia ocorrencia = db.Ocorrencia.Find(id);
-            if (ocorrencia == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ocorrencia);
-        }
-
-        // POST: Ocorrencias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Ocorrencia ocorrencia = db.Ocorrencia.Find(id);
-            db.Ocorrencia.Remove(ocorrencia);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                if (id > 0)
+                {
+                    var retorno = OcorrenciaService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
+            }
+
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        private SelectList ListarMoradores()
         {
-            if (disposing)
+            var listaMoradorTO = MoradorService.Listar();
+            var listaMoradorVM = Mapper.Map<List<MoradorTO>, List<MoradorVM>>(listaMoradorTO.Lista);
+            return new SelectList(listaMoradorVM, "Identificador", "Nome");
+        }
+
+        private void NomearVariaveis(OcorrenciaVM OcorrenciaVM = null, List<OcorrenciaVM> listaOcorrenciaVM = null)
+        {
+            var listaMoradorTO = MoradorService.Listar().Lista;
+
+            if (listaOcorrenciaVM != null && listaOcorrenciaVM.Count > 0)
             {
-                db.Dispose();
+                foreach (var con in listaOcorrenciaVM)
+                {
+                    con.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == con.IdMorador).Nome;
+                }
             }
-            base.Dispose(disposing);
+
+            if (OcorrenciaVM != null)
+            {
+                OcorrenciaVM.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == OcorrenciaVM.IdMorador).Nome;
+            }
         }
     }
 }

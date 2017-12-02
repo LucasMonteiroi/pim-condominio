@@ -1,132 +1,194 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using PIM.Database.DatabaseModel;
-
-namespace PIM.Web.Controllers
+﻿namespace PIM.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using PIM.Database.TO;
+    using PIM.Service.Services;
+    using AutoMapper;
+    using PIM.Web.ViewModels;
+    using System.Linq;
+
     public class EstacionamentosController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: Estacionamentos
         public ActionResult Index()
         {
-            var estacionamento = db.Estacionamento.Include(e => e.Apartamento);
-            return View(estacionamento.ToList());
-        }
+            ListaEstacionamentoTO listaEstacionamento = new ListaEstacionamentoTO();
 
-        // GET: Estacionamentos/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                listaEstacionamento = EstacionamentoService.Listar();
+                var listaEstacionamentosVM = Mapper.Map<List<EstacionamentoTO>, List<EstacionamentoVM>>(listaEstacionamento.Lista);
+                NomearVariaveis(null, listaEstacionamentosVM);
+                return View(listaEstacionamentosVM);
             }
-            Estacionamento estacionamento = db.Estacionamento.Find(id);
-            if (estacionamento == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                listaEstacionamento.Mensagem = $"Erro ao obter Estacionamentoes. Erro: {ex.Message} ";
             }
-            return View(estacionamento);
-        }
 
-        // GET: Estacionamentos/Create
-        public ActionResult Create()
-        {
-            ViewBag.IdApartamento = new SelectList(db.Apartamento, "Identificador", "Numero");
             return View();
         }
 
-        // POST: Estacionamentos/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
+        public ActionResult Details(int id)
+        {
+            ViewBag.Apartamentos = ListarApartamentos();
+
+            EstacionamentoTO EstacionamentoTO = new EstacionamentoTO();
+
+            try
+            {
+                EstacionamentoTO = EstacionamentoService.Obter(id);
+
+                if (!EstacionamentoTO.Valido)
+                {
+                    Session["Mensagem"] = EstacionamentoTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var EstacionamentoVM = Mapper.Map<EstacionamentoTO, EstacionamentoVM>(EstacionamentoTO);
+                NomearVariaveis(EstacionamentoVM);
+                return View(EstacionamentoVM);
+            }
+            catch (Exception ex)
+            {
+                EstacionamentoTO.Mensagem = $"Erro ao obter Estacionamento. Erro: {ex.Message}";
+
+            }
+
+            return View();
+        }
+
+        public ActionResult Create()
+        {
+            ViewBag.Apartamentos = ListarApartamentos();
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,VagasDisponiveis,IdApartamento")] Estacionamento estacionamento)
+        public ActionResult Create(EstacionamentoVM Estacionamento)
         {
             if (ModelState.IsValid)
             {
-                db.Estacionamento.Add(estacionamento);
-                db.SaveChanges();
+                var EstacionamentoTO = Mapper.Map<EstacionamentoVM, EstacionamentoTO>(Estacionamento);
+
+                EstacionamentoService.Criar(EstacionamentoTO);
+
+                Session["Mensagem"] = EstacionamentoTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            ViewBag.IdApartamento = new SelectList(db.Apartamento, "Identificador", "Numero", estacionamento.IdApartamento);
-            return View(estacionamento);
+            else
+            {
+                return View(Estacionamento);
+            }
         }
 
-        // GET: Estacionamentos/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            ViewBag.Apartamentos = ListarApartamentos();
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var EstacionamentoTO = EstacionamentoService.Obter(id);
+
+                if (!EstacionamentoTO.Valido)
+                {
+                    Session["Mensagem"] = EstacionamentoTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var EstacionamentoVM = Mapper.Map<EstacionamentoTO, EstacionamentoVM>(EstacionamentoTO);
+                NomearVariaveis(EstacionamentoVM);
+                return View(EstacionamentoVM);
             }
-            Estacionamento estacionamento = db.Estacionamento.Find(id);
-            if (estacionamento == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdApartamento = new SelectList(db.Apartamento, "Identificador", "Numero", estacionamento.IdApartamento);
-            return View(estacionamento);
+
+            return RedirectToAction("Index");
         }
 
-        // POST: Estacionamentos/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,VagasDisponiveis,IdApartamento")] Estacionamento estacionamento)
+        public ActionResult Edit(EstacionamentoVM EstacionamentoVM)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(estacionamento).State = EntityState.Modified;
-                db.SaveChanges();
+                var EstacionamentoTO = Mapper.Map<EstacionamentoVM, EstacionamentoTO>(EstacionamentoVM);
+
+                EstacionamentoService.Atualizar(EstacionamentoTO);
+
+                if (!EstacionamentoTO.Valido)
+                {
+                    Session["Mensagem"] = EstacionamentoTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                EstacionamentoVM = Mapper.Map<EstacionamentoTO, EstacionamentoVM>(EstacionamentoTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            ViewBag.Apartamentos = ListarApartamentos();
+
+            if (id > 0)
+            {
+                var EstacionamentoTO = EstacionamentoService.Obter(id);
+                var EstacionamentoVM = Mapper.Map<EstacionamentoTO, EstacionamentoVM>(EstacionamentoTO);
+                NomearVariaveis(EstacionamentoVM);
+                return View(EstacionamentoVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            ViewBag.IdApartamento = new SelectList(db.Apartamento, "Identificador", "Numero", estacionamento.IdApartamento);
-            return View(estacionamento);
         }
 
-        // GET: Estacionamentos/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Estacionamento estacionamento = db.Estacionamento.Find(id);
-            if (estacionamento == null)
-            {
-                return HttpNotFound();
-            }
-            return View(estacionamento);
-        }
-
-        // POST: Estacionamentos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Estacionamento estacionamento = db.Estacionamento.Find(id);
-            db.Estacionamento.Remove(estacionamento);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                if (id > 0)
+                {
+                    var retorno = EstacionamentoService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
+            }
+
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        private SelectList ListarApartamentos()
         {
-            if (disposing)
+            var listaApartamentoTO = ApartamentoService.Listar();
+            var listaApartamentoVM = Mapper.Map<List<ApartamentoTO>, List<ApartamentoVM>>(listaApartamentoTO.Lista);
+            return new SelectList(listaApartamentoVM, "Identificador", "Numero");
+        }
+
+        private void NomearVariaveis(EstacionamentoVM estacionamentoVM = null, List<EstacionamentoVM> listaEstacionamentoVM = null)
+        {
+            var listaApartamentoTO = ApartamentoService.Listar().Lista;
+
+            if (listaEstacionamentoVM != null && listaEstacionamentoVM.Count > 0)
             {
-                db.Dispose();
+                foreach (var est in listaEstacionamentoVM)
+                {
+                    var apa = listaApartamentoTO.FirstOrDefault(x => x.Identificador == est.IdApartamento);
+
+                    est.Apartamento = $"Bloco: {apa.Bloco} - Número: {apa.Numero}";
+                }
             }
-            base.Dispose(disposing);
+
+            if (estacionamentoVM != null)
+            {
+                var apa = listaApartamentoTO.FirstOrDefault(x => x.Identificador == estacionamentoVM.IdApartamento);
+
+                estacionamentoVM.Apartamento = $"Bloco: {apa.Bloco} - Número: {apa.Numero}";
+            }
         }
     }
 }

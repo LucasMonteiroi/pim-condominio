@@ -1,4 +1,4 @@
-﻿@model PIM.Database.DatabaseModel.Reserva
+﻿@model PIM.Web.ViewModels.ReservaVM
 
 @{
     ViewBag.Title = "Details";
@@ -27,19 +27,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Moradores.Nome)
+            @Html.DisplayNameFor(model => model.IdMorador)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Moradores.Nome)
+            @Html.DisplayFor(model => model.NomeMorador)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TipoReserva.Tipo)
+            @Html.DisplayNameFor(model => model.IdTipoReserva)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TipoReserva.Tipo)
+            @Html.DisplayFor(model => model.TipoReserva)
         </dd>
 
     </dl>

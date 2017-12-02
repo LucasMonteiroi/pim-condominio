@@ -1,4 +1,4 @@
-﻿@model PIM.Database.DatabaseModel.Advertencia
+﻿@model PIM.Web.ViewModels.AdvertenciaVM
 
 @{
     ViewBag.Title = "Details";
@@ -27,11 +27,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Ocorrencia.Motivo)
+            @Html.DisplayNameFor(model => model.IdOcorrencia)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Ocorrencia.Motivo)
+            @Html.DisplayFor(model => model.MotivoOcorrencia)
         </dd>
 
     </dl>

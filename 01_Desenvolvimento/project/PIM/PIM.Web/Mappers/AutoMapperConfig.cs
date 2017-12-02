@@ -1,13 +1,8 @@
 ﻿namespace PIM.Web.Mappers
 {
     using AutoMapper;
-    using PIM.Database.DatabaseModel;
     using PIM.Database.TO;
     using PIM.Web.ViewModels;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
 
     public class AutoMapperConfig
     {
@@ -15,9 +10,57 @@
         {
             Mapper.Initialize(x =>
             {
-                x.CreateMap<Morador, MoradorVM>();
-                x.CreateMap<MoradorVM, Morador>();
-                x.CreateMap<MoradorTO, Morador>();
+                //Morador
+                x.CreateMap<MoradorTO, MoradorVM>();
+                x.CreateMap<MoradorVM, MoradorTO>();
+
+                //Colaborador
+                x.CreateMap<ColaboradorTO, ColaboradorVM>();
+                x.CreateMap<ColaboradorVM, ColaboradorTO>();
+
+                //Dependente
+                x.CreateMap<DependenteTO, DependenteVM>();
+                x.CreateMap<DependenteVM, DependenteTO>();
+
+                //Advertencia
+                x.CreateMap<AdvertenciaTO, AdvertenciaVM>();
+                x.CreateMap<AdvertenciaVM, AdvertenciaTO>();
+
+                //Apartamento
+                x.CreateMap<ApartamentoTO, ApartamentoVM>();
+                x.CreateMap<ApartamentoVM, ApartamentoTO>();
+
+                //Contrato
+                x.CreateMap<ContratoTO, ContratoVM>();
+                x.CreateMap<ContratoVM, ContratoTO>();
+
+                //Estacionamento
+                x.CreateMap<EstacionamentoTO, EstacionamentoVM>();
+                x.CreateMap<EstacionamentoVM, EstacionamentoTO>();
+
+                //GrupoUsuario
+                x.CreateMap<GrupoUsuarioTO, GrupoUsuarioVM>();
+                x.CreateMap<GrupoUsuarioVM, GrupoUsuarioTO>();
+
+                //Ocorrencia
+                x.CreateMap<OcorrenciaTO, OcorrenciaVM>();
+                x.CreateMap<OcorrenciaVM, OcorrenciaTO>();
+
+                //Reserva
+                x.CreateMap<ReservaTO, ReservaVM>();
+                x.CreateMap<ReservaVM, ReservaTO>();
+
+                //TipoReserva
+                x.CreateMap<TipoReservaTO, TipoReservaVM>();
+                x.CreateMap<TipoReservaVM, TipoReservaTO>();
+
+                //Usuario
+                x.CreateMap<UsuarioTO, UsuarioVM>();
+                x.CreateMap<UsuarioVM, UsuarioTO>();
+
+                //Visitante
+                x.CreateMap<VisitanteTO, VisitanteVM>();
+                x.CreateMap<VisitanteVM, VisitanteTO>();
             });
         }
     }

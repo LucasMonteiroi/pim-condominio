@@ -1,132 +1,188 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using PIM.Database.DatabaseModel;
-
-namespace PIM.Web.Controllers
+﻿namespace PIM.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using PIM.Web.ViewModels;
+    using AutoMapper;
+    using PIM.Service.Services;
+    using PIM.Database.TO;
+    using System.Linq;
+
     public class VisitantesController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: Visitantes
         public ActionResult Index()
         {
-            var visitante = db.Visitante.Include(v => v.Morador);
-            return View(visitante.ToList());
-        }
+            ListaVisitanteTO listaVisitante = new ListaVisitanteTO();
 
-        // GET: Visitantes/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                listaVisitante = VisitanteService.Listar();
+                var listaVisitantesVM = Mapper.Map<List<VisitanteTO>, List<VisitanteVM>>(listaVisitante.Lista);
+                NomearVariaveis(null, listaVisitantesVM);
+                return View(listaVisitantesVM);
             }
-            Visitante visitante = db.Visitante.Find(id);
-            if (visitante == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                listaVisitante.Mensagem = $"Erro ao obter Visitantees. Erro: {ex.Message} ";
             }
-            return View(visitante);
-        }
 
-        // GET: Visitantes/Create
-        public ActionResult Create()
-        {
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome");
             return View();
         }
 
-        // POST: Visitantes/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
+        public ActionResult Details(int id)
+        {
+            VisitanteTO VisitanteTO = new VisitanteTO();
+
+            try
+            {
+                VisitanteTO = VisitanteService.Obter(id);
+
+                if (!VisitanteTO.Valido)
+                {
+                    Session["Mensagem"] = VisitanteTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var VisitanteVM = Mapper.Map<VisitanteTO, VisitanteVM>(VisitanteTO);
+
+                NomearVariaveis(VisitanteVM, null);
+
+                return View(VisitanteVM);
+            }
+            catch (Exception ex)
+            {
+                VisitanteTO.Mensagem = $"Erro ao obter Visitante. Erro: {ex.Message}";
+
+            }
+
+            return View();
+        }
+
+        public ActionResult Create()
+        {
+            ViewBag.Morador = ListarMoradores();
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,Nome,IdMorador")] Visitante visitante)
+        public ActionResult Create(VisitanteVM Visitante)
         {
             if (ModelState.IsValid)
             {
-                db.Visitante.Add(visitante);
-                db.SaveChanges();
+                var VisitanteTO = Mapper.Map<VisitanteVM, VisitanteTO>(Visitante);
+
+                VisitanteService.Criar(VisitanteTO);
+
+                Session["Mensagem"] = VisitanteTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", visitante.IdMorador);
-            return View(visitante);
+            else
+            {
+                return View(Visitante);
+            }
         }
 
-        // GET: Visitantes/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            ViewBag.Morador = ListarMoradores();
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var VisitanteTO = VisitanteService.Obter(id);
+
+                if (!VisitanteTO.Valido)
+                {
+                    Session["Mensagem"] = VisitanteTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var VisitanteVM = Mapper.Map<VisitanteTO, VisitanteVM>(VisitanteTO);
+                NomearVariaveis(VisitanteVM, null);
+                return View(VisitanteVM);
             }
-            Visitante visitante = db.Visitante.Find(id);
-            if (visitante == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", visitante.IdMorador);
-            return View(visitante);
+
+            return RedirectToAction("Index");
         }
 
-        // POST: Visitantes/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,Nome,IdMorador")] Visitante visitante)
+        public ActionResult Edit(VisitanteVM VisitanteVM)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(visitante).State = EntityState.Modified;
-                db.SaveChanges();
+                var VisitanteTO = Mapper.Map<VisitanteVM, VisitanteTO>(VisitanteVM);
+
+                VisitanteService.Atualizar(VisitanteTO);
+
+                if (!VisitanteTO.Valido)
+                {
+                    Session["Mensagem"] = VisitanteTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                VisitanteVM = Mapper.Map<VisitanteTO, VisitanteVM>(VisitanteTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (id > 0)
+            {
+                var VisitanteTO = VisitanteService.Obter(id);
+                var VisitanteVM = Mapper.Map<VisitanteTO, VisitanteVM>(VisitanteTO);
+                NomearVariaveis(VisitanteVM, null);
+                return View(VisitanteVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            ViewBag.IdMorador = new SelectList(db.Morador, "Identificador", "Nome", visitante.IdMorador);
-            return View(visitante);
         }
 
-        // GET: Visitantes/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Visitante visitante = db.Visitante.Find(id);
-            if (visitante == null)
-            {
-                return HttpNotFound();
-            }
-            return View(visitante);
-        }
-
-        // POST: Visitantes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Visitante visitante = db.Visitante.Find(id);
-            db.Visitante.Remove(visitante);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                if (id > 0)
+                {
+                    var retorno = VisitanteService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
+            }
+
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        private SelectList ListarMoradores()
         {
-            if (disposing)
+            var listaMoradorTO = MoradorService.Listar();
+            var listaMoradorVM = Mapper.Map<List<MoradorTO>, List<MoradorVM>>(listaMoradorTO.Lista);
+            return new SelectList(listaMoradorVM, "Identificador", "Nome");
+        }
+
+        private void NomearVariaveis(VisitanteVM VisitanteVM = null, List<VisitanteVM> listaVisitanteVM = null)
+        {
+            var listaMoradorTO = MoradorService.Listar().Lista;
+
+            if (listaVisitanteVM != null && listaVisitanteVM.Count > 0)
             {
-                db.Dispose();
+                foreach (var con in listaVisitanteVM)
+                {
+                    con.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == con.IdMorador).Nome;
+                }
             }
-            base.Dispose(disposing);
+
+            if (VisitanteVM != null)
+            {
+                VisitanteVM.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == VisitanteVM.IdMorador).Nome;
+            }
         }
     }
 }

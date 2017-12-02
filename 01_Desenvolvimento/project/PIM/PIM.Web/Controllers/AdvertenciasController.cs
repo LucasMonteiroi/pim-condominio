@@ -1,132 +1,187 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using PIM.Database.DatabaseModel;
-
-namespace PIM.Web.Controllers
+﻿namespace PIM.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using PIM.Database.TO;
+    using AutoMapper;
+    using PIM.Web.ViewModels;
+    using PIM.Service.Services;
+    using System.Linq;
+
     public class AdvertenciasController : Controller
     {
-        private EntidadePIM db = new EntidadePIM();
-
-        // GET: Advertencias
         public ActionResult Index()
         {
-            var advertencia = db.Advertencia.Include(a => a.Ocorrencia);
-            return View(advertencia.ToList());
-        }
+            ListaAdvertenciaTO listaAdvertencia = new ListaAdvertenciaTO();
 
-        // GET: Advertencias/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                listaAdvertencia = AdvertenciaService.Listar();
+                var listaAdvertenciaesVM = Mapper.Map<List<AdvertenciaTO>, List<AdvertenciaVM>>(listaAdvertencia.Lista);
+                NomearVariaveis(null, listaAdvertenciaesVM);
+                return View(listaAdvertenciaesVM);
             }
-            Advertencia advertencia = db.Advertencia.Find(id);
-            if (advertencia == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                listaAdvertencia.Mensagem = $"Erro ao obter Advertenciaes. Erro: {ex.Message} ";
             }
-            return View(advertencia);
-        }
 
-        // GET: Advertencias/Create
-        public ActionResult Create()
-        {
-            ViewBag.IdOcorrencia = new SelectList(db.Ocorrencia, "Identificador", "Motivo");
             return View();
         }
 
-        // POST: Advertencias/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
+        public ActionResult Details(int id)
+        {
+            AdvertenciaTO AdvertenciaTO = new AdvertenciaTO();
+
+            try
+            {
+                AdvertenciaTO = AdvertenciaService.Obter(id);
+
+                if (!AdvertenciaTO.Valido)
+                {
+                    Session["Mensagem"] = AdvertenciaTO.Mensagem;
+
+                    return RedirectToActionPermanent("Index");
+                }
+
+                var AdvertenciaVM = Mapper.Map<AdvertenciaTO, AdvertenciaVM>(AdvertenciaTO);
+                NomearVariaveis(AdvertenciaVM, null);
+                return View(AdvertenciaVM);
+            }
+            catch (Exception ex)
+            {
+                AdvertenciaTO.Mensagem = $"Erro ao obter Advertencia. Erro: {ex.Message}";
+
+            }
+
+            return View();
+        }
+
+        public ActionResult Create()
+        {
+            ViewBag.Ocorrencia = ListarOcorrencias();
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Identificador,Valor,Pago,IdOcorrencia")] Advertencia advertencia)
+        public ActionResult Create(AdvertenciaVM Advertencia)
         {
             if (ModelState.IsValid)
             {
-                db.Advertencia.Add(advertencia);
-                db.SaveChanges();
+                var AdvertenciaTO = Mapper.Map<AdvertenciaVM, AdvertenciaTO>(Advertencia);
+
+                AdvertenciaService.Criar(AdvertenciaTO);
+
+                Session["Mensagem"] = AdvertenciaTO.Mensagem;
                 return RedirectToAction("Index");
             }
-
-            ViewBag.IdOcorrencia = new SelectList(db.Ocorrencia, "Identificador", "Motivo", advertencia.IdOcorrencia);
-            return View(advertencia);
+            else
+            {
+                return View(Advertencia);
+            }
         }
 
-        // GET: Advertencias/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            ViewBag.Ocorrencia = ListarOcorrencias();
+
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var AdvertenciaTO = AdvertenciaService.Obter(id);
+
+                if (!AdvertenciaTO.Valido)
+                {
+                    Session["Mensagem"] = AdvertenciaTO.Mensagem;
+                    return RedirectToAction("Index");
+                }
+
+                var AdvertenciaVM = Mapper.Map<AdvertenciaTO, AdvertenciaVM>(AdvertenciaTO);
+                NomearVariaveis(AdvertenciaVM, null);
+                return View(AdvertenciaVM);
             }
-            Advertencia advertencia = db.Advertencia.Find(id);
-            if (advertencia == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdOcorrencia = new SelectList(db.Ocorrencia, "Identificador", "Motivo", advertencia.IdOcorrencia);
-            return View(advertencia);
+
+            return RedirectToAction("Index");
         }
 
-        // POST: Advertencias/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificador,Valor,Pago,IdOcorrencia")] Advertencia advertencia)
+        public ActionResult Edit(AdvertenciaVM AdvertenciaVM)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(advertencia).State = EntityState.Modified;
-                db.SaveChanges();
+                var AdvertenciaTO = Mapper.Map<AdvertenciaVM, AdvertenciaTO>(AdvertenciaVM);
+
+                AdvertenciaService.Atualizar(AdvertenciaTO);
+
+                if (!AdvertenciaTO.Valido)
+                {
+                    Session["Mensagem"] = AdvertenciaTO.Valido;
+                    return RedirectToAction("Index");
+                }
+
+                AdvertenciaVM = Mapper.Map<AdvertenciaTO, AdvertenciaVM>(AdvertenciaTO);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (id > 0)
+            {
+                var AdvertenciaTO = AdvertenciaService.Obter(id);
+                var AdvertenciaVM = Mapper.Map<AdvertenciaTO, AdvertenciaVM>(AdvertenciaTO);
+                NomearVariaveis(AdvertenciaVM, null);
+                return View(AdvertenciaVM);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            ViewBag.IdOcorrencia = new SelectList(db.Ocorrencia, "Identificador", "Motivo", advertencia.IdOcorrencia);
-            return View(advertencia);
         }
 
-        // GET: Advertencias/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Advertencia advertencia = db.Advertencia.Find(id);
-            if (advertencia == null)
-            {
-                return HttpNotFound();
-            }
-            return View(advertencia);
-        }
-
-        // POST: Advertencias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Advertencia advertencia = db.Advertencia.Find(id);
-            db.Advertencia.Remove(advertencia);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                if (id > 0)
+                {
+                    var retorno = AdvertenciaService.Remover(id);
+
+                    Session["Mensagem"] = retorno.Mensagem;
+                }
+            }
+
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        private SelectList ListarOcorrencias()
         {
-            if (disposing)
+            var listaOcorrenciaTO = OcorrenciaService.Listar();
+            var listaOcorrenciaVM = Mapper.Map<List<OcorrenciaTO>, List<OcorrenciaVM>>(listaOcorrenciaTO.Lista);
+            return new SelectList(listaOcorrenciaVM, "Identificador", "Motivo");
+        }
+
+        private void NomearVariaveis(AdvertenciaVM AdvertenciaVM = null, List<AdvertenciaVM> listaAdvertenciaVM = null)
+        {
+            var listaOcorrenciaTO = OcorrenciaService.Listar().Lista;
+
+            if (listaAdvertenciaVM != null && listaAdvertenciaVM.Count > 0)
             {
-                db.Dispose();
+                foreach (var con in listaAdvertenciaVM)
+                {
+                    con.MotivoOcorrencia = listaOcorrenciaTO.FirstOrDefault(x => x.Identificador == con.IdOcorrencia).Motivo;
+                }
             }
-            base.Dispose(disposing);
+
+            if (AdvertenciaVM != null)
+            {
+                AdvertenciaVM.MotivoOcorrencia = listaOcorrenciaTO.FirstOrDefault(x => x.Identificador == AdvertenciaVM.IdOcorrencia).Motivo;
+            }
         }
     }
 }
