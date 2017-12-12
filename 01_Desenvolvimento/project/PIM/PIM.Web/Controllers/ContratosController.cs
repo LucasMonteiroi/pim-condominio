@@ -11,8 +11,24 @@
 
     public class ContratosController : Controller
     {
+        private UsuarioTO _usuarioTO;
+
         public ActionResult Index()
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ListaContratoTO listaContrato = new ListaContratoTO();
 
             try
@@ -34,6 +50,20 @@
 
         public ActionResult Details(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ContratoTO ContratoTO = new ContratoTO();
 
             try
@@ -62,6 +92,20 @@
 
         public ActionResult Create()
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ViewBag.Morador = ListarMoradores();
             return View();
         }
@@ -72,6 +116,7 @@
         {
             if (ModelState.IsValid)
             {
+                Contrato.TipoContrato = Contrato.TipoContrato.Substring(0, 1);
                 var ContratoTO = Mapper.Map<ContratoVM, ContratoTO>(Contrato);
 
                 ContratoService.Criar(ContratoTO);
@@ -87,6 +132,20 @@
 
         public ActionResult Edit(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ViewBag.Morador = ListarMoradores();
 
             if (ModelState.IsValid)
@@ -113,6 +172,8 @@
         {
             if (ModelState.IsValid)
             {
+                ContratoVM.TipoContrato = ContratoVM.TipoContrato.Substring(0, 1);
+
                 var ContratoTO = Mapper.Map<ContratoVM, ContratoTO>(ContratoVM);
 
                 ContratoService.Atualizar(ContratoTO);
@@ -131,6 +192,20 @@
 
         public ActionResult Delete(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             if (id > 0)
             {
                 var ContratoTO = ContratoService.Obter(id);

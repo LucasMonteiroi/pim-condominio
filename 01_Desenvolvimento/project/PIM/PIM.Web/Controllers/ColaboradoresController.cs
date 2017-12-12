@@ -16,14 +16,36 @@ namespace PIM.Web.Controllers
 {
     public class ColaboradoresController : Controller
     {
+        private UsuarioTO _usuarioTO;
+
         public ActionResult Index()
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ListaColaboradorTO listaColaborador = new ListaColaboradorTO();
 
             try
             {
                 listaColaborador = ColaboradorService.Listar();
                 var listaColaboradoresVM = Mapper.Map<List<ColaboradorTO>, List<ColaboradorVM>>(listaColaborador.Lista);
+
+                foreach(var c in listaColaboradoresVM)
+                {
+                    c.DataAdimissao = c.DataContrato.GetValueOrDefault().ToString("dd/MM/yyyy");
+                    c.ValorSalario = c.Salario.HasValue ? string.Format("R$ {0:C}", c.Salario.Value) : string.Empty;
+                }
 
                 return View(listaColaboradoresVM);
             }
@@ -37,6 +59,20 @@ namespace PIM.Web.Controllers
 
         public ActionResult Details(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ColaboradorTO ColaboradorTO = new ColaboradorTO();
 
             try
@@ -65,6 +101,20 @@ namespace PIM.Web.Controllers
 
         public ActionResult Create()
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             return View();
         }
 
@@ -89,6 +139,20 @@ namespace PIM.Web.Controllers
 
         public ActionResult Edit(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             if (ModelState.IsValid)
             {
                 var ColaboradorTO = ColaboradorService.Obter(id);
@@ -113,6 +177,7 @@ namespace PIM.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                ColaboradorVM.CPF = ColaboradorVM.CPF.Replace(".", "").Replace("-", "");
                 var ColaboradorTO = Mapper.Map<ColaboradorVM, ColaboradorTO>(ColaboradorVM);
 
                 ColaboradorService.Atualizar(ColaboradorTO);
@@ -131,6 +196,18 @@ namespace PIM.Web.Controllers
 
         public ActionResult Delete(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+
             if (id > 0)
             {
                 var ColaboradorTO = ColaboradorService.Obter(id);

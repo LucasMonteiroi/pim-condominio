@@ -11,13 +11,44 @@
 
     public class ReservasController : Controller
     {
+        UsuarioTO _usuarioTO;
+        MoradorTO _moradorTO;
+
         public ActionResult Index()
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             ListaReservaTO listaReserva = new ListaReservaTO();
 
             try
             {
-                listaReserva = ReservaService.Listar();
+                if (_moradorTO != null)
+                    listaReserva = ReservaService.ListarPorMorador(_moradorTO.Identificador);
+                else
+                    listaReserva = ReservaService.Listar();
                 var listaReservasVM = Mapper.Map<List<ReservaTO>, List<ReservaVM>>(listaReserva.Lista);
                 NomearVariaveis(null, listaReservasVM);
                 return View(listaReservasVM);
@@ -32,6 +63,31 @@
 
         public ActionResult Details(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             ReservaTO ReservaTO = new ReservaTO();
 
             try
@@ -60,6 +116,32 @@
 
         public ActionResult Create()
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+
             ViewBag.Morador = ListarMoradores();
             ViewBag.TipoReserva = ListarTipoReservas();
             return View();
@@ -71,6 +153,8 @@
         {
             if (ModelState.IsValid)
             {
+                Reserva.ConfirmacaoReserva = Reserva.Confirmacao ? "S" : "N";
+
                 var ReservaTO = Mapper.Map<ReservaVM, ReservaTO>(Reserva);
 
                 ReservaService.Criar(ReservaTO);
@@ -86,6 +170,31 @@
 
         public ActionResult Edit(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             ViewBag.Morador = ListarMoradores();
             ViewBag.TipoReserva = ListarTipoReservas();
 
@@ -113,6 +222,7 @@
         {
             if (ModelState.IsValid)
             {
+                ReservaVM.ConfirmacaoReserva = ReservaVM.Confirmacao ? "S" : "N";
                 var ReservaTO = Mapper.Map<ReservaVM, ReservaTO>(ReservaVM);
 
                 ReservaService.Atualizar(ReservaTO);
@@ -131,6 +241,31 @@
 
         public ActionResult Delete(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             if (id > 0)
             {
                 var ReservaTO = ReservaService.Obter(id);
@@ -186,6 +321,7 @@
                 {
                     con.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == con.IdMorador).Nome;
                     con.TipoReserva = listaTipoReservaTO.FirstOrDefault(x => x.Identificador == con.IdTipoReserva).Tipo;
+                    con.Confirmacao = "S".Equals(con.ConfirmacaoReserva);
                 }
             }
 
@@ -193,6 +329,7 @@
             {
                 ReservaVM.NomeMorador = listaMoradorTO.FirstOrDefault(x => x.Identificador == ReservaVM.IdMorador).Nome;
                 ReservaVM.TipoReserva = listaTipoReservaTO.FirstOrDefault(x => x.Identificador == ReservaVM.IdTipoReserva).Tipo;
+                ReservaVM.Confirmacao = "S".Equals(ReservaVM.ConfirmacaoReserva);
             }
         }
     }

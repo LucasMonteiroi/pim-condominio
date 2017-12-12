@@ -11,8 +11,24 @@
 
     public class EstacionamentosController : Controller
     {
+        private UsuarioTO _usuarioTO;
+
         public ActionResult Index()
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ListaEstacionamentoTO listaEstacionamento = new ListaEstacionamentoTO();
 
             try
@@ -32,6 +48,20 @@
 
         public ActionResult Details(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ViewBag.Apartamentos = ListarApartamentos();
 
             EstacionamentoTO EstacionamentoTO = new EstacionamentoTO();
@@ -62,6 +92,21 @@
 
         public ActionResult Create()
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+            else if(_usuarioTO.IdGrupo == 2 || _usuarioTO.IdGrupo == 3)
+                return RedirectToActionPermanent("Index");
             ViewBag.Apartamentos = ListarApartamentos();
             return View();
         }
@@ -87,6 +132,22 @@
 
         public ActionResult Edit(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+            else if (_usuarioTO.IdGrupo == 2 || _usuarioTO.IdGrupo == 3)
+                return RedirectToActionPermanent("Index");
+
             ViewBag.Apartamentos = ListarApartamentos();
             if (ModelState.IsValid)
             {
@@ -130,6 +191,22 @@
 
         public ActionResult Delete(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+            else if (_usuarioTO.IdGrupo == 2 || _usuarioTO.IdGrupo == 3)
+                return RedirectToActionPermanent("Index");
+
             ViewBag.Apartamentos = ListarApartamentos();
 
             if (id > 0)

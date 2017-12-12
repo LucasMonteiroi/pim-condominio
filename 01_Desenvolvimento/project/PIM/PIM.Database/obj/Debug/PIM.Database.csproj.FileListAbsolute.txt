@@ -5,6 +5,7 @@ C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\bin
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\bin\Debug\EntityFramework.SqlServer.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\bin\Debug\EntityFramework.xml
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\bin\Debug\EntityFramework.SqlServer.xml
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\obj\Debug\PIM.Database.csprojResolveAssemblyReference.cache
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\obj\Debug\PIM.Database.csproj.CoreCompileInputs.cache
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\obj\Debug\PIM.Database.dll
 C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\obj\Debug\PIM.Database.pdb
-C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\obj\Debug\PIM.Database.csprojResolveAssemblyReference.cache

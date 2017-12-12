@@ -21,9 +21,17 @@
         public string Funcao { get; set; }
 
         [Display(Name = "Data de Contratação")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [DataType(DataType.Date)]
         public DateTime? DataContrato { get; set; }
 
+        public string DataAdimissao { get; set; }
+        [DataType(DataType.Currency)]
+        public string ValorSalario { get; set; }
+
         [Display(Name = "Salário")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
+        [DataType(DataType.Currency)]
         public decimal? Salario { get; set; }
 
     }

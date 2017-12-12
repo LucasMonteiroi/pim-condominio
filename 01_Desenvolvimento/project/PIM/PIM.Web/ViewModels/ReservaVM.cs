@@ -17,14 +17,16 @@
 
         [Display(Name = "Data da Reserva")]
         [Required(ErrorMessage = "A {0} é obrigatória")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DataReserva { get; set; }
 
         [Display(Name = "Confirmação de Reserva")]
-        [Required(ErrorMessage = "A {0} é obrigatória")]
         public string ConfirmacaoReserva { get; set; }
 
         public string NomeMorador { get; set; }
 
         public string TipoReserva { get; set; }
+        public bool Confirmacao { get; set; }
     }
 }

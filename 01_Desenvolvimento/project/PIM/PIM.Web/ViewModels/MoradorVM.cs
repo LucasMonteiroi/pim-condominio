@@ -17,11 +17,13 @@
         public string CPF { get; set; }
 
         [Required(ErrorMessage = "O {0} é obrigatório")]
+        [DataType(DataType.PhoneNumber)]
         public string Telefone { get; set; }
 
         public string Celular { get; set; }
 
         [Display(Name = "Data de Nascimento")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? DataNascimento { get; set; }
 
         public string Email { get; set; }

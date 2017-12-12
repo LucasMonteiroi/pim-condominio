@@ -22,6 +22,7 @@
 
         [Display(Name = "Grau de Parentesco")]
         [Required(ErrorMessage = "O {0} do dependente é obrigatório")]
+        [StringLength(1)]
         public string GrauParentesco { get; set; }
 
         public string NomeMorador { get; set; }

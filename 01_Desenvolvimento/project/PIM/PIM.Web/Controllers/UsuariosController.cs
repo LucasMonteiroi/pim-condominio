@@ -8,11 +8,28 @@
     using PIM.Web.ViewModels;
     using AutoMapper;
     using System.Linq;
+    using PIM.Service.Infra;
 
     public class UsuariosController : Controller
     {
+        private UsuarioTO _usuarioTO;
+
         public ActionResult Index()
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ListaUsuarioTO listaUsuario = new ListaUsuarioTO();
 
             try
@@ -34,6 +51,20 @@
 
         public ActionResult Details(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             UsuarioTO UsuarioTO = new UsuarioTO();
 
             try
@@ -64,6 +95,20 @@
 
         public ActionResult Create()
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ViewBag.Colaborador = ListarColaboradores();
             ViewBag.Grupo = ListarGrupos();
             return View();
@@ -90,6 +135,20 @@
 
         public ActionResult Edit(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             if (ModelState.IsValid)
             {
                 ViewBag.Colaborador = ListarColaboradores();
@@ -119,7 +178,13 @@
         {
             if (ModelState.IsValid)
             {
+
+                var to = UsuarioService.Obter(UsuarioVM.Identificador);
+
                 var UsuarioTO = Mapper.Map<UsuarioVM, UsuarioTO>(UsuarioVM);
+
+                if (to.Senha != UsuarioTO.Senha)
+                    UsuarioTO.Senha =  UtilitarioService.GerarHashMD5(UsuarioTO.Senha);
 
                 UsuarioService.Atualizar(UsuarioTO);
 
@@ -137,6 +202,20 @@
 
         public ActionResult Delete(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             if (id > 0)
             {
                 var UsuarioTO = UsuarioService.Obter(id);

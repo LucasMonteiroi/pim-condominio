@@ -1,0 +1,73 @@
+﻿@model PIM.Web.ViewModels.LoginVM
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SIGACON | Login</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="~/Content/animate.css" rel="stylesheet">
+    <link href="~/Content/style.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name">SGC</h1>
+            </div>
+            <h3>Bem Vindo(a) ao Sigacon</h3>
+            <p>
+                Um Sistema de Gerenciamento de Condomínio amigável, com as funções necessárias para seu condomínio.
+            </p>
+            @if (!string.IsNullOrEmpty(ViewBag.Mensagem))
+            {
+                <p class="text-danger"><small>@ViewBag.Mensagem</small></p>
+            }
+
+            @using (Html.BeginForm())
+            {
+                <h3>Login usuário</h3>
+
+                @Html.AntiForgeryToken()
+                <form class="m-t" role="form" action="#">
+
+                    @Html.ValidationSummary(true)
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Login)
+                        @Html.EditorFor(model => model.Login)
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Senha)
+                        @Html.EditorFor(model => model.Senha)
+                    </div>
+
+                    <hr />
+                    <h3>Login Morador</h3>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CPF)
+                        @Html.EditorFor(model => model.CPF)
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-outline block full-width m-b">Login</button>
+
+                </form>
+
+            }
+        </div>
+    </div>
+</body>
+
+</html>

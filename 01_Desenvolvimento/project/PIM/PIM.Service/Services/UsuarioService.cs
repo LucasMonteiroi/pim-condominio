@@ -81,8 +81,10 @@
 
                 retorno = listaUsuarioTO.Lista.FirstOrDefault(x => x.Login == login && x.Senha == senha);
 
-                if(retorno == null)
+                if (retorno == null)
                 {
+                    retorno = new UsuarioTO();
+
                     retorno.Valido = false;
                     retorno.Mensagem = "Login e/ou senha inválidos.";
 

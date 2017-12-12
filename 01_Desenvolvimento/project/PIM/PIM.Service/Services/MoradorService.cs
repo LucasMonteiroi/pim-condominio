@@ -66,5 +66,39 @@
 
             return retorno;
         }
+
+        public static MoradorTO LoginMorador(string cpf)
+        {
+            _Crud = CrudService<MoradorCrud>.ObterInstancia();
+            MoradorTO retorno = new MoradorTO();
+
+            try
+            {
+                ListaMoradorTO listaMoradorTO = new ListaMoradorTO();
+                listaMoradorTO = _Crud.Listar();
+
+                retorno = listaMoradorTO.Lista.FirstOrDefault(x => x.CPF == cpf);
+
+                if (retorno == null)
+                {
+                    retorno = new MoradorTO();
+                    retorno.Valido = false;
+                    retorno.Mensagem = "Não há moradores cadastrados na base de dados";
+
+                    return retorno;
+                }
+
+                retorno.Mensagem = "Morador obtido com sucesso.";
+                retorno.Valido = true;
+            }
+            catch (Exception ex)
+            {
+                retorno.Valido = false;
+                retorno.Mensagem = string.Format("Erro: {0}", ex.Message);
+            }
+
+            return retorno;
+
+        }
     }
 }

@@ -1,0 +1,559 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{84C71D3B-2D67-4A11-A885-0F69C98B578B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>PIM.Desktop</RootNamespace>
+    <AssemblyName>PIM.Desktop</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="frmAdministrador.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAdministrador.Designer.cs">
+      <DependentUpon>frmAdministrador.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAdministrarCondominio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAdministrarCondominio.Designer.cs">
+      <DependentUpon>frmAdministrarCondominio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmApartamentoCadastrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmApartamentoCadastrar.Designer.cs">
+      <DependentUpon>frmApartamentoCadastrar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmApartamentoEditar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmApartamentoEditar.Designer.cs">
+      <DependentUpon>frmApartamentoEditar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmApartamentoExcluir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmApartamentoExcluir.Designer.cs">
+      <DependentUpon>frmApartamentoExcluir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmApartamentoVisualizar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmApartamentoVisualizar.Designer.cs">
+      <DependentUpon>frmApartamentoVisualizar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmColaboradorCadastrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmColaboradorCadastrar.Designer.cs">
+      <DependentUpon>frmColaboradorCadastrar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmContratoCadastrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmContratoCadastrar.Designer.cs">
+      <DependentUpon>frmContratoCadastrar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmContratoEditar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmContratoEditar.Designer.cs">
+      <DependentUpon>frmContratoEditar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmContratoExcluir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmContratoExcluir.Designer.cs">
+      <DependentUpon>frmContratoExcluir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmContratoVisualizar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmContratoVisualizar.Designer.cs">
+      <DependentUpon>frmContratoVisualizar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDependenteEditar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDependenteEditar.Designer.cs">
+      <DependentUpon>frmDependenteEditar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDependenteExcluir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDependenteExcluir.Designer.cs">
+      <DependentUpon>frmDependenteExcluir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDependenteVisualizar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDependenteVisualizar.Designer.cs">
+      <DependentUpon>frmDependenteVisualizar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMoradorCadastrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMoradorCadastrar.Designer.cs">
+      <DependentUpon>frmMoradorCadastrar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCadastrarOcorrencia.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCadastrarOcorrencia.Designer.cs">
+      <DependentUpon>frmCadastrarOcorrencia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCadastrarVisitante.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCadastrarVisitante.Designer.cs">
+      <DependentUpon>frmCadastrarVisitante.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDependenteCadastrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDependenteCadastrar.Designer.cs">
+      <DependentUpon>frmDependenteCadastrar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmColaboradorEditar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmColaboradorEditar.Designer.cs">
+      <DependentUpon>frmColaboradorEditar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmColaboradorExcluir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmColaboradorExcluir.Designer.cs">
+      <DependentUpon>frmColaboradorExcluir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLogin.Designer.cs">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMorador.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMorador.Designer.cs">
+      <DependentUpon>frmMorador.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMoradorEditar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMoradorEditar.Designer.cs">
+      <DependentUpon>frmMoradorEditar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMoradorExcluir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMoradorExcluir.Designer.cs">
+      <DependentUpon>frmMoradorExcluir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMoradorVisualizar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMoradorVisualizar.Designer.cs">
+      <DependentUpon>frmMoradorVisualizar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmOcorrenciaCadastrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOcorrenciaCadastrar.Designer.cs">
+      <DependentUpon>frmOcorrenciaCadastrar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmOcorrenciaEditar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOcorrenciaEditar.Designer.cs">
+      <DependentUpon>frmOcorrenciaEditar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmOcorrenciaExcluir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOcorrenciaExcluir.Designer.cs">
+      <DependentUpon>frmOcorrenciaExcluir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmOcorrenciaVisualizar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOcorrenciaVisualizar.Designer.cs">
+      <DependentUpon>frmOcorrenciaVisualizar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPorteiro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPorteiro.Designer.cs">
+      <DependentUpon>frmPorteiro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmColaboradorVisualizar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmColaboradorVisualizar.Designer.cs">
+      <DependentUpon>frmColaboradorVisualizar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPorteiroVisualizarColaborador.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPorteiroVisualizarColaborador.Designer.cs">
+      <DependentUpon>frmPorteiroVisualizarColaborador.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmRedefinirSenha.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRedefinirSenha.Designer.cs">
+      <DependentUpon>frmRedefinirSenha.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmReservaCadastrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmReservaCadastrar.Designer.cs">
+      <DependentUpon>frmReservaCadastrar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmReservaEditar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmReservaEditar.Designer.cs">
+      <DependentUpon>frmReservaEditar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmReservaExcluir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmReservaExcluir.Designer.cs">
+      <DependentUpon>frmReservaExcluir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmReservaVisualizar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmReservaVisualizar.Designer.cs">
+      <DependentUpon>frmReservaVisualizar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTipoDeReservaCadastrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTipoDeReservaCadastrar.Designer.cs">
+      <DependentUpon>frmTipoDeReservaCadastrar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTipoDeReservaEditar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTipoDeReservaEditar.Designer.cs">
+      <DependentUpon>frmTipoDeReservaEditar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTipoDeReservaExcluir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTipoDeReservaExcluir.Designer.cs">
+      <DependentUpon>frmTipoDeReservaExcluir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTipoDeReservaVisualizar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTipoDeReservaVisualizar.Designer.cs">
+      <DependentUpon>frmTipoDeReservaVisualizar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUsuarioCadastrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUsuarioCadastrar.Designer.cs">
+      <DependentUpon>frmUsuarioCadastrar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUsuarioEditar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUsuarioEditar.Designer.cs">
+      <DependentUpon>frmUsuarioEditar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUsuarioExcluir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUsuarioExcluir.Designer.cs">
+      <DependentUpon>frmUsuarioExcluir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUsuarioVisualizar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUsuarioVisualizar.Designer.cs">
+      <DependentUpon>frmUsuarioVisualizar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmVisitanteCadastrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVisitanteCadastrar.Designer.cs">
+      <DependentUpon>frmVisitanteCadastrar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmVisitanteEditar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVisitanteEditar.Designer.cs">
+      <DependentUpon>frmVisitanteEditar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmVisitanteExcluir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVisitanteExcluir.Designer.cs">
+      <DependentUpon>frmVisitanteExcluir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmVisitanteVisualizar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVisitanteVisualizar.Designer.cs">
+      <DependentUpon>frmVisitanteVisualizar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmAdministrador.resx">
+      <DependentUpon>frmAdministrador.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAdministrarCondominio.resx">
+      <DependentUpon>frmAdministrarCondominio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmApartamentoCadastrar.resx">
+      <DependentUpon>frmApartamentoCadastrar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmApartamentoEditar.resx">
+      <DependentUpon>frmApartamentoEditar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmApartamentoExcluir.resx">
+      <DependentUpon>frmApartamentoExcluir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmApartamentoVisualizar.resx">
+      <DependentUpon>frmApartamentoVisualizar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmColaboradorCadastrar.resx">
+      <DependentUpon>frmColaboradorCadastrar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmContratoCadastrar.resx">
+      <DependentUpon>frmContratoCadastrar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmContratoEditar.resx">
+      <DependentUpon>frmContratoEditar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmContratoExcluir.resx">
+      <DependentUpon>frmContratoExcluir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmContratoVisualizar.resx">
+      <DependentUpon>frmContratoVisualizar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDependenteEditar.resx">
+      <DependentUpon>frmDependenteEditar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDependenteExcluir.resx">
+      <DependentUpon>frmDependenteExcluir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDependenteVisualizar.resx">
+      <DependentUpon>frmDependenteVisualizar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMoradorCadastrar.resx">
+      <DependentUpon>frmMoradorCadastrar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCadastrarOcorrencia.resx">
+      <DependentUpon>frmCadastrarOcorrencia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCadastrarVisitante.resx">
+      <DependentUpon>frmCadastrarVisitante.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDependenteCadastrar.resx">
+      <DependentUpon>frmDependenteCadastrar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmColaboradorEditar.resx">
+      <DependentUpon>frmColaboradorEditar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmColaboradorExcluir.resx">
+      <DependentUpon>frmColaboradorExcluir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLogin.resx">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMorador.resx">
+      <DependentUpon>frmMorador.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMoradorEditar.resx">
+      <DependentUpon>frmMoradorEditar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMoradorExcluir.resx">
+      <DependentUpon>frmMoradorExcluir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMoradorVisualizar.resx">
+      <DependentUpon>frmMoradorVisualizar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOcorrenciaCadastrar.resx">
+      <DependentUpon>frmOcorrenciaCadastrar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOcorrenciaEditar.resx">
+      <DependentUpon>frmOcorrenciaEditar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOcorrenciaExcluir.resx">
+      <DependentUpon>frmOcorrenciaExcluir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOcorrenciaVisualizar.resx">
+      <DependentUpon>frmOcorrenciaVisualizar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPorteiro.resx">
+      <DependentUpon>frmPorteiro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmColaboradorVisualizar.resx">
+      <DependentUpon>frmColaboradorVisualizar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPorteiroVisualizarColaborador.resx">
+      <DependentUpon>frmPorteiroVisualizarColaborador.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRedefinirSenha.resx">
+      <DependentUpon>frmRedefinirSenha.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmReservaCadastrar.resx">
+      <DependentUpon>frmReservaCadastrar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmReservaEditar.resx">
+      <DependentUpon>frmReservaEditar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmReservaExcluir.resx">
+      <DependentUpon>frmReservaExcluir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmReservaVisualizar.resx">
+      <DependentUpon>frmReservaVisualizar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTipoDeReservaCadastrar.resx">
+      <DependentUpon>frmTipoDeReservaCadastrar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTipoDeReservaEditar.resx">
+      <DependentUpon>frmTipoDeReservaEditar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTipoDeReservaExcluir.resx">
+      <DependentUpon>frmTipoDeReservaExcluir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTipoDeReservaVisualizar.resx">
+      <DependentUpon>frmTipoDeReservaVisualizar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUsuarioCadastrar.resx">
+      <DependentUpon>frmUsuarioCadastrar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUsuarioEditar.resx">
+      <DependentUpon>frmUsuarioEditar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUsuarioExcluir.resx">
+      <DependentUpon>frmUsuarioExcluir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUsuarioVisualizar.resx">
+      <DependentUpon>frmUsuarioVisualizar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVisitanteCadastrar.resx">
+      <DependentUpon>frmVisitanteCadastrar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVisitanteEditar.resx">
+      <DependentUpon>frmVisitanteEditar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVisitanteExcluir.resx">
+      <DependentUpon>frmVisitanteExcluir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVisitanteVisualizar.resx">
+      <DependentUpon>frmVisitanteVisualizar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PIM.Database\PIM.Database.csproj">
+      <Project>{91f0b016-362b-4252-a7c8-a1220b66cc76}</Project>
+      <Name>PIM.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PIM.Service\PIM.Service.csproj">
+      <Project>{14f18a31-87c4-4668-9ac0-9d67992352ba}</Project>
+      <Name>PIM.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\multisend.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Profile.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Add.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\viewmag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kedit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Profile.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

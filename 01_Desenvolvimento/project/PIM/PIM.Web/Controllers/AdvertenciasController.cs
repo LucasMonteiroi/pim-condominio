@@ -11,8 +11,24 @@
 
     public class AdvertenciasController : Controller
     {
+        UsuarioTO _usuarioTO;
+
         public ActionResult Index()
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ListaAdvertenciaTO listaAdvertencia = new ListaAdvertenciaTO();
 
             try
@@ -32,6 +48,20 @@
 
         public ActionResult Details(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             AdvertenciaTO AdvertenciaTO = new AdvertenciaTO();
 
             try
@@ -60,6 +90,20 @@
 
         public ActionResult Create()
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ViewBag.Ocorrencia = ListarOcorrencias();
             return View();
         }
@@ -70,6 +114,8 @@
         {
             if (ModelState.IsValid)
             {
+                Advertencia.Pago = Advertencia.CheckPag ? "S" : "N";
+
                 var AdvertenciaTO = Mapper.Map<AdvertenciaVM, AdvertenciaTO>(Advertencia);
 
                 AdvertenciaService.Criar(AdvertenciaTO);
@@ -85,6 +131,20 @@
 
         public ActionResult Edit(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             ViewBag.Ocorrencia = ListarOcorrencias();
 
             if (ModelState.IsValid)
@@ -111,6 +171,8 @@
         {
             if (ModelState.IsValid)
             {
+                AdvertenciaVM.Pago = AdvertenciaVM.CheckPag ? "S" : "N";
+
                 var AdvertenciaTO = Mapper.Map<AdvertenciaVM, AdvertenciaTO>(AdvertenciaVM);
 
                 AdvertenciaService.Atualizar(AdvertenciaTO);
@@ -129,6 +191,20 @@
 
         public ActionResult Delete(int id)
         {
+            if (Session["MoradorTO"] != null)
+            {
+                return RedirectToActionPermanent("AccessDenied", "ErrorHandler");
+            }
+
+            if (Session["UsuarioTO"] == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            if (!_usuarioTO.Valido)
+                return RedirectToActionPermanent("Login", "Home");
+
             if (id > 0)
             {
                 var AdvertenciaTO = AdvertenciaService.Obter(id);
@@ -175,12 +251,14 @@
                 foreach (var con in listaAdvertenciaVM)
                 {
                     con.MotivoOcorrencia = listaOcorrenciaTO.FirstOrDefault(x => x.Identificador == con.IdOcorrencia).Motivo;
+                    con.CheckPag = "S".Equals(con.Pago);
                 }
             }
 
             if (AdvertenciaVM != null)
             {
                 AdvertenciaVM.MotivoOcorrencia = listaOcorrenciaTO.FirstOrDefault(x => x.Identificador == AdvertenciaVM.IdOcorrencia).Motivo;
+                AdvertenciaVM.CheckPag = "S".Equals(AdvertenciaVM.Pago);
             }
         }
     }

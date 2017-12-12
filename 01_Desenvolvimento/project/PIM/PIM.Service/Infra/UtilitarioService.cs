@@ -8,7 +8,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    internal static class UtilitarioService
+    public static class UtilitarioService
     {
         #region --- Propriedades ---
 
@@ -20,7 +20,7 @@
 
         #region --- Segurança ---
 
-        internal static string GerarHashMD5(string p_Senha)
+        public static string GerarHashMD5(string p_Senha)
         {
             MD5 md5Hash = MD5.Create();
             // Converter a String para array de bytes, que é como a biblioteca trabalha.

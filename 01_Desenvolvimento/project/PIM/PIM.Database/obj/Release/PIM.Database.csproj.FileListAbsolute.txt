@@ -1,0 +1,11 @@
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\bin\Release\PIM.Database.dll.config
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\bin\Release\PIM.Database.dll
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\bin\Release\PIM.Database.pdb
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\bin\Release\EntityFramework.dll
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\bin\Release\EntityFramework.SqlServer.dll
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\bin\Release\EntityFramework.xml
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\bin\Release\EntityFramework.SqlServer.xml
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\obj\Release\PIM.Database.csproj.CoreCompileInputs.cache
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\obj\Release\PIM.Database.dll
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\obj\Release\PIM.Database.pdb
+C:\Sandbox\github\pim-condominio\01_Desenvolvimento\project\PIM\PIM.Database\obj\Release\PIM.Database.csprojResolveAssemblyReference.cache

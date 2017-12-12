@@ -11,13 +11,45 @@
 
     public class DependentesController : Controller
     {
+        UsuarioTO _usuarioTO;
+        MoradorTO _moradorTO;
+
         public ActionResult Index()
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             ListaDependenteTO listaDependente = new ListaDependenteTO();
 
             try
             {
-                listaDependente = DependenteService.Listar();
+                if (_moradorTO != null)
+                    listaDependente = DependenteService.ListarPorMorador(_moradorTO.Identificador);
+                else
+                    listaDependente = DependenteService.Listar();
+
                 var listaDependenteesVM = Mapper.Map<List<DependenteTO>, List<DependenteVM>>(listaDependente.Lista);
                 NomearVariaveis(null, listaDependenteesVM);
                 return View(listaDependenteesVM);
@@ -32,6 +64,31 @@
 
         public ActionResult Details(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             DependenteTO DependenteTO = new DependenteTO();
 
             try
@@ -60,8 +117,45 @@
 
         public ActionResult Create()
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+                else if (_usuarioTO.IdGrupo == 3)
+                    return RedirectToActionPermanent("Index");
+
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             ViewBag.Morador = ListarMoradores();
-            return View();
+
+            DependenteVM dependente = new DependenteVM();
+
+            if (_moradorTO != null)
+            {
+                dependente.IdMorador = _moradorTO.Identificador;
+                dependente.NomeMorador = _moradorTO.Nome;
+            }
+
+            return View(dependente);
         }
 
         [HttpPost]
@@ -77,14 +171,41 @@
                 Session["Mensagem"] = DependenteTO.Mensagem;
                 return RedirectToAction("Index");
             }
-            else
-            {
-                return View(Dependente);
-            }
+
+            return View();
+
         }
 
         public ActionResult Edit(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+                else if (_usuarioTO.IdGrupo == 3)
+                    return RedirectToActionPermanent("Index");
+
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             ViewBag.Morador = ListarMoradores();
             if (ModelState.IsValid)
             {
@@ -128,6 +249,34 @@
 
         public ActionResult Delete(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+                else if (_usuarioTO.IdGrupo == 3)
+                    return RedirectToActionPermanent("Index");
+
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             if (id > 0)
             {
                 var DependenteTO = DependenteService.Obter(id);

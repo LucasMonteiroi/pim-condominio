@@ -6,9 +6,11 @@
     {
         public int Identificador { get; set; }
 
+        [Range(0, 100)]
         [Required(ErrorMessage = "O {0} do apartamento é obrigatório")]
         public int Bloco { get; set; }
 
+        [Range(0, 100)]
         [Required(ErrorMessage = "O {0} do apartamento é obrigatório")]
         [Display(Name = "Número")]
         public string Numero { get; set; }

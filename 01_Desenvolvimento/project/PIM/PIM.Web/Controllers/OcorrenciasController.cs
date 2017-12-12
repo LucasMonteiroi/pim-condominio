@@ -11,13 +11,44 @@
 
     public class OcorrenciasController : Controller
     {
+        UsuarioTO _usuarioTO;
+        MoradorTO _moradorTO;
+
         public ActionResult Index()
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             ListaOcorrenciaTO listaOcorrencia = new ListaOcorrenciaTO();
 
             try
             {
-                listaOcorrencia = OcorrenciaService.Listar();
+                if (_moradorTO != null)
+                    listaOcorrencia = OcorrenciaService.ListarPorMorador(_moradorTO.Identificador);
+                else
+                    listaOcorrencia = OcorrenciaService.Listar();
                 var listaOcorrenciaesVM = Mapper.Map<List<OcorrenciaTO>, List<OcorrenciaVM>>(listaOcorrencia.Lista);
                 NomearVariaveis(null, listaOcorrenciaesVM);
                 return View(listaOcorrenciaesVM);
@@ -32,6 +63,45 @@
 
         public ActionResult Details(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            if (Session["UsuarioTO"] != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (Session["MoradorTO"] != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (!_moradorTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+
             OcorrenciaTO OcorrenciaTO = new OcorrenciaTO();
 
             try
@@ -60,6 +130,45 @@
 
         public ActionResult Create()
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            if (Session["UsuarioTO"] != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (Session["MoradorTO"] != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (!_moradorTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+
             ViewBag.Morador = ListarMoradores();
             return View();
         }
@@ -85,6 +194,45 @@
 
         public ActionResult Edit(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            if (Session["UsuarioTO"] != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (Session["MoradorTO"] != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (!_moradorTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+
             ViewBag.Morador = ListarMoradores();
             if (ModelState.IsValid)
             {
@@ -128,6 +276,45 @@
 
         public ActionResult Delete(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+            if (Session["UsuarioTO"] != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (Session["MoradorTO"] != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (!_moradorTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+
             if (id > 0)
             {
                 var OcorrenciaTO = OcorrenciaService.Obter(id);

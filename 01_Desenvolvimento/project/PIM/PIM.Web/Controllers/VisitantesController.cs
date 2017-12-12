@@ -11,13 +11,44 @@
 
     public class VisitantesController : Controller
     {
+        UsuarioTO _usuarioTO;
+        MoradorTO _moradorTO;
+
         public ActionResult Index()
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             ListaVisitanteTO listaVisitante = new ListaVisitanteTO();
 
             try
             {
-                listaVisitante = VisitanteService.Listar();
+                if (_moradorTO != null)
+                    listaVisitante = VisitanteService.ListarPorMorador(_moradorTO.Identificador);
+                else
+                    listaVisitante = VisitanteService.Listar();
                 var listaVisitantesVM = Mapper.Map<List<VisitanteTO>, List<VisitanteVM>>(listaVisitante.Lista);
                 NomearVariaveis(null, listaVisitantesVM);
                 return View(listaVisitantesVM);
@@ -32,6 +63,31 @@
 
         public ActionResult Details(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             VisitanteTO VisitanteTO = new VisitanteTO();
 
             try
@@ -62,7 +118,36 @@
 
         public ActionResult Create()
         {
-            ViewBag.Morador = ListarMoradores();
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+                else if (_usuarioTO.IdGrupo == 3)
+                    return RedirectToActionPermanent("Index");
+                ViewBag.Morador = ListarMoradores();
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                    ViewBag.Morador = ListarMoradores(_moradorTO.Identificador);
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
+
             return View();
         }
 
@@ -79,14 +164,42 @@
                 Session["Mensagem"] = VisitanteTO.Mensagem;
                 return RedirectToAction("Index");
             }
-            else
-            {
-                return View(Visitante);
-            }
+
+            return View();
         }
 
         public ActionResult Edit(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+                else if (_usuarioTO.IdGrupo == 3)
+                    return RedirectToActionPermanent("Index");
+
+                ViewBag.Morador = ListarMoradores();
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                    ViewBag.Morador = ListarMoradores(_moradorTO.Identificador);
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             ViewBag.Morador = ListarMoradores();
             if (ModelState.IsValid)
             {
@@ -130,6 +243,34 @@
 
         public ActionResult Delete(int id)
         {
+            _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+            _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+            if (_usuarioTO != null)
+            {
+                _usuarioTO = (UsuarioTO)Session["UsuarioTO"];
+                if (!_usuarioTO.Valido)
+                    return RedirectToActionPermanent("Login", "Home");
+                else if (_usuarioTO.IdGrupo == 3)
+                    return RedirectToActionPermanent("Index");
+
+            }
+            else if (_moradorTO != null)
+            {
+                _moradorTO = (MoradorTO)Session["MoradorTO"];
+
+                if (_moradorTO != null)
+                {
+                    _moradorTO = (MoradorTO)Session["MoradorTO"];
+                    if (!_moradorTO.Valido)
+                        return RedirectToActionPermanent("Login", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+
             if (id > 0)
             {
                 var VisitanteTO = VisitanteService.Obter(id);
@@ -160,10 +301,22 @@
             return RedirectToAction("Index");
         }
 
-        private SelectList ListarMoradores()
+        private SelectList ListarMoradores(int id = 0)
         {
-            var listaMoradorTO = MoradorService.Listar();
-            var listaMoradorVM = Mapper.Map<List<MoradorTO>, List<MoradorVM>>(listaMoradorTO.Lista);
+            ListaMoradorTO listaMoradorTO;
+            List<MoradorVM> listaMoradorVM;
+
+            if (id > 0)
+            {
+                listaMoradorTO = MoradorService.Listar();
+                listaMoradorVM = Mapper.Map<List<MoradorTO>, List<MoradorVM>>(listaMoradorTO.Lista.Where(x => x.Identificador == id).ToList());
+            }
+            else
+            {
+                listaMoradorTO = MoradorService.Listar();
+                listaMoradorVM = Mapper.Map<List<MoradorTO>, List<MoradorVM>>(listaMoradorTO.Lista);
+            }
+
             return new SelectList(listaMoradorVM, "Identificador", "Nome");
         }
 
